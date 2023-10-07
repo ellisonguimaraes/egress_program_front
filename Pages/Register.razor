@@ -1,0 +1,80 @@
+@page "/cadastrar"
+@using EgressPortal.Models.Form
+@using EgressPortal.Models.Form.Enums
+@using EgressPortal.Services.Interfaces
+@using EgressPortal.Shared.Auth
+@inject IUserServices UserServices
+@inject ISnackbar Snackbar
+
+<PageTitle>Pré Cadastro | Faça o seu pré cadastro.</PageTitle>
+
+<TitlePageComponent Title="Pré Cadastro" SubTitle="Faça o seu pré cadastro."/>
+
+@if (_loadingApiResponse)
+{
+    <MudProgressLinear Color="Color.Warning" Indeterminate="true" />
+}
+
+<div class="d-flex flex-column align-items-center w-100">
+    <div class="d-flex flex-column m-0 p-5" style="width:100%;max-width: 700px;">
+        @if (_wasRegisteredSuccessfully)
+        {
+            <div class="d-flex flex-column gap-4 align-items-center w-100 py-12">
+                <MudIcon Icon="@Icons.Material.Filled.CheckCircleOutline" Style="font-size: 4rem;" Color="Color.Success"/>
+                <MudText Align="Align.Center" Typo="Typo.h5" Color="Color.Dark" Style="font-weight: bold">Cadastrado com sucesso!</MudText>
+
+                @if (_register.UserType.Equals(UserType.Student) || _register.UserType.Equals(UserType.Teacher))
+                {
+                    <MudText Align="Align.Center" Typo="Typo.subtitle1" Color="Color.Dark"><b>Após aprovação do colegiado</b>, chegará um email para continuação do cadastro.<br/>Obrigado pela atenção.</MudText>
+                }
+                else
+                {
+                    <MudText Align="Align.Center" Typo="Typo.subtitle1" Color="Color.Dark">Um email de confirmação chegará ao seu email para continuar o cadastro.<br/>Obrigado pela atenção.</MudText>
+                }
+                <MudButton Href="/" Variant="Variant.Filled" Color="Color.Tertiary">Voltar a página inicial</MudButton>
+            </div>
+        }
+        else
+        {
+            <RegisterFormComponent RegisterForm="_register" EventCallbackOnValidSubmit="OnValidSubmitCallbackAsync"/>
+        }
+    </div>
+</div>
+
+
+
+@code {
+    private RegisterForm _register = new RegisterForm();
+
+    private bool _loadingApiResponse = false;
+    private bool _wasRegisteredSuccessfully = false;
+
+    private async Task OnValidSubmitCallbackAsync()
+    {
+        _loadingApiResponse = true;
+        StateHasChanged();
+
+        await RegisterAsync();
+
+        _loadingApiResponse = false;
+        StateHasChanged();
+    }
+
+    private async Task RegisterAsync()
+    {
+        var result = await UserServices.RegisterAsync(_register);
+
+        if (result.StatusCode.Equals(204))
+        {
+            Snackbar.Add("Cadastrado com sucesso.", Severity.Success);
+            _wasRegisteredSuccessfully = true;
+        }
+        else
+        {
+            foreach (var error in result.Errors)
+            {
+                Snackbar.Add(error, Severity.Error);
+            }
+        }
+    }
+}

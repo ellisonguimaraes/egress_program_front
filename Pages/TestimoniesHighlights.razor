@@ -1,0 +1,24 @@
+@page "/profile/depoimentos-destaques"
+@using Microsoft.AspNetCore.Authorization
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@attribute [Authorize]
+
+<h3>Meus depoimentos e destaques</h3>
+
+<p>Aqui é possível editar depoimentos e destaques</p>
+
+@* <AuthorizeView> *@
+@*     Name: @context.User.Identity.Name <br/> *@
+@*     Is in role: @context.User.IsInRole("EGRESS")<br/> *@
+@*     Role: @context.User.Claims.FirstOrDefault(c => c.Type.Equals(ClaimTypes.Role)).Value<br/> *@
+@* </AuthorizeView> *@
+
+
+@code {
+    private AuthenticationState _authenticationState = null!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _authenticationState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+    }
+}

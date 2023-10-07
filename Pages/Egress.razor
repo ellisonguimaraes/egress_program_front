@@ -1,0 +1,67 @@
+@page "/egressos"
+@using EgressPortal.Models.Form
+
+<PageTitle>Egressos | Visualize nossos egressos.</PageTitle>
+
+<TitlePageComponent Title="Egressos" SubTitle="Visualize nossos egressos."/>
+
+<div class="d-flex flex-column align-items-center w-100">
+    <div class="d-flex flex-column m-0 p-5" style="width:100%;max-width: 1000px;">
+        <EditForm Model="_egressFilter" OnValidSubmit="OnValidSubmit">
+            <DataAnnotationsValidator/>
+            <MudGrid>
+                <MudItem xs="6" sm="6" md="6" lg="6">
+                    <MudText Typo="Typo.h6" Class="mb-5">Filtros</MudText>
+                </MudItem>
+                <MudItem xs="6" sm="6" md="6" lg="6" Class="text-end">
+                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Filtrar</MudButton>
+                </MudItem>
+            </MudGrid>
+            <MudGrid>
+                <MudItem xs="12" sm="12" md="4" lg="4" Class="d-flex flex-column m-0 p-3 gap-4 h-100">
+                    <MudTextField Variant="Variant.Outlined" Margin="Margin.Dense" Class="p-0 m-0" Placeholder="Ciência da Computação" Label="Curso" @bind-Value="_egressFilter.CourseName" For="@(() => _egressFilter.CourseName)"/>
+                    <MudField Label="Modalidade" Variant="Variant.Outlined" Class="p-0 m-0 justify-content-end">
+                        <MudCheckBox @bind-Checked="@_egressFilter.CheckModalityClassroom" Size="Size.Small"><MudText Typo="Typo.body2">Presencial</MudText></MudCheckBox>
+                        <MudCheckBox @bind-Checked="@_egressFilter.CheckModalityVirtualClass" Size="Size.Small"><MudText Typo="Typo.body2">EAD</MudText></MudCheckBox>
+                    </MudField>
+                </MudItem>
+                <MudItem xs="12" sm="12" md="4" lg="4" Class="d-flex flex-column m-0 p-3 gap-4 h-100">
+                    <MudField Label="Nível" Variant="Variant.Outlined" InnerPadding="false" Class="p-0 m-0 h-100">
+                        <MudCheckBox @bind-Checked="@_egressFilter.CheckLevelGraduation" Size="Size.Small"><MudText Typo="Typo.body2">Graduação</MudText></MudCheckBox>
+                        <MudCheckBox @bind-Checked="@_egressFilter.CheckLevelPostgraduate" Size="Size.Small"><MudText Typo="Typo.body2">Pós-Graduação</MudText></MudCheckBox>
+                        <MudCheckBox @bind-Checked="@_egressFilter.CheckLevelMasterDegree" Size="Size.Small"><MudText Typo="Typo.body2">Mestrado</MudText></MudCheckBox>
+                        <MudCheckBox @bind-Checked="@_egressFilter.CheckLevelDoctorateDegree" Size="Size.Small"><MudText Typo="Typo.body2">Doutorado</MudText></MudCheckBox>
+                    </MudField>
+                </MudItem>
+                <MudItem xs="12" sm="12" md="4" lg="4" Class="d-flex flex-column m-0 p-3 gap-4 h-100 justify-content-around align-content-around">
+                    <MudNumericField @bind-Value="_egressFilter.IngressYear" Class="p-0 m-0" Margin="Margin.Dense" Label="Ano de Ingresso" Variant="Variant.Outlined"/>
+                    <MudNumericField @bind-Value="_egressFilter.ConclusionYear" Class="p-0 m-0" Margin="Margin.Dense" Label="Ano de Conclusão" Variant="Variant.Outlined"/>
+                </MudItem>
+            </MudGrid>
+        </EditForm>
+
+
+    </div>
+</div>
+
+@code {
+    private EgressFilterForm _egressFilter = new EgressFilterForm();
+
+    protected override void OnInitialized()
+    {
+        _egressFilter.IngressYear = _egressFilter.ConclusionYear = DateTime.Now.Year;
+    }
+
+    private void OnValidSubmit()
+    {
+        Console.WriteLine("CourseName = " + _egressFilter.CourseName);
+        Console.WriteLine("CheckModalityClassroom = " + _egressFilter.CheckModalityClassroom);
+        Console.WriteLine("CheckModalityVirtualClass = " + _egressFilter.CheckModalityVirtualClass);
+        Console.WriteLine("CheckLevelGraduation = " + _egressFilter.CheckLevelGraduation);
+        Console.WriteLine("CheckLevelPostgraduate = " + _egressFilter.CheckLevelPostgraduate);
+        Console.WriteLine("CheckLevelMasterDegree = " + _egressFilter.CheckLevelMasterDegree);
+        Console.WriteLine("CheckLevelDoctorateDegree = " + _egressFilter.CheckLevelDoctorateDegree);
+        Console.WriteLine("IngressYear = " + _egressFilter.IngressYear);
+        Console.WriteLine("ConclusionYear = " + _egressFilter.ConclusionYear);
+    }
+}

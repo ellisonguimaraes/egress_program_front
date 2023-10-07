@@ -1,0 +1,34 @@
+::deep .text_color_white {
+    color: var(--egress-color-white);
+}
+
+.background_color_darkgreen {
+    background-color: var(--egress-color-darkgreen);
+}
+
+.title_page {
+    min-height:115px;
+}
+
+::deep .title_page_center {
+    max-width: 1000px;
+}
+
+::deep .page_title_text_align {
+    text-align: right;
+}
+
+::deep .page_subtitle_text_align {
+    text-align: left;
+}
+
+
+@media (max-width: 960px) {
+    ::deep .page_title_text_align {
+        text-align: center;
+    }
+
+    ::deep .page_subtitle_text_align {
+        text-align: center;
+    }
+}

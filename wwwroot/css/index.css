@@ -1,0 +1,43 @@
+.banner_index {
+    background-color: var(--egress-color-darkblue);
+}
+
+.text_color_white {
+    color: var(--egress-color-white);
+}
+
+.text_color_yellow {
+    color: var(--egress-color-yellow);
+}
+
+.text_color_green {
+     color: var(--egress-color-green);
+ }
+
+.banner_right {
+    max-width: 100%;
+}
+
+@media (max-width: 960px) {
+    .banner_right {
+        max-height: 300px;
+    }
+
+    .nav_hidden_link, .nav_hidden_access_button{
+        display: none;
+    }
+
+    .nav_hidden_button{
+        display: block;
+    }
+}
+
+.highlights_main {
+    background-color: #384861;
+}
+
+.highlights_each {
+    height: 419px;
+    min-width: 134px;
+    background: url("../img/index/highlights_fire.png") no-repeat top center;
+}

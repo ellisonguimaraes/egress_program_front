@@ -1,0 +1,57 @@
+@using EgressPortal.Models
+@using EgressPortal.Services.Interfaces
+@inject ILoginServices LoginServices
+@inject NavigationManager NavigationManager
+
+<AuthorizeView>
+    <Authorized>
+        <MudMenu AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter" EndIcon="@Icons.Material.Filled.ArrowDropDown">
+            <ActivatorContent>
+                <div class="d-flex flex-row align-content-center align-items-center justify-content-center">
+                    <MudText Class="m-2 fw-bold text_color_darkgreen" Typo="Typo.body2">@GetFirstName(context.User.Identity!.Name!.ToUpper())</MudText>
+                    <MudAvatar Color="Color.Primary">
+                        @* @if (string.IsNullOrWhiteSpace(context.User.Identity!.Name)) *@
+                        @* { *@
+                        <b>@context.User.Identity!.Name![0]</b>
+                        @* } *@
+                        @* else *@
+                        @* { *@
+                        @*     <MudImage Src="img/eu_quadrado.jpg" Alt="avatar"/> *@
+                        @* } *@
+                    </MudAvatar>
+                    <MudIcon Icon="@Icons.Material.Filled.ArrowDropDown" Class="text_color_darkgreen" Size="Size.Medium"/>
+                </div>
+            </ActivatorContent>
+            <ChildContent>
+                <MudMenuItem>Meus depoimentos</MudMenuItem>
+                <MudMenuItem>Meus destaques</MudMenuItem>
+                <MudMenuItem>Atualizar Perfil</MudMenuItem>
+                <MudMenuItem OnClick="LogoutAsync">Sair</MudMenuItem>
+            </ChildContent>
+        </MudMenu>
+    </Authorized>
+    <NotAuthorized>
+        <MudButton Variant="Variant.Filled" Color="Color.Tertiary" StartIcon="@Icons.Material.Filled.Login" Href="@_loginRoute">ACESSAR</MudButton>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    #region Constants
+    private const string SEPARATOR_NAME = " ";
+    private const string NAVIGATION_TO_LOGOUT = "/";
+    #endregion
+
+    private string _loginRoute = "login";
+
+    private string GetFirstName(string fullName)
+    {
+        var names = fullName.Split(SEPARATOR_NAME);
+        return names[0];
+    }
+
+    private async Task LogoutAsync()
+    {
+        await LoginServices.LogoutAsync();
+        NavigationManager.NavigateTo(NAVIGATION_TO_LOGOUT);
+    }
+}

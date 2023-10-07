@@ -1,0 +1,85 @@
+@using EgressPortal.Models.Form
+@using EgressPortal.Models.Form.Enums
+<EditForm Model="RegisterForm" OnValidSubmit="OnValidSubmitAsync">
+    <DataAnnotationsValidator/>
+    <MudGrid Class="m-0 p-0">
+        <MudItem xs="12" sm="12" md="12" lg="12" Class="d-flex flex-column gap-4">
+            <MudField Label="Você é:" Variant="Variant.Outlined" InnerPadding="false">
+                <MudRadioGroup @bind-SelectedOption="@RegisterForm.UserType" For="@(() => RegisterForm.UserType)">
+                    <MudRadio Option="@(UserType.Egress)" Color="Color.Primary">Egresso</MudRadio>
+                    <MudRadio Option="@(UserType.Teacher)" Color="Color.Primary">Docente</MudRadio>
+                    <MudRadio Option="@(UserType.Student)" Color="Color.Primary">Discente</MudRadio>
+                </MudRadioGroup>
+            </MudField>
+            <MudTextField Variant="Variant.Outlined" Placeholder="Nome" Label="Nome completo" @bind-Value="RegisterForm.Name" For="@(() => RegisterForm.Name)"></MudTextField>
+            <MudField Label="Cpf ou Matrícula" Variant="Variant.Outlined">
+                <MudRadioGroup @bind-SelectedOption="@RegisterForm.DocumentType" For="@(() => RegisterForm.DocumentType)" Class="mb-3">
+                    <MudRadio Option="@(DocumentType.Cpf)" Color="Color.Primary">Cpf</MudRadio>
+                    <MudRadio Option="@(DocumentType.Registration)" Color="Color.Primary">Matrícula</MudRadio>
+                </MudRadioGroup>
+                <MudNumericField HideSpinButtons="true" Variant="Variant.Text" Class="px-4 py-2" Label="Cpf ou Matrícula" @bind-Value="RegisterForm.Document" For="@(() => RegisterForm.Document)"></MudNumericField>
+            </MudField>
+            <MudTextField Variant="Variant.Outlined" Placeholder="E-mail" InputType="InputType.Email" Label="E-mail" @bind-Value="RegisterForm.Email" For="@(() => RegisterForm.Email)"></MudTextField>
+            <MudTextField @bind-Value="RegisterForm.Password" Placeholder="Senha" Label="Senha" Variant="Variant.Outlined" InputType="@_passwordInput" For="@(() => RegisterForm.Password)" Adornment="Adornment.End" AdornmentIcon="@_passwordInputIcon" OnAdornmentClick="ButtonShowPassword" AdornmentAriaLabel="Mostrar senha"/>
+            <MudTextField @bind-Value="RegisterForm.RepeatPassword" Placeholder="Repetir senha" Label="Repetir senha" Variant="Variant.Outlined" InputType="@_repeatPasswordInput" For="@(() => RegisterForm.RepeatPassword)" Adornment="Adornment.End" AdornmentIcon="@_repeatPasswordInputIcon" OnAdornmentClick="ButtonShowRepeatPassword" AdornmentAriaLabel="Mostrar senha"/>
+        </MudItem>
+        <MudItem xs="12" sm="12" md="12" lg="12" Class="d-flex flex-row flex-wrap justify-content-center">
+            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Warning" Disabled="@_buttonSubmitDisabled">Registrar-se</MudButton>
+        </MudItem>
+    </MudGrid>
+</EditForm>
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public RegisterForm RegisterForm { get; set; }  = null!;
+
+    [Parameter]
+    [EditorRequired]
+    public EventCallback EventCallbackOnValidSubmit { get; set; }
+
+    private InputType _passwordInput = InputType.Password;
+    private string _passwordInputIcon = Icons.Material.Filled.VisibilityOff;
+    private bool _isShowPassword;
+
+    private InputType _repeatPasswordInput = InputType.Password;
+    private string _repeatPasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+    private bool _isShowRepeatPassword;
+
+    private bool _buttonSubmitDisabled = false;
+
+    private async Task OnValidSubmitAsync()
+    {
+        _buttonSubmitDisabled = true;
+        await EventCallbackOnValidSubmit.InvokeAsync();
+        _buttonSubmitDisabled = false;
+    }
+
+    private void ButtonShowPassword(){
+        @if (_isShowPassword)
+        {
+            _isShowPassword = false;
+            _passwordInputIcon = Icons.Material.Filled.VisibilityOff;
+            _passwordInput = InputType.Password;
+        }
+        else {
+            _isShowPassword = true;
+            _passwordInputIcon = Icons.Material.Filled.Visibility;
+            _passwordInput = InputType.Text;
+        }
+    }
+
+    private void ButtonShowRepeatPassword(){
+        @if (_isShowRepeatPassword)
+        {
+            _isShowRepeatPassword = false;
+            _repeatPasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+            _repeatPasswordInput = InputType.Password;
+        }
+        else {
+            _isShowRepeatPassword = true;
+            _repeatPasswordInputIcon = Icons.Material.Filled.Visibility;
+            _repeatPasswordInput = InputType.Text;
+        }
+    }
+}

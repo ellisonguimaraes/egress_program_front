@@ -1,0 +1,7 @@
+::deep .text_color_white {
+    color: var(--egress-color-white);
+}
+
+::deep .text_color_darkgreen {
+    color: var(--egress-color-darkgreen);
+}

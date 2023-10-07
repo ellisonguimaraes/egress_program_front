@@ -1,0 +1,70 @@
+@page "/contatos"
+@using EgressPortal.Models.Form
+
+<PageTitle>Contatos | Entre em contato com a equipe de gestão de egressos.</PageTitle>
+
+<TitlePageComponent Title="Contatos" SubTitle="Entre em contato com a equipe de gestão de egressos."/>
+
+<div class="d-flex flex-column align-items-center w-100">
+    <div class="d-flex flex-column m-0 p-5 contact_main_center" style="width:100%;max-width: 1000px;">
+        <MudText Align="Align.Start" Typo="Typo.h6" Class="mb-5">Formulário de Contato</MudText>
+        <MudGrid Class="m-0 p-0">
+            <MudItem xs="12" sm="12" md="6" lg="6">
+                <EditForm OnValidSubmit="OnValidSubmit" Model="_contactForm">
+                    <DataAnnotationsValidator/>
+                    <MudGrid Class="gap-3">
+                        <MudItem xs="12" sm="12" md="12" lg="12" Class="m-0 p-0">
+                            <MudTextField Variant="Variant.Outlined" Placeholder="Assunto" Label="Assunto" @bind-Value="_contactForm.Subject" For="@(() => _contactForm.Subject)"/>
+                        </MudItem>
+
+                        <MudItem xs="12" sm="12" md="12" lg="12" Class="m-0 p-0">
+                            <MudTextField InputType="InputType.Email" Variant="Variant.Outlined" Placeholder="E-mail" Label="E-mail" HelperText="E-mail para contato" @bind-Value="_contactForm.Email" For="@(() => _contactForm.Email)"/>
+                        </MudItem>
+
+                        <MudItem xs="12" sm="12" md="12" lg="12" Class="m-0 p-0">
+                            <MudTextField Variant="Variant.Outlined" Placeholder="Mensagem" Label="Mensagem" Lines="5" @bind-Value="_contactForm.Message" For="@(() => _contactForm.Message)"/>
+                        </MudItem>
+
+                        <MudItem xs="12" sm="12" md="12" lg="12" Class="m-0 p-0 py-4 text-end">
+                            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">Enviar</MudButton>
+                        </MudItem>
+                    </MudGrid>
+                </EditForm>
+            </MudItem>
+            <MudItem xs="12" sm="12" md="6" lg="6" Class="m-0 p-5">
+                <MudGrid Class="d-flex m-0 p-0 w-100 justify-content-between align-content-between h-100 gap-5">
+                    <MudItem xs="12" sm="12" md="12" lg="12" Class="d-flex flex-column p-0 m-0 w-100 gap-3">
+                        <div class="d-flex flex-row gap-3">
+                            <MudIcon Icon="@Icons.Material.Filled.MyLocation" Color="Color.Dark"/>
+                            <MudText Typo="Typo.caption" Align="Align.Justify" Color="Color.Dark">
+                                Campus Soane Nazaré de Andrade, Rodovia Jorge Amado, km 16, Bairro Salobrinho.<br/>
+                                CEP 45662-900.<br/>
+                                Ilhéus-Bahia.
+                            </MudText>
+                        </div>
+                        <div class="d-flex flex-row gap-3">
+                            <MudIcon Icon="@Icons.Material.Filled.Mail"  Color="Color.Dark"/>
+                            <MudText Typo="Typo.caption" Color="Color.Dark">egressocomputacao@uesc.br</MudText>
+                        </div>
+                    </MudItem>
+                    <MudItem xs="12" sm="12" md="12" lg="12" Class="d-flex flex-row justify-content-center p-0 m-0">
+                        <MudIconButton Icon="@Icons.Custom.Brands.Facebook" Size="Size.Large" Class="p-0 m-0" Color="Color.Primary"/>
+                        <MudIconButton Icon="@Icons.Custom.Brands.Instagram" Size="Size.Large" Class="p-0 m-0" Color="Color.Primary"/>
+                    </MudItem>
+                </MudGrid>
+            </MudItem>
+        </MudGrid>
+    </div>
+</div>
+
+@code {
+    private ContactForm _contactForm = new ContactForm();
+
+    private void OnValidSubmit()
+    {
+        Console.WriteLine("OnValidSubmit Contact");
+        Console.WriteLine(_contactForm.Subject);
+        Console.WriteLine(_contactForm.Email);
+        Console.WriteLine(_contactForm.Message);
+    }
+}

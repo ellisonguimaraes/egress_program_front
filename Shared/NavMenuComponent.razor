@@ -1,0 +1,109 @@
+﻿@using MudBlazor.Utilities
+@using EgressPortal.Models
+
+<nav class="d-flex align-items-center justify-center flex-wrap p-4 nav_main">
+    <MudGrid class="nav_main_center">
+        <MudItem xs="12" sm="12" md="4" lg="4">
+            <MudGrid Class="d-flex flex-row justify-content-center align-items-center align-content-center">
+                <MudItem xs="12" sm="12" md="2" lg="2" Class="text-center">
+                    <img src="img/uesc_logo.png" alt="logo uesc"/>
+                </MudItem>
+                <MudItem xs="12" sm="12" md="10" lg="10">
+                    <MudText Typo="Typo.body2" Class="fw-bold text_color_white">
+                        <div class="nav_logo_text w-100">
+                            <span class="text_color_green">PORTAL DE EGRESSOS</span><br/>UNIVERSIDADE ESTADUAL DE SANTA CRUZ
+                        </div>
+                    </MudText>
+                </MudItem>
+            </MudGrid>
+        </MudItem>
+        <MudItem xs="12" sm="12" md="6" lg="6" Class="d-flex flex-column p-0 align-content-center justify-content-center align-items-center">
+            <div class="nav_hidden nav_hidden_button text-center m-2">
+                <MudFab OnClick="OpenDrawer" StartIcon="@Icons.Material.Filled.Menu" id="button_menu" Color="Color.Tertiary"/>
+            </div>
+            <div class="nav_hidden nav_hidden_link">
+                <div class="d-flex align-items-center h-100">
+                    <MudGrid Class="d-flex m-0 p-0 text-center">
+                        <MudItem xs="12" sm="12" md="3" lg="3">
+                            <NavLink class="nav-fill" href="@_homeRoute" Match="NavLinkMatch.All">
+                                <MudText Typo="Typo.button" Class="text_color_white">INÍCIO</MudText>
+                            </NavLink>
+                        </MudItem>
+                        <MudItem xs="12" sm="12" md="3" lg="3">
+                            <NavLink class="nav-fill">
+                                <div class="d-flex flex-row justify-content-center align-content-center align-items-center">
+                                    <MudMenu AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter" EndIcon="@Icons.Material.Filled.ArrowDropDown">
+                                        <ActivatorContent>
+                                            <MudText Typo="Typo.button" Class="text_color_white">EGRESSOS</MudText>
+                                            <MudIcon Icon="@Icons.Material.Filled.ArrowDropDown" Class="text-white" Size="Size.Small"/>
+                                        </ActivatorContent>
+                                        <ChildContent>
+                                            <MudMenuItem Href="@_profileEgressRoute">Perfil dos Egressos</MudMenuItem>
+                                            <MudMenuItem Href="@_egressRoute">Egressos</MudMenuItem>
+                                        </ChildContent>
+                                    </MudMenu>
+                                </div>
+                            </NavLink>
+                        </MudItem>
+                        <MudItem xs="12" sm="12" md="3" lg="3">
+                            <NavLink class="nav-fill" href="@_testimonyRoute">
+                                <MudText Typo="Typo.button" Class="text_color_white">DEPOIMENTOS</MudText>
+                            </NavLink>
+                        </MudItem>
+                        <MudItem xs="12" sm="12" md="3" lg="3">
+                            <NavLink class="nav-fill" href="@_contactRoute">
+                                <MudText Typo="Typo.button" Class="text_color_white">CONTATO</MudText>
+                            </NavLink>
+                        </MudItem>
+                    </MudGrid>
+                </div>
+            </div>
+        </MudItem>
+        <MudItem xs="12" sm="12" md="2" lg="2" Class="d-flex align-self-center p-0 text-end">
+            <div class="nav_hidden nav_hidden_access_button">
+                <NavMenuLogInLogOutComponent/>
+            </div>
+        </MudItem>
+    </MudGrid>
+</nav>
+
+<MudDrawer @bind-Open="@_flagDrawer" Anchor="@Anchor.Start" Elevation="1" Variant="@DrawerVariant.Temporary">
+    <MudDrawerHeader Class="align-items-center">
+        <MudIconButton Icon="@Icons.Material.Filled.Close" Color="Color.Default" Size="Size.Medium" OnClick="CloseDrawer"/>
+        <MudText Typo="Typo.subtitle1">Menu</MudText>
+    </MudDrawerHeader>
+    <MudNavMenu>
+        <MudNavLink Match="NavLinkMatch.All" Href="@_homeRoute">
+            <MudText Typo="Typo.body2" Class="py-1" Color="Color.Dark">Início</MudText>
+        </MudNavLink>
+        <MudNavLink Match="NavLinkMatch.All" Href="@_egressRoute">
+            <MudText Typo="Typo.body2" Class="py-1" Color="Color.Dark">Egressos</MudText>
+        </MudNavLink>
+        <MudNavLink Match="NavLinkMatch.All" Href="@_profileEgressRoute">
+            <MudText Typo="Typo.body2" Class="py-1" Color="Color.Dark">Perfil dos Egressos</MudText>
+        </MudNavLink>
+        <MudNavLink Match="NavLinkMatch.All" Href="@_testimonyRoute">
+            <MudText Typo="Typo.body2" Class="py-1" Color="Color.Dark">Depoimentos</MudText>
+        </MudNavLink>
+        <MudNavLink Match="NavLinkMatch.All" Href="@_contactRoute">
+            <MudText Typo="Typo.body2" Class="py-1" Color="Color.Dark">Contato</MudText>
+        </MudNavLink>
+        <div class="align-items-center justify-content-center align-content-center text-center py-5">
+            <NavMenuLogInLogOutComponent/>
+        </div>
+    </MudNavMenu>
+</MudDrawer>
+
+@code {
+    private string _homeRoute = "/";
+    private string _egressRoute = "egressos";
+    private string _profileEgressRoute = "perfil-egressos";
+    private string _testimonyRoute = "depoimentos";
+    private string _contactRoute = "contatos";
+
+    private bool _flagDrawer = false;
+
+    private void OpenDrawer() => _flagDrawer = true;
+
+    private void CloseDrawer() => _flagDrawer = false;
+}

@@ -1,0 +1,99 @@
+@page "/Login"
+@using EgressPortal.Models.Form
+@using EgressPortal.Services.Interfaces
+@inject IUserServices UserServices
+@inject ILoginServices LoginServices
+@inject ISnackbar Snackbar
+
+<PageTitle>Login | Faça o login ou registre-se</PageTitle>
+
+<TitlePageComponent Title="Acesso a área privada" SubTitle="Faça o login ou registre-se"/>
+
+@if (_loadingApiResponse)
+{
+    <MudProgressLinear Color="Color.Warning" Indeterminate="true" />
+}
+
+<div class="d-flex flex-column align-items-center w-100">
+    <div class="d-flex flex-column m-0 p-5" style="width:100%;max-width: 500px;">
+        <EditForm Model="_login" OnValidSubmit="OnValidSubmitAsync">
+            <DataAnnotationsValidator/>
+            <MudGrid Class="m-0 p-0 gap-2">
+                <MudItem xs="12" sm="12" md="12" lg="12">
+                    <MudTextField Variant="Variant.Outlined" Class="p-0 m-0" InputType="InputType.Email" Placeholder="E-mail" Label="E-mail" @bind-Value="_login.Email" For="@(() => _login.Email)"></MudTextField>
+                </MudItem>
+                <MudItem xs="12" sm="12" md="12" lg="12">
+                    <MudTextField  @bind-Value="_login.Password" Placeholder="Senha" Label="Senha" Variant="Variant.Outlined" InputType="@_passwordInput" Adornment="Adornment.End" AdornmentIcon="@_passwordInputIcon" OnAdornmentClick="ButtonShowPassword" For="@(() => _login.Password)" AdornmentAriaLabel="Mostrar senha" />
+                </MudItem>
+                <MudItem xs="12" sm="12" md="12" lg="12" Class="d-flex flex-row flex-wrap text-center justify-content-between">
+                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Warning" Href="@_registerRoute">Registrar-se</MudButton>
+                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">Entrar</MudButton>
+                </MudItem>
+                <MudItem xs="12" sm="12" md="12" lg="12" Class="w-100 text-center">
+                    <MudLink Href="@_recoveryPasswordRoute" Typo="Typo.body2">Esqueci minha senha!</MudLink>
+                </MudItem>
+            </MudGrid>
+        </EditForm>
+    </div>
+</div>
+
+
+@code {
+    private string _registerRoute = "cadastrar";
+    private string _recoveryPasswordRoute = "recuperar-senha";
+
+    private LoginForm _login = new LoginForm();
+
+    private InputType _passwordInput = InputType.Password;
+    private string _passwordInputIcon = Icons.Material.Filled.VisibilityOff;
+    private bool _isShowPassword;
+
+    private bool _loadingApiResponse = false;
+
+    private async Task OnValidSubmitAsync()
+    {
+        _loadingApiResponse = true;
+        StateHasChanged();
+
+        await AuthenticateAsync();
+
+        _loadingApiResponse = false;
+        StateHasChanged();
+    }
+
+    private async Task AuthenticateAsync()
+    {
+        var result = await UserServices.AuthenticateAsync(_login.Email, _login.Password);
+
+        if (result.StatusCode.Equals(200))
+        {
+            Snackbar.Add("Autenticado com sucesso.", Severity.Success);
+            await LoginServices.LoginAsync(result.Data!);
+            Console.WriteLine("Autenticado com sucesso!");
+        }
+        else
+        {
+            foreach (var error in result.Errors)
+            {
+                Snackbar.Add(error, Severity.Error);
+                Console.WriteLine(error);
+            }
+
+            Console.WriteLine("Não autenticado com sucesso!");
+        }
+    }
+
+    private void ButtonShowPassword(){
+        @if (_isShowPassword)
+        {
+            _isShowPassword = false;
+            _passwordInputIcon = Icons.Material.Filled.VisibilityOff;
+            _passwordInput = InputType.Password;
+        }
+        else {
+            _isShowPassword = true;
+            _passwordInputIcon = Icons.Material.Filled.Visibility;
+            _passwordInput = InputType.Text;
+        }
+    }
+}
