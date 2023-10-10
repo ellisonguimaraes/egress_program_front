@@ -1,12 +1,21 @@
 @using System.Net
 @inject IEgressServices EgressServices
 
-<div class="d-flex flex-column align-items-center w-100 p-0 m-0">
+<div class="d-flex flex-column align-items-center w-100 h-100 p-0 m-0">
 
         <MudGrid Class="m-0 testimonies_main">
-            @if (_randomTestimonies is not null)
-            {
-                <MudItem xs="12" sm="12" md="5" lg="5" Class="d-flex flex-column align-items-center m-0 p-0 testimonies_main_left">
+            <MudItem xs="12" sm="12" md="5" lg="5" Class="d-flex flex-column align-items-center m-0 p-0 testimonies_main_left">
+                @if (_randomTestimonies is null)
+                {
+                    <div class="d-flex flex-column w-100 h-100 p-5 justify-content-center align-items-center">
+                        <MudSkeleton SkeletonType="SkeletonType.Circle" Style="height:200px; width:200px; font-size:2rem; margin: 70px 0 15px;"/>
+                        <MudSkeleton Width="20%" Height="20px"/>
+                        <MudSkeleton Width="35%" />
+                        <MudSkeleton Width="100%" Class="testimonies_content"/>
+                    </div>
+                }
+                else
+                {
                     @if (_randomTestimonies[0].PerfilImageSrc is null)
                     {
                         <MudAvatar Color="Color.Tertiary" Style="height:200px; width:200px; font-size:2rem; margin: 70px 0 15px; border:5px solid var(--egress-color-darkgreen)">@_randomTestimonies[0].Name[0]</MudAvatar>
@@ -20,17 +29,29 @@
 
                     <MudText Typo="Typo.h5" Class="text_color_darkblue fw-bold">@_randomTestimonies[0].Name</MudText>
                     <MudText Typo="Typo.subtitle2" Class="text_color_gray_1 fw-bold">@string.Join(", ", _randomTestimonies[0].Courses)</MudText>
-                    <MudText Typo="Typo.body2" Align="Align.Justify" Class="p-3" Color="Color.Dark">"@_randomTestimonies[0].Content"</MudText>
-                </MudItem>
+                    <MudText Typo="Typo.body2" Align="Align.Justify" Class="testimonies_content" Color="Color.Dark">"@_randomTestimonies[0].Content"</MudText>
+                }
+            </MudItem>
 
-                <MudItem xs="12" sm="0" md="2" lg="2" Class="d-flex flex-column m-0 p-0 justify-content-center align-items-center testimonies_main_center">
-                    <div class="h-100 testimonies_main_center_space">
-                        <MudSpacer/>
+            <MudItem xs="12" sm="0" md="2" lg="2" Class="d-flex flex-column m-0 p-0 justify-content-center align-items-center testimonies_main_center">
+                <div class="h-100 testimonies_main_center_space">
+                    <MudSpacer/>
+                </div>
+                <MudText Typo="Typo.h5" Color="Color.Dark" Class="fw-bold">DEPOIMENTOS</MudText>
+            </MudItem>
+
+            <MudItem xs="12" sm="12" md="5" lg="5" Class="d-flex flex-column align-items-center m-0 p-0 testimonies_main_right">
+                @if (_randomTestimonies is null)
+                {
+                    <div class="d-flex flex-column w-100 h-100 p-5 justify-content-center align-items-center">
+                        <MudSkeleton SkeletonType="SkeletonType.Circle" Style="height:200px; width:200px; font-size:2rem; margin: 70px 0 15px;"/>
+                        <MudSkeleton Width="20%" Height="20px"/>
+                        <MudSkeleton Width="35%" />
+                        <MudSkeleton Width="100%" Class="testimonies_content"/>
                     </div>
-                    <MudText Typo="Typo.h5" Color="Color.Dark" Class="fw-bold">DEPOIMENTOS</MudText>
-                </MudItem>
-
-                <MudItem xs="12" sm="12" md="5" lg="5" Class="d-flex flex-column align-items-center m-0 p-0 testimonies_main_right">
+                }
+                else
+                {
                     @if (_randomTestimonies[1].PerfilImageSrc is null)
                     {
                         <MudAvatar Color="Color.Tertiary" Style="height:200px; width:200px; font-size:2rem; margin: 70px 0 15px; border:5px solid var(--egress-color-darkgreen);">@_randomTestimonies[1].Name[0]</MudAvatar>
@@ -44,15 +65,10 @@
 
                     <MudText Typo="Typo.h5" Class="text_color_darkblue fw-bold">@_randomTestimonies[1].Name</MudText>
                     <MudText Typo="Typo.subtitle2" Class="text_color_gray_1 fw-bold">@string.Join(", ", _randomTestimonies[1].Courses)</MudText>
-                    <MudText Typo="Typo.body2" Align="Align.Justify" Class="p-3" Color="Color.Dark">"@_randomTestimonies[1].Content"</MudText>
-                </MudItem>
-            }
-            else
-            {
-                <MudSkeleton Animation="Animation.Wave" SkeletonType="SkeletonType.Rectangle" Width="100%" Height="100px"/>
-            }
+                    <MudText Typo="Typo.body2" Align="Align.Justify" Class="testimonies_content" Color="Color.Dark">"@_randomTestimonies[1].Content"</MudText>
+                }
+            </MudItem>
         </MudGrid>
-
 </div>
 
 @code {

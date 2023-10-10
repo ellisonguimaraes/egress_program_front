@@ -24,14 +24,24 @@
                                     }
                                     <MudText Typo="Typo.h5" Class="text_color_green fw-bold">@h.Name</MudText>
                                     <MudText Typo="Typo.subtitle2" Class="text_color_yellow fw-bold">@string.Join(", ", h.Courses)</MudText>
-                                    <MudText Typo="Typo.body2" Align="Align.Justify" Class="text_color_white px-4 py-2">@h.Description</MudText>
+                                    <MudText Typo="Typo.body2" Align="Align.Justify" Class="text_color_white px-4 py-2">@h.Title</MudText>
                                 </div>
                             </MudItem>
                         }
                     }
                     else
                     {
-                        <MudSkeleton Animation="Animation.Wave" SkeletonType="SkeletonType.Rectangle" Width="100%" Height="100px"/>
+                        @for (var x = 0; x < 3; x++)
+                        {
+                            <MudItem xs="12" sm="12" md="4" lg="4" Class="d-flex justify-content-center p-0 m-0 mb-4">
+                                <div class="d-flex flex-column highlights_each w-100 h-100 align-items-center px-4">
+                                    <MudSkeleton SkeletonType="SkeletonType.Circle" Animation="Animation.Wave" Style="height:94px; width:94px; font-size:2rem; margin: 45px 0 15px -8px"/>
+                                    <MudSkeleton Width="20%" Height="20px"/>
+                                    <MudSkeleton Width="35%" />
+                                    <MudSkeleton Width="100%" Class="px-4 py-2"/>
+                                </div>
+                            </MudItem>
+                        }
                     }
                 </MudGrid>
             </MudItem>

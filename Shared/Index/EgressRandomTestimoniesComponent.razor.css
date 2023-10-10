@@ -21,6 +21,10 @@
     display: none;
 }
 
+::deep .testimonies_content {
+    padding:20px 50px;
+}
+
 @media (max-width: 960px) {
     ::deep .testimonies_main_left {
         order: 1;

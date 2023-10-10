@@ -22,40 +22,33 @@
                 <MudFab OnClick="OpenDrawer" StartIcon="@Icons.Material.Filled.Menu" id="button_menu" Color="Color.Tertiary"/>
             </div>
             <div class="nav_hidden nav_hidden_link">
-                <div class="d-flex align-items-center h-100">
-                    <MudGrid Class="d-flex m-0 p-0 text-center">
-                        <MudItem xs="12" sm="12" md="3" lg="3">
-                            <NavLink class="nav-fill" href="@_homeRoute" Match="NavLinkMatch.All">
-                                <MudText Typo="Typo.button" Class="text_color_white">INÍCIO</MudText>
-                            </NavLink>
-                        </MudItem>
-                        <MudItem xs="12" sm="12" md="3" lg="3">
-                            <NavLink class="nav-fill">
-                                <div class="d-flex flex-row justify-content-center align-content-center align-items-center">
-                                    <MudMenu AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter" EndIcon="@Icons.Material.Filled.ArrowDropDown">
-                                        <ActivatorContent>
-                                            <MudText Typo="Typo.button" Class="text_color_white">EGRESSOS</MudText>
-                                            <MudIcon Icon="@Icons.Material.Filled.ArrowDropDown" Class="text-white" Size="Size.Small"/>
-                                        </ActivatorContent>
-                                        <ChildContent>
-                                            <MudMenuItem Href="@_profileEgressRoute">Perfil dos Egressos</MudMenuItem>
-                                            <MudMenuItem Href="@_egressRoute">Egressos</MudMenuItem>
-                                        </ChildContent>
-                                    </MudMenu>
-                                </div>
-                            </NavLink>
-                        </MudItem>
-                        <MudItem xs="12" sm="12" md="3" lg="3">
-                            <NavLink class="nav-fill" href="@_testimonyRoute">
-                                <MudText Typo="Typo.button" Class="text_color_white">DEPOIMENTOS</MudText>
-                            </NavLink>
-                        </MudItem>
-                        <MudItem xs="12" sm="12" md="3" lg="3">
-                            <NavLink class="nav-fill" href="@_contactRoute">
-                                <MudText Typo="Typo.button" Class="text_color_white">CONTATO</MudText>
-                            </NavLink>
-                        </MudItem>
-                    </MudGrid>
+                <div class="d-flex justify-content-between align-items-center p-2 h-100">
+                    <NavLink class="nav-fill" href="@_homeRoute" Match="NavLinkMatch.All">
+                        <MudText Typo="Typo.button" Class="text_color_white">INÍCIO</MudText>
+                    </NavLink>
+                    <NavLink class="nav-fill">
+                        <div class="d-flex flex-row justify-content-center align-content-center align-items-center">
+                            <MudMenu AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter" EndIcon="@Icons.Material.Filled.ArrowDropDown">
+                                <ActivatorContent>
+                                    <MudText Typo="Typo.button" Class="text_color_white">EGRESSOS</MudText>
+                                    <MudIcon Icon="@Icons.Material.Filled.ArrowDropDown" Class="text-white" Size="Size.Small"/>
+                                </ActivatorContent>
+                                <ChildContent>
+                                    <MudMenuItem Href="@_profileEgressRoute">Perfil dos Egressos</MudMenuItem>
+                                    <MudMenuItem Href="@_egressRoute">Egressos</MudMenuItem>
+                                </ChildContent>
+                            </MudMenu>
+                        </div>
+                    </NavLink>
+                    <NavLink class="nav-fill" href="@_testimonyRoute">
+                        <MudText Typo="Typo.button" Class="text_color_white">DEPOIMENTOS</MudText>
+                    </NavLink>
+                    <NavLink class="nav-fill" href="@_highlightsRoute">
+                        <MudText Typo="Typo.button" Class="text_color_white">DESTAQUES</MudText>
+                    </NavLink>
+                    <NavLink class="nav-fill" href="@_contactRoute">
+                        <MudText Typo="Typo.button" Class="text_color_white">CONTATO</MudText>
+                    </NavLink>
                 </div>
             </div>
         </MudItem>
@@ -85,6 +78,9 @@
         <MudNavLink Match="NavLinkMatch.All" Href="@_testimonyRoute">
             <MudText Typo="Typo.body2" Class="py-1" Color="Color.Dark">Depoimentos</MudText>
         </MudNavLink>
+        <MudNavLink Match="NavLinkMatch.All" Href="@_highlightsRoute">
+            <MudText Typo="Typo.body2" Class="py-1" Color="Color.Dark">Destaques</MudText>
+        </MudNavLink>
         <MudNavLink Match="NavLinkMatch.All" Href="@_contactRoute">
             <MudText Typo="Typo.body2" Class="py-1" Color="Color.Dark">Contato</MudText>
         </MudNavLink>
@@ -99,6 +95,7 @@
     private string _egressRoute = "egressos";
     private string _profileEgressRoute = "perfil-egressos";
     private string _testimonyRoute = "depoimentos";
+    private string _highlightsRoute = "destaques";
     private string _contactRoute = "contatos";
 
     private bool _flagDrawer = false;
