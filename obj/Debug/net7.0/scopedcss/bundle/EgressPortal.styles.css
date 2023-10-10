@@ -1,3 +1,49 @@
+/* /Pages/Index.razor.rz.scp.css */
+.banner_index[custom-scope-identifier] {
+    background-color: var(--egress-color-darkblue);
+}
+
+.banner_index_center[custom-scope-identifier] {
+    max-width: 1200px;
+}
+
+[custom-scope-identifier] .banner_left {
+    max-width: 300px;
+}
+
+[custom-scope-identifier] .banner_right {
+     max-width: 100%;
+ }
+
+.register_message_button_large[custom-scope-identifier] {
+    display: block;
+}
+
+[custom-scope-identifier] .register_message_button_small {
+    display: none;
+}
+
+@media (max-width: 960px) {
+    [custom-scope-identifier] .banner_right {
+        max-height: 300px;
+    }
+
+    .nav_hidden_link[custom-scope-identifier], .nav_hidden_access_button[custom-scope-identifier]{
+        display: none;
+    }
+
+    .nav_hidden_button[custom-scope-identifier]{
+        display: block;
+    }
+
+    .register_message_button_large[custom-scope-identifier] {
+        display: none;
+    }
+
+    [custom-scope-identifier] .register_message_button_small {
+        display: block;
+    }
+}
 /* /Shared/FooterComponent.razor.rz.scp.css */
 [b-luu46lk4br] .text_color_white {
     color: var(--egress-color-white);
@@ -17,6 +63,89 @@ footer[b-luu46lk4br] {
     max-width:1200px;
     width: 100%;
     min-height:200px;
+}
+/* /Shared/Index/EgressChartComponent.razor.rz.scp.css */
+
+.main-center[b-u1c65whmwe] {
+    max-width: 1200px;
+}
+
+[b-u1c65whmwe] .total-text-color {
+    color: var(--egress-color-darkgreen);
+}
+
+/* /Shared/Index/EgressRandomHighlightsIndexComponent.razor.rz.scp.css */
+.highlights_main[b-huxz80puxk] {
+    background-color: #384861;
+    padding:30px 0;
+}
+
+.highlights_main_center[b-huxz80puxk] {
+    max-width: 1200px;
+}
+
+.highlights_each[b-huxz80puxk] {
+    height: 419px;
+    min-width: 134px;
+    max-width: 400px;
+    background: url("../img/index/highlights_fire.png") no-repeat top center;
+}
+
+[b-huxz80puxk] .highlights_title_mud_item {
+    order: 1;
+}
+
+[b-huxz80puxk] .highlights_list_mud_item {
+    order: 0;
+    padding:0;
+}
+
+@media (max-width: 960px) {
+    [b-huxz80puxk] .highlights_title_mud_item {
+        order: 0;
+    }
+
+    [b-huxz80puxk] .highlights_list_mud_item {
+        order: 1;
+        padding-bottom: 150px;
+    }
+}
+/* /Shared/Index/EgressRandomTestimoniesComponent.razor.rz.scp.css */
+
+[b-7cemfi2a64] .testimonies_main {
+    background: url(img/index/background_testimony_left.png) no-repeat top left, url(img/index/background_testimony_right.png) no-repeat top right;
+    padding-bottom: 50px;
+}
+
+[b-7cemfi2a64] .testimonies_main_left {
+    order: 0;
+}
+
+[b-7cemfi2a64] .testimonies_main_right {
+    order: 2;
+}
+
+[b-7cemfi2a64] .testimonies_main_center {
+    order: 1;
+    min-height: 314px;
+}
+
+[b-7cemfi2a64] .testimonies_main_center_space {
+    display: none;
+}
+
+@media (max-width: 960px) {
+    [b-7cemfi2a64] .testimonies_main_left {
+        order: 1;
+    }
+
+    [b-7cemfi2a64] .testimonies_main_center {
+        order: 0;
+    }
+
+    [b-7cemfi2a64] .testimonies_main_center_space {
+        display: block;
+    }
 }
 /* /Shared/MainLayout.razor.rz.scp.css */
 *[b-nfwxva671o] {

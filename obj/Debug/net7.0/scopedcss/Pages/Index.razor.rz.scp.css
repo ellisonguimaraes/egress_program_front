@@ -1,0 +1,45 @@
+.banner_index[custom-scope-identifier] {
+    background-color: var(--egress-color-darkblue);
+}
+
+.banner_index_center[custom-scope-identifier] {
+    max-width: 1200px;
+}
+
+[custom-scope-identifier] .banner_left {
+    max-width: 300px;
+}
+
+[custom-scope-identifier] .banner_right {
+     max-width: 100%;
+ }
+
+.register_message_button_large[custom-scope-identifier] {
+    display: block;
+}
+
+[custom-scope-identifier] .register_message_button_small {
+    display: none;
+}
+
+@media (max-width: 960px) {
+    [custom-scope-identifier] .banner_right {
+        max-height: 300px;
+    }
+
+    .nav_hidden_link[custom-scope-identifier], .nav_hidden_access_button[custom-scope-identifier]{
+        display: none;
+    }
+
+    .nav_hidden_button[custom-scope-identifier]{
+        display: block;
+    }
+
+    .register_message_button_large[custom-scope-identifier] {
+        display: none;
+    }
+
+    [custom-scope-identifier] .register_message_button_small {
+        display: block;
+    }
+}

@@ -1,6 +1,6 @@
 using EgressPortal.Models.API;
 using EgressPortal.Models.API.HttpClient.Egress;
-using EgressPortal.Models.API.HttpClient.Egress.Testimony;
+using EgressPortal.Models.API.HttpClient.Egress.Highlights;
 using EgressPortal.Services.Extensions;
 using EgressPortal.Services.HttpClients;
 using EgressPortal.Services.Interfaces;
@@ -16,9 +16,15 @@ public class EgressServices : IEgressServices
         _egressApi = egressApi;
     }
 
-    public async Task<GenericHttpResponse<List<GetRandomTestimonyResponseApi>>> GetRandomTestimonyAsync(int quantity)
+    public async Task<GenericHttpResponse<List<GetRandomHighlightResponseApi>>> GetRandomHighlightsAsync(int quantity)
     {
-        var response = await _egressApi.GetRandomAsync(quantity);
+        var response = await _egressApi.GetRandomHighlightsAsync(quantity);
+        return await HandleResponseAsync<List<GetRandomHighlightResponseApi>>(response);
+    }
+
+    public async Task<GenericHttpResponse<List<GetRandomTestimonyResponseApi>>> GetRandomTestimoniesAsync(int quantity)
+    {
+        var response = await _egressApi.GetRandomTestimoniesAsync(quantity);
         return await HandleResponseAsync<List<GetRandomTestimonyResponseApi>>(response);
     }
 

@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "0OhjH6YRcCOcNq9ze+TJ8YbeLpG01e1qZIiD+gSHm2k=",
+  "Hash": "kyVtFcjDf/lZre6jaSiFG8N459gyBFrGcwIr5Okgt7g=",
   "Source": "EgressPortal",
   "BasePath": "/",
   "Mode": "Root",
@@ -7699,6 +7699,40 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot/img/governo_estado_logo.png"
+    },
+    {
+      "Identity": "/Users/ellisonguimaraes/repos/EgressPortal/wwwroot/img/index/background_testimony_left.png",
+      "SourceId": "EgressPortal",
+      "SourceType": "Discovered",
+      "ContentRoot": "/Users/ellisonguimaraes/repos/EgressPortal/wwwroot/",
+      "BasePath": "/",
+      "RelativePath": "img/index/background_testimony_left.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/img/index/background_testimony_left.png"
+    },
+    {
+      "Identity": "/Users/ellisonguimaraes/repos/EgressPortal/wwwroot/img/index/background_testimony_right.png",
+      "SourceId": "EgressPortal",
+      "SourceType": "Discovered",
+      "ContentRoot": "/Users/ellisonguimaraes/repos/EgressPortal/wwwroot/",
+      "BasePath": "/",
+      "RelativePath": "img/index/background_testimony_right.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/img/index/background_testimony_right.png"
     },
     {
       "Identity": "/Users/ellisonguimaraes/repos/EgressPortal/wwwroot/img/index/banner_left.png",

@@ -1,0 +1,35 @@
+.highlights_main {
+    background-color: #384861;
+    padding:30px 0;
+}
+
+.highlights_main_center {
+    max-width: 1200px;
+}
+
+.highlights_each {
+    height: 419px;
+    min-width: 134px;
+    max-width: 400px;
+    background: url("../img/index/highlights_fire.png") no-repeat top center;
+}
+
+::deep .highlights_title_mud_item {
+    order: 1;
+}
+
+::deep .highlights_list_mud_item {
+    order: 0;
+    padding:0;
+}
+
+@media (max-width: 960px) {
+    ::deep .highlights_title_mud_item {
+        order: 0;
+    }
+
+    ::deep .highlights_list_mud_item {
+        order: 1;
+        padding-bottom: 150px;
+    }
+}

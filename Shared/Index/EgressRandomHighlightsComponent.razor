@@ -1,0 +1,75 @@
+﻿@using System.Net
+@inject IEgressServices EgressServices
+
+<div class="d-flex flex-column align-items-center w-100 py-5 highlights_main">
+    <div class="d-flex w-100" style="max-width: 1200px">
+
+        <MudGrid Class="d-flex m-0 p-0 align-items-center">
+            <MudItem xs="12" sm="12" md="3" lg="3" Class="d-flex m-0 py-2 p-0 align-items-center">
+                <MudGrid Class="d-flex m-0 p-0">
+                    <MudItem xs="3" sm="3" md="3" lg="3" Class="d-flex m-0 p-0 justify-content-start">
+                        <svg width="60" height="300" viewBox="0 0 81 374" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M81 187L0.75 373.195L0.75 0.804535L81 187Z" fill="white"/>
+                        </svg>
+                    </MudItem>
+                    <MudItem xs="6" sm="6" md="9" lg="9" Class="d-flex p-5 justify-content-center align-items-center align-content-center m-0 p-0">
+                        <div class="d-flex flex-column">
+                            <MudText Typo="Typo.h5" Class="fw-bold text_color_white">DISCENTE<br/>DISTAQUE</MudText>
+                        </div>
+                    </MudItem>
+                </MudGrid>
+            </MudItem>
+
+            <MudItem xs="12" sm="12" md="9" lg="9" Class="d-flex m-0 p-0 w-100">
+                <MudGrid Class="d-flex m-0 p-0 w-100 justify-content-between">
+                    @if (_hasSuccessfullyRequestRandomHighlights)
+                    {
+                        @foreach(var h in _randomHighlights)
+                        {
+                            <MudItem xs="12" sm="12" md="4" lg="4" Class="d-flex justify-content-center p-0 m-0 mb-4">
+                                <div class="d-flex flex-column highlights_each w-100 h-100 align-items-center px-4" Style="max-width: 400px">
+                                    @if (h.AdvertisingImageSrc is null)
+                                    {
+                                        <MudAvatar Color="Color.Tertiary" Style="height:94px; width:94px; font-size:2rem; margin: 45px 0 15px -8px">@h.Name[0]</MudAvatar>
+                                    }
+                                    else 
+                                    {
+                                        <MudAvatar Style="height:94px; width:94px; font-size:2rem; margin: 45px 0 15px -8px">
+                                            <MudImage Src="@h.AdvertisingImageSrc" Alt=""></MudImage>
+                                        </MudAvatar>
+                                    }
+                                    <MudText Typo="Typo.h5" Class="text_color_green fw-bold">@h.Name</MudText>
+                                    <MudText Typo="Typo.subtitle2" Class="text_color_yellow fw-bold">@string.Join(", ", h.Courses)</MudText>
+                                    <MudText Typo="Typo.body2" Align="Align.Justify" Class="text_color_white px-4 py-2">@h.Description</MudText>
+                                </div>
+                            </MudItem>
+                        }
+                    }
+                    else
+                    {
+                        <MudSkeleton Animation="Animation.Wave" SkeletonType="SkeletonType.Rectangle" Width="100%" Height="100px"/> 
+                    }
+                </MudGrid>
+            </MudItem>
+        </MudGrid>
+    </div>
+</div>
+
+@code {
+    private IList<GetRandomHighlightResponseApi>  _randomHighlights = new List();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetRandomHighlightsAsync();
+    }
+
+    private async Task GetRandomHighlightsAsync()
+    {
+        var response = await EgressServices.GetRandomHighlightsAsync(3);
+
+        if (response.StatusCode.Equals((int)HttpStatusCode.OK))
+        {
+            _randomHighlights = response.Data!;
+        }
+    }
+}

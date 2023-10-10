@@ -1,0 +1,79 @@
+@using System.Net
+@inject IEgressServices EgressServices
+
+<div class="d-flex flex-column align-items-center w-100 p-0 m-0">
+
+        <MudGrid Class="m-0 testimonies_main">
+            @if (_randomTestimonies is not null)
+            {
+                <MudItem xs="12" sm="12" md="5" lg="5" Class="d-flex flex-column align-items-center m-0 p-0 testimonies_main_left">
+                    @if (_randomTestimonies[0].PerfilImageSrc is null)
+                    {
+                        <MudAvatar Color="Color.Tertiary" Style="height:200px; width:200px; font-size:2rem; margin: 70px 0 15px; border:5px solid var(--egress-color-darkgreen)">@_randomTestimonies[0].Name[0]</MudAvatar>
+                    }
+                    else
+                    {
+                        <MudAvatar Style="height:200px; width:200px; font-size:2rem; margin: 70px 0 15px; border:5px solid var(--egress-color-darkgreen);">
+                            <MudImage Src="@(_randomTestimonies[0].PerfilImageSrc)" Alt=""></MudImage>
+                        </MudAvatar>
+                    }
+
+                    <MudText Typo="Typo.h5" Class="text_color_darkblue fw-bold">@_randomTestimonies[0].Name</MudText>
+                    <MudText Typo="Typo.subtitle2" Class="text_color_gray_1 fw-bold">@string.Join(", ", _randomTestimonies[0].Courses)</MudText>
+                    <MudText Typo="Typo.body2" Align="Align.Justify" Class="p-3" Color="Color.Dark">"@_randomTestimonies[0].Content"</MudText>
+                </MudItem>
+
+                <MudItem xs="12" sm="0" md="2" lg="2" Class="d-flex flex-column m-0 p-0 justify-content-center align-items-center testimonies_main_center">
+                    <div class="h-100 testimonies_main_center_space">
+                        <MudSpacer/>
+                    </div>
+                    <MudText Typo="Typo.h5" Color="Color.Dark" Class="fw-bold">DEPOIMENTOS</MudText>
+                </MudItem>
+
+                <MudItem xs="12" sm="12" md="5" lg="5" Class="d-flex flex-column align-items-center m-0 p-0 testimonies_main_right">
+                    @if (_randomTestimonies[1].PerfilImageSrc is null)
+                    {
+                        <MudAvatar Color="Color.Tertiary" Style="height:200px; width:200px; font-size:2rem; margin: 70px 0 15px; border:5px solid var(--egress-color-darkgreen);">@_randomTestimonies[1].Name[0]</MudAvatar>
+                    }
+                    else
+                    {
+                        <MudAvatar Style="height:200px; width:200px; font-size:2rem; margin: 70px 0 15px; border:5px solid var(--egress-color-darkgreen);">
+                            <MudImage Src="@(_randomTestimonies[1].PerfilImageSrc)" Alt=""></MudImage>
+                        </MudAvatar>
+                    }
+
+                    <MudText Typo="Typo.h5" Class="text_color_darkblue fw-bold">@_randomTestimonies[1].Name</MudText>
+                    <MudText Typo="Typo.subtitle2" Class="text_color_gray_1 fw-bold">@string.Join(", ", _randomTestimonies[1].Courses)</MudText>
+                    <MudText Typo="Typo.body2" Align="Align.Justify" Class="p-3" Color="Color.Dark">"@_randomTestimonies[1].Content"</MudText>
+                </MudItem>
+            }
+            else
+            {
+                <MudSkeleton Animation="Animation.Wave" SkeletonType="SkeletonType.Rectangle" Width="100%" Height="100px"/>
+            }
+        </MudGrid>
+
+</div>
+
+@code {
+    #region Constants
+    private const int QUANTITY_TESTIMONIES = 2;
+    #endregion
+
+    private IList<GetRandomTestimonyResponseApi>?  _randomTestimonies;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetRandomTestimoniesAsync();
+    }
+
+    private async Task GetRandomTestimoniesAsync()
+    {
+        var response = await EgressServices.GetRandomTestimoniesAsync(QUANTITY_TESTIMONIES);
+
+        if (response.StatusCode.Equals((int)HttpStatusCode.OK))
+        {
+            _randomTestimonies = response.Data!;
+        }
+    }
+}

@@ -1,0 +1,84 @@
+﻿@using System.Net
+@inject IEgressServices EgressServices
+
+<div class="d-flex flex-column align-items-center w-100 py-5">
+    <div class="d-flex w-100 main-center py-5">
+        <MudGrid Class="d-flex m-0 p-0 align-items-center">
+            <MudItem xs="12" sm="12" md="5" lg="5" Class="d-flex m-0 p-0">
+                <MudGrid Class="d-flex m-0 p-0">
+                    <MudItem xs="2" sm="2" md="2" lg="2" Class="d-flex m-0 p-0">
+                        <svg width="60" height="300" viewBox="0 0 81 402" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M81 201L0.75 401.052L0.75 0.948135L81 201Z" fill="#384861"/>
+                        </svg>
+                    </MudItem>
+                    <MudItem xs="10" sm="10" md="10" lg="10" Class="d-flex p-5 justify-content-center align-items-center align-content-center m-0 p-0">
+                        <div class="d-flex flex-column">
+                            <MudText Typo="Typo.h6" Class="fw-bold total-text-color">TOTAL DE</MudText>
+                            <MudText Typo="Typo.h4" Class="fw-bold" Color="Color.Dark">EGRESSOS</MudText>
+                            <MudText Typo="Typo.h1" Class="fw-bold m-0 p-0" Color="Color.Dark">
+                                @if (_series.Count > 0)
+                                {
+                                    @_egressQuantity
+                                }
+                                else
+                                {
+                                    <MudSkeleton Animation="Animation.Wave" SkeletonType="SkeletonType.Text"/>
+                                }
+                            </MudText>
+                        </div>
+                    </MudItem>
+                </MudGrid>
+            </MudItem>
+            <MudItem xs="12" sm="12" md="7" lg="7" Class="m-0 py-2 px-5">
+                @if (_series.Count > 0)
+                {
+                    <MudChart ChartType="ChartType.Bar" ChartOptions="new ChartOptions { YAxisLines = true, XAxisLines = true }" ChartSeries="@_series" @bind-SelectedIndex="_indexGraph" XAxisLabels="@_xAxisLabels" Width="100%" Height="300px" LegendPosition="Position.Bottom">
+                        <CustomGraphics>
+                            <text x="0" y="10">Total</text>
+                        </CustomGraphics>
+                    </MudChart>
+                }
+                else
+                {
+                    <MudSkeleton Animation="Animation.Wave" SkeletonType="SkeletonType.Rectangle" Width="100%" Height="300px"/>
+                }
+            </MudItem>
+        </MudGrid>
+    </div>
+</div>
+
+
+@code {
+    #region Constants
+    private const string EGRESS_SUBTITLE = "Egressos";
+    #endregion
+
+    #region Chart Properties
+    private int _indexGraph = -1;
+    private List<ChartSeries> _series = new ();
+    private string[] _xAxisLabels = { };
+    #endregion
+
+    private int? _egressQuantity;
+
+    protected override async Task OnInitializedAsync()
+        => await GetCountEgressPerFinalSemesterRequestAsync();
+
+    private async Task GetCountEgressPerFinalSemesterRequestAsync()
+    {
+        var response = await EgressServices.GetCountEgressPerFinalSemesterAsync();
+
+        if (response.StatusCode.Equals((int)HttpStatusCode.OK))
+        {
+            _egressQuantity = response.Data!.Total;
+
+            _xAxisLabels = response.Data!.EgressPerYearList.Select(g => g.Key).ToArray()!;
+
+            _series.Add(new ChartSeries
+            {
+                Name = EGRESS_SUBTITLE,
+                Data = response.Data!.EgressPerYearList.Select(g => g.Value).ToArray()
+            });
+        }
+    }
+}

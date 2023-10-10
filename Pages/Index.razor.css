@@ -1,0 +1,45 @@
+.banner_index {
+    background-color: var(--egress-color-darkblue);
+}
+
+.banner_index_center {
+    max-width: 1200px;
+}
+
+::deep .banner_left {
+    max-width: 300px;
+}
+
+::deep .banner_right {
+     max-width: 100%;
+ }
+
+.register_message_button_large {
+    display: block;
+}
+
+::deep .register_message_button_small {
+    display: none;
+}
+
+@media (max-width: 960px) {
+    ::deep .banner_right {
+        max-height: 300px;
+    }
+
+    .nav_hidden_link, .nav_hidden_access_button{
+        display: none;
+    }
+
+    .nav_hidden_button{
+        display: block;
+    }
+
+    .register_message_button_large {
+        display: none;
+    }
+
+    ::deep .register_message_button_small {
+        display: block;
+    }
+}

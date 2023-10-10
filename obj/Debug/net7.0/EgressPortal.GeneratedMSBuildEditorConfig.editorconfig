@@ -37,10 +37,6 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXMvRWdyZXNzUHJvZmlsZS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[/Users/ellisonguimaraes/repos/EgressPortal/Pages/Index.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXMvSW5kZXgucmF6b3I=
-build_metadata.AdditionalFiles.CssScope = 
-
 [/Users/ellisonguimaraes/repos/EgressPortal/Pages/Login.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXMvTG9naW4ucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
@@ -101,9 +97,25 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = X0ltcG9ydHMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
+[/Users/ellisonguimaraes/repos/EgressPortal/Pages/Index.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvSW5kZXgucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = custom-scope-identifier
+
 [/Users/ellisonguimaraes/repos/EgressPortal/Shared/FooterComponent.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkL0Zvb3RlckNvbXBvbmVudC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = b-luu46lk4br
+
+[/Users/ellisonguimaraes/repos/EgressPortal/Shared/Index/EgressChartComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkL0luZGV4L0VncmVzc0NoYXJ0Q29tcG9uZW50LnJhem9y
+build_metadata.AdditionalFiles.CssScope = b-u1c65whmwe
+
+[/Users/ellisonguimaraes/repos/EgressPortal/Shared/Index/EgressRandomHighlightsIndexComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkL0luZGV4L0VncmVzc1JhbmRvbUhpZ2hsaWdodHNJbmRleENvbXBvbmVudC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = b-huxz80puxk
+
+[/Users/ellisonguimaraes/repos/EgressPortal/Shared/Index/EgressRandomTestimoniesComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkL0luZGV4L0VncmVzc1JhbmRvbVRlc3RpbW9uaWVzQ29tcG9uZW50LnJhem9y
+build_metadata.AdditionalFiles.CssScope = b-7cemfi2a64
 
 [/Users/ellisonguimaraes/repos/EgressPortal/Shared/MainLayout.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkL01haW5MYXlvdXQucmF6b3I=

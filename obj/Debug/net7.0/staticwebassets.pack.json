@@ -85,6 +85,14 @@
       "PackagePath": "staticwebassets/img/governo_estado_logo.png"
     },
     {
+      "Id": "/Users/ellisonguimaraes/repos/EgressPortal/wwwroot/img/index/background_testimony_left.png",
+      "PackagePath": "staticwebassets/img/index/background_testimony_left.png"
+    },
+    {
+      "Id": "/Users/ellisonguimaraes/repos/EgressPortal/wwwroot/img/index/background_testimony_right.png",
+      "PackagePath": "staticwebassets/img/index/background_testimony_right.png"
+    },
+    {
       "Id": "/Users/ellisonguimaraes/repos/EgressPortal/wwwroot/img/index/banner_left.png",
       "PackagePath": "staticwebassets/img/index/banner_left.png"
     },

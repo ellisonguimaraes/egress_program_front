@@ -1,0 +1,36 @@
+
+::deep .testimonies_main {
+    background: url(img/index/background_testimony_left.png) no-repeat top left, url(img/index/background_testimony_right.png) no-repeat top right;
+    padding-bottom: 50px;
+}
+
+::deep .testimonies_main_left {
+    order: 0;
+}
+
+::deep .testimonies_main_right {
+    order: 2;
+}
+
+::deep .testimonies_main_center {
+    order: 1;
+    min-height: 314px;
+}
+
+::deep .testimonies_main_center_space {
+    display: none;
+}
+
+@media (max-width: 960px) {
+    ::deep .testimonies_main_left {
+        order: 1;
+    }
+
+    ::deep .testimonies_main_center {
+        order: 0;
+    }
+
+    ::deep .testimonies_main_center_space {
+        display: block;
+    }
+}

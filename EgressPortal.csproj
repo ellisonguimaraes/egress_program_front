@@ -9,6 +9,9 @@
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'https' " />
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'http' " />
   <ItemGroup>
+    <Content Remove="Shared/Index/EgressRandomHighlightsComponent.razor" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="7.0.11" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="7.0.11" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="7.0.11" PrivateAssets="all" />
@@ -19,6 +22,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="wwwroot\css\index.css" />
+    <None Update="Pages\*.razor.css" CssScope="custom-scope-identifier" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Shared/Index/EgressRandomHighlightsComponent.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Shared/Index/EgressRandomHighlightsComponent.razor" />
   </ItemGroup>
 
 </Project>
