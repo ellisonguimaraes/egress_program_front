@@ -1,6 +1,7 @@
 @page "/Login"
 @using EgressPortal.Models.Form
 @using EgressPortal.Services.Interfaces
+@using EgressPortal.Models
 @inject IUserServices UserServices
 @inject ILoginServices LoginServices
 @inject ISnackbar Snackbar
@@ -26,11 +27,11 @@
                     <MudTextField  @bind-Value="_login.Password" Placeholder="Senha" Label="Senha" Variant="Variant.Outlined" InputType="@_passwordInput" Adornment="Adornment.End" AdornmentIcon="@_passwordInputIcon" OnAdornmentClick="ButtonShowPassword" For="@(() => _login.Password)" AdornmentAriaLabel="Mostrar senha" />
                 </MudItem>
                 <MudItem xs="12" sm="12" md="12" lg="12" Class="d-flex flex-row flex-wrap text-center justify-content-between">
-                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Warning" Href="@_registerRoute">Registrar-se</MudButton>
+                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Warning" Href="@RouteSettings.RegisterRoute">Registrar-se</MudButton>
                     <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">Entrar</MudButton>
                 </MudItem>
                 <MudItem xs="12" sm="12" md="12" lg="12" Class="w-100 text-center">
-                    <MudLink Href="@_recoveryPasswordRoute" Typo="Typo.body2">Esqueci minha senha!</MudLink>
+                    <MudLink Href="@RouteSettings.RecoveryPasswordRoute" Typo="Typo.body2">Esqueci minha senha!</MudLink>
                 </MudItem>
             </MudGrid>
         </EditForm>
@@ -39,9 +40,6 @@
 
 
 @code {
-    private string _registerRoute = "cadastrar";
-    private string _recoveryPasswordRoute = "recuperar-senha";
-
     private LoginForm _login = new LoginForm();
 
     private InputType _passwordInput = InputType.Password;

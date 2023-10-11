@@ -13,6 +13,9 @@ public class GetRandomHighlightResponseApi
     [JsonPropertyName("link")]
     public string? Link { get; set; }
 
+    [JsonPropertyName("perfilImageSrc")]
+    public string? PerfilImageSrc { get; set; }
+
     [JsonPropertyName("wasAccepted")]
     public bool WasAccepted { get; set; }
 

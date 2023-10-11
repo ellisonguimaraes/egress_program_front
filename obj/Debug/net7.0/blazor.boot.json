@@ -213,13 +213,13 @@
       "mscorlib.dll": "sha256-X+o60j6cZnlI2vFFjdH81yYTAxx13\/wqnNSWTKbDsyw=",
       "netstandard.dll": "sha256-Cr6slBs\/R2v2t\/vecFDHbQHakbEhar0adYu0YemwiXI=",
       "System.Private.CoreLib.dll": "sha256-dDw5nzGJhW1jOjGfSJcs\/Mi4KQ+DZygXnoK+vJ+jHyk=",
-      "EgressPortal.dll": "sha256-uzl7bGngckRDOLz\/fQICpGY6h4coeDlzZ1osNMzs4E4="
+      "EgressPortal.dll": "sha256-KnuOHOmHq7LeiwXsB179ZC5XRfeEtqLhhija72MyKgc="
     },
     "extensions": null,
     "lazyAssembly": null,
     "libraryInitializers": null,
     "pdb": {
-      "EgressPortal.pdb": "sha256-JGxSSM50taRv25r1L54YekWm4wt3BaIS0rpbgR71Q\/4="
+      "EgressPortal.pdb": "sha256-symbEcG87hpv710R2Q+Q9ZPRFOaQnlCcSILWnFgQgkI="
     },
     "runtime": {
       "dotnet.7.0.11.2fq0byqg6q.js": "sha256-RtIVigdAD1mUvR4pxoKyD8kcQgw4INP81v+PVSqkeQY=",

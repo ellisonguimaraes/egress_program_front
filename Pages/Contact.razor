@@ -1,5 +1,6 @@
 @page "/contatos"
 @using EgressPortal.Models.Form
+@using EgressPortal.Models
 
 <PageTitle>Contatos | Entre em contato com a equipe de gestão de egressos.</PageTitle>
 
@@ -48,8 +49,8 @@
                         </div>
                     </MudItem>
                     <MudItem xs="12" sm="12" md="12" lg="12" Class="d-flex flex-row justify-content-center p-0 m-0">
-                        <MudIconButton Icon="@Icons.Custom.Brands.Facebook" Size="Size.Large" Class="p-0 m-0" Color="Color.Primary"/>
-                        <MudIconButton Icon="@Icons.Custom.Brands.Instagram" Size="Size.Large" Class="p-0 m-0" Color="Color.Primary"/>
+                        <MudIconButton Icon="@Icons.Custom.Brands.Facebook" Size="Size.Large" Class="p-0 m-0" Color="Color.Primary" Href="@RouteSettings.FacebookRoute" Target="_blank"/>
+                        <MudIconButton Icon="@Icons.Custom.Brands.Instagram" Size="Size.Large" Class="p-0 m-0" Color="Color.Primary" Href="@RouteSettings.InstagramRoute" Target="_blank"/>
                     </MudItem>
                 </MudGrid>
             </MudItem>

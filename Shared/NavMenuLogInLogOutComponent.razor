@@ -31,17 +31,14 @@
         </MudMenu>
     </Authorized>
     <NotAuthorized>
-        <MudButton Variant="Variant.Filled" Color="Color.Tertiary" StartIcon="@Icons.Material.Filled.Login" Href="@_loginRoute">ACESSAR</MudButton>
+        <MudButton Variant="Variant.Filled" Color="Color.Tertiary" StartIcon="@Icons.Material.Filled.Login" Href="@RouteSettings.LoginRoute">ACESSAR</MudButton>
     </NotAuthorized>
 </AuthorizeView>
 
 @code {
     #region Constants
     private const string SEPARATOR_NAME = " ";
-    private const string NAVIGATION_TO_LOGOUT = "/";
     #endregion
-
-    private string _loginRoute = "login";
 
     private string GetFirstName(string fullName)
     {
@@ -52,6 +49,6 @@
     private async Task LogoutAsync()
     {
         await LoginServices.LogoutAsync();
-        NavigationManager.NavigateTo(NAVIGATION_TO_LOGOUT);
+        NavigationManager.NavigateTo(RouteSettings.HomeRoute);
     }
 }

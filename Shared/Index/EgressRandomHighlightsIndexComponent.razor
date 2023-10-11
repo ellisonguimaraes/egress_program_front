@@ -12,14 +12,14 @@
                         {
                             <MudItem xs="12" sm="12" md="4" lg="4" Class="d-flex justify-content-center p-0 m-0 mb-4">
                                 <div class="d-flex flex-column highlights_each w-100 h-100 align-items-center px-4">
-                                    @if (h.AdvertisingImageSrc is null)
+                                    @if (h.PerfilImageSrc is null)
                                     {
                                         <MudAvatar Color="Color.Tertiary" Style="height:94px; width:94px; font-size:2rem; margin: 45px 0 15px -8px">@h.Name[0]</MudAvatar>
                                     }
                                     else
                                     {
                                         <MudAvatar Style="height:94px; width:94px; font-size:2rem; margin: 45px 0 15px -8px">
-                                            <MudImage Src="@h.AdvertisingImageSrc" Alt=""></MudImage>
+                                            <MudImage Src="@h.PerfilImageSrc" Alt=""></MudImage>
                                         </MudAvatar>
                                     }
                                     <MudText Typo="Typo.h5" Class="text_color_green fw-bold">@h.Name</MudText>

@@ -1,6 +1,7 @@
 @page "/confirmar-email"
 @using EgressPortal.Services.Interfaces
 @using System.Net
+@using EgressPortal.Models
 @inject IUserServices UserServices
 @inject ISnackbar Snackbar
 
@@ -16,7 +17,7 @@
                 <MudIcon Icon="@Icons.Material.Filled.CheckCircleOutline" Style="font-size: 4rem;" Color="Color.Success"/>
                 <MudText Align="Align.Center" Typo="Typo.h5" Color="Color.Dark" Style="font-weight: bold">Sua conta foi confirmada com sucesso!</MudText>
                 <MudText Align="Align.Center" Typo="Typo.subtitle1" Color="Color.Dark">Agora que sua conta foi confirmada, faça login para finalizar o cadastro.</MudText>
-                <MudButton Variant="Variant.Filled" Color="Color.Tertiary" StartIcon="@Icons.Material.Filled.Login" Href="@_loginRoute">ACESSAR</MudButton>
+                <MudButton Variant="Variant.Filled" Color="Color.Tertiary" StartIcon="@Icons.Material.Filled.Login" Href="@RouteSettings.LoginRoute">ACESSAR</MudButton>
             </div>
         }
 
@@ -37,7 +38,6 @@
     [SupplyParameterFromQuery(Name = "email")]
     public string Email { get; set; }
 
-    private string _loginRoute = "login";
     private bool _hasConfirmedUser = false;
     private bool _loadingWhileConfirmingEmail = true;
 

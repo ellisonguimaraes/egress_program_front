@@ -1,3 +1,4 @@
+@using EgressPortal.Models
 
 <footer class="d-flex justify-content-center align-items-center w-100">
     <MudGrid Class="m-0 py-3 footer_center">
@@ -16,8 +17,8 @@
             </div>
         </MudItem>
         <MudItem xs="12" sm="12" md="4" lg="4" Class="d-flex flex-row justify-content-center gap-3 p-3 m-0">
-            <MudIconButton Icon="@Icons.Custom.Brands.Facebook" Size="Size.Large" Class="m-0 p-0 text_color_darkgreen"/>
-            <MudIconButton Icon="@Icons.Custom.Brands.Instagram" Size="Size.Large"  Class="m-0 p-0 text_color_darkgreen"/>
+            <MudIconButton Icon="@Icons.Custom.Brands.Facebook" Size="Size.Large" Class="m-0 p-0 text_color_darkgreen" Href="@RouteSettings.FacebookRoute" Target="_blank"/>
+            <MudIconButton Icon="@Icons.Custom.Brands.Instagram" Size="Size.Large"  Class="m-0 p-0 text_color_darkgreen" Href="@RouteSettings.InstagramRoute" Target="_blank"/>
         </MudItem>
         <MudItem xs="12" sm="12" md="4" lg="4" Class="d-flex flex-row justify-content-center justify-content-sm-center justify-content-md-end align-items-center gap-4 p-4">
             <MudImage Src="img/uesc_logo.png" Height="60" Alt="Uesc logo" Elevation="25"/>

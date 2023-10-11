@@ -23,7 +23,7 @@
             </div>
             <div class="nav_hidden nav_hidden_link">
                 <div class="d-flex justify-content-between align-items-center p-2 h-100">
-                    <NavLink class="nav-fill" href="@_homeRoute" Match="NavLinkMatch.All">
+                    <NavLink class="nav-fill" href="@RouteSettings.HomeRoute" Match="NavLinkMatch.All">
                         <MudText Typo="Typo.button" Class="text_color_white">INÍCIO</MudText>
                     </NavLink>
                     <NavLink class="nav-fill">
@@ -34,19 +34,19 @@
                                     <MudIcon Icon="@Icons.Material.Filled.ArrowDropDown" Class="text-white" Size="Size.Small"/>
                                 </ActivatorContent>
                                 <ChildContent>
-                                    <MudMenuItem Href="@_profileEgressRoute">Perfil dos Egressos</MudMenuItem>
-                                    <MudMenuItem Href="@_egressRoute">Egressos</MudMenuItem>
+                                    <MudMenuItem Href="@RouteSettings.ProfileEgressRoute">Perfil dos Egressos</MudMenuItem>
+                                    <MudMenuItem Href="@RouteSettings.EgressRoute">Egressos</MudMenuItem>
                                 </ChildContent>
                             </MudMenu>
                         </div>
                     </NavLink>
-                    <NavLink class="nav-fill" href="@_testimonyRoute">
+                    <NavLink class="nav-fill" href="@RouteSettings.TestimonyRoute">
                         <MudText Typo="Typo.button" Class="text_color_white">DEPOIMENTOS</MudText>
                     </NavLink>
-                    <NavLink class="nav-fill" href="@_highlightsRoute">
+                    <NavLink class="nav-fill" href="@RouteSettings.HighlightsRoute">
                         <MudText Typo="Typo.button" Class="text_color_white">DESTAQUES</MudText>
                     </NavLink>
-                    <NavLink class="nav-fill" href="@_contactRoute">
+                    <NavLink class="nav-fill" href="@RouteSettings.ContactRoute">
                         <MudText Typo="Typo.button" Class="text_color_white">CONTATO</MudText>
                     </NavLink>
                 </div>
@@ -66,22 +66,22 @@
         <MudText Typo="Typo.subtitle1">Menu</MudText>
     </MudDrawerHeader>
     <MudNavMenu>
-        <MudNavLink Match="NavLinkMatch.All" Href="@_homeRoute">
+        <MudNavLink Match="NavLinkMatch.All" Href="@RouteSettings.HomeRoute">
             <MudText Typo="Typo.body2" Class="py-1" Color="Color.Dark">Início</MudText>
         </MudNavLink>
-        <MudNavLink Match="NavLinkMatch.All" Href="@_egressRoute">
+        <MudNavLink Match="NavLinkMatch.All" Href="@RouteSettings.EgressRoute">
             <MudText Typo="Typo.body2" Class="py-1" Color="Color.Dark">Egressos</MudText>
         </MudNavLink>
-        <MudNavLink Match="NavLinkMatch.All" Href="@_profileEgressRoute">
+        <MudNavLink Match="NavLinkMatch.All" Href="@RouteSettings.ProfileEgressRoute">
             <MudText Typo="Typo.body2" Class="py-1" Color="Color.Dark">Perfil dos Egressos</MudText>
         </MudNavLink>
-        <MudNavLink Match="NavLinkMatch.All" Href="@_testimonyRoute">
+        <MudNavLink Match="NavLinkMatch.All" Href="@RouteSettings.TestimonyRoute">
             <MudText Typo="Typo.body2" Class="py-1" Color="Color.Dark">Depoimentos</MudText>
         </MudNavLink>
-        <MudNavLink Match="NavLinkMatch.All" Href="@_highlightsRoute">
+        <MudNavLink Match="NavLinkMatch.All" Href="@RouteSettings.HighlightsRoute">
             <MudText Typo="Typo.body2" Class="py-1" Color="Color.Dark">Destaques</MudText>
         </MudNavLink>
-        <MudNavLink Match="NavLinkMatch.All" Href="@_contactRoute">
+        <MudNavLink Match="NavLinkMatch.All" Href="@RouteSettings.ContactRoute">
             <MudText Typo="Typo.body2" Class="py-1" Color="Color.Dark">Contato</MudText>
         </MudNavLink>
         <div class="align-items-center justify-content-center align-content-center text-center py-5">
@@ -91,13 +91,6 @@
 </MudDrawer>
 
 @code {
-    private string _homeRoute = "/";
-    private string _egressRoute = "egressos";
-    private string _profileEgressRoute = "perfil-egressos";
-    private string _testimonyRoute = "depoimentos";
-    private string _highlightsRoute = "destaques";
-    private string _contactRoute = "contatos";
-
     private bool _flagDrawer = false;
 
     private void OpenDrawer() => _flagDrawer = true;
