@@ -2,8 +2,11 @@ using System.Text.Json.Serialization;
 
 namespace EgressPortal.Models.API.HttpClient.Egress.Highlights;
 
-public class GetRandomHighlightResponseApi
+public class HighlightResponseApi
 {
+    [JsonPropertyName("id")]
+    public Guid Id { get; set; }
+
     [JsonPropertyName("title")]
     public string Title { get; set; }
 
@@ -30,4 +33,10 @@ public class GetRandomHighlightResponseApi
 
     [JsonPropertyName("courses")]
     public IEnumerable<string> Courses { get; set; }
+
+    [JsonPropertyName("createdAt")]
+    public DateTime CreatedAt { get; set; }
+
+    [JsonPropertyName("updatedAt")]
+    public DateTime UpdatedAt { get; set; }
 }

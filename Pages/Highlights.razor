@@ -1,20 +1,19 @@
-@page "/depoimentos"
+@page "/destaques"
 @using EgressPortal.Shared.Utils
-@using EgressPortal.Models.API.HttpClient.Egress.Testimony
-@using EgressPortal.Shared.Testimonies
+@using EgressPortal.Shared.Highlights
 @using System.Net
 @inject ISnackbar Snackbar
 @inject IEgressServices EgressServices
 
-<PageTitle>Depoimentos | Veja o que os egressos relatam sobre a UESC.</PageTitle>
+<PageTitle>Destaques | Um pouco das conquistas dos egressos.</PageTitle>
 
-<TitlePageComponent Title="Depoimentos" SubTitle="Veja o que os egressos relatam sobre a UESC."/>
+<TitlePageComponent Title="Destaques" SubTitle="Um pouco das conquistas dos egressos."/>
 
 <div class="d-flex flex-column align-items-center w-100">
     <div class="d-flex flex-column m-0 p-5" style="width:100%;max-width: 1000px;">
-        <PaginationComponent TotalPages="_totalPages" ChangePageNumberCallback="ChangePageNumberAsync" Items="_testimonies">
+        <PaginationComponent TotalPages="_totalPages" ChangePageNumberCallback="ChangePageNumberAsync" Items="_highlights">
             <ViewItemComponent>
-                <TestimonyItemPaginationComponent Testimony="context"/>
+                <HighlightsItemPaginationComponent Highlights="context"/>
             </ViewItemComponent>
         </PaginationComponent>
     </div>
@@ -25,24 +24,24 @@
     private const int PAGE_SIZE = 2;
     #endregion
 
-    private List<TestimonyResponseApi> _testimonies = new();
+    private List<HighlightResponseApi> _highlights = new();
 
     private int _totalPages = 1;
 
     private async Task ChangePageNumberAsync(int pageNumber)
     {
-        await GetPaginateTestimoniesAsync(pageNumber);
+        await GetPaginateHighlightsAsync(pageNumber);
     }
 
-    private async Task GetPaginateTestimoniesAsync(int pageNumber)
+    private async Task GetPaginateHighlightsAsync(int pageNumber)
     {
-        var result = await EgressServices.GetPaginateTestimoniesAsync(pageNumber, PAGE_SIZE);
+        var result = await EgressServices.GetPaginateHighlightsAsync(pageNumber, PAGE_SIZE);
 
         if (result.StatusCode.Equals((int)HttpStatusCode.OK))
         {
             if (result.Data?.Data is not null)
             {
-                _testimonies = result.Data.Data.ToList();
+                _highlights = result.Data.Data.ToList();
                 _totalPages = result.Data.TotalPages;
             }
         }

@@ -1,6 +1,9 @@
+using System.Text.Json;
+using EgressPortal.Models;
 using EgressPortal.Models.API;
 using EgressPortal.Models.API.HttpClient.Egress;
 using EgressPortal.Models.API.HttpClient.Egress.Highlights;
+using EgressPortal.Models.API.HttpClient.Egress.Testimony;
 using EgressPortal.Services.Extensions;
 using EgressPortal.Services.HttpClients;
 using EgressPortal.Services.Interfaces;
@@ -9,6 +12,10 @@ namespace EgressPortal.Services;
 
 public class EgressServices : IEgressServices
 {
+    #region Constants
+    private const string X_PAGINATION_HEADER = "X-Pagination";
+    #endregion
+
     private readonly IEgressApi _egressApi;
 
     public EgressServices(IEgressApi egressApi)
@@ -16,16 +23,93 @@ public class EgressServices : IEgressServices
         _egressApi = egressApi;
     }
 
-    public async Task<GenericHttpResponse<List<GetRandomHighlightResponseApi>>> GetRandomHighlightsAsync(int quantity)
+    public async Task<GenericHttpResponse<List<HighlightResponseApi>>> GetRandomHighlightsAsync(int quantity)
     {
         var response = await _egressApi.GetRandomHighlightsAsync(quantity);
-        return await HandleResponseAsync<List<GetRandomHighlightResponseApi>>(response);
+        return await HandleResponseAsync<List<HighlightResponseApi>>(response);
     }
 
-    public async Task<GenericHttpResponse<List<GetRandomTestimonyResponseApi>>> GetRandomTestimoniesAsync(int quantity)
+    public async Task<GenericHttpResponse<PagedList<HighlightResponseApi>>> GetPaginateHighlightsAsync(int pageNumber, int pageSize)
+    {
+        var response = await _egressApi.GetPaginateHighlighsAsync(pageNumber, pageSize);
+
+        var highlightsGenericHttpResponse = await HandleResponseAsync<List<HighlightResponseApi>>(response);
+
+        var genericHttpResponse = new GenericHttpResponse<PagedList<HighlightResponseApi>>
+        {
+            TraceId = highlightsGenericHttpResponse.TraceId,
+            StatusCode = highlightsGenericHttpResponse.StatusCode,
+            Data = default,
+            Errors = highlightsGenericHttpResponse.Errors
+        };
+
+        var paginationInfo = GetPaginationInfo<HighlightResponseApi>(response);
+
+        if (paginationInfo is not null)
+            paginationInfo!.Data = highlightsGenericHttpResponse.Data;
+
+        genericHttpResponse.Data = paginationInfo;
+
+        return genericHttpResponse;
+    }
+
+    public async Task<GenericHttpResponse<HighlightResponseApi?>> GetHighlightsAsync(Guid id)
+    {
+        var responseApi = await _egressApi.GetHighlighsAsync(id);
+
+        var genericHttpResponse = await HandleResponseAsync<List<HighlightResponseApi>>(responseApi);
+
+        return new GenericHttpResponse<HighlightResponseApi?>
+        {
+            TraceId = genericHttpResponse.TraceId,
+            StatusCode = genericHttpResponse.StatusCode,
+            Data = genericHttpResponse.Data?.FirstOrDefault(),
+            Errors = genericHttpResponse.Errors
+        };
+    }
+
+    public async Task<GenericHttpResponse<List<TestimonyResponseApi>>> GetRandomTestimoniesAsync(int quantity)
     {
         var response = await _egressApi.GetRandomTestimoniesAsync(quantity);
-        return await HandleResponseAsync<List<GetRandomTestimonyResponseApi>>(response);
+        return await HandleResponseAsync<List<TestimonyResponseApi>>(response);
+    }
+
+    public async Task<GenericHttpResponse<PagedList<TestimonyResponseApi>>> GetPaginateTestimoniesAsync(int pageNumber, int pageSize)
+    {
+        var response = await _egressApi.GetPaginateTestimoniesAsync(pageNumber, pageSize);
+
+        var testimonyGenericHttpResponse = await HandleResponseAsync<List<TestimonyResponseApi>>(response);
+
+        var genericHttpResponse = new GenericHttpResponse<PagedList<TestimonyResponseApi>>
+        {
+            TraceId = testimonyGenericHttpResponse.TraceId,
+            StatusCode = testimonyGenericHttpResponse.StatusCode,
+            Data = default,
+            Errors = testimonyGenericHttpResponse.Errors
+        };
+
+        var paginationInfo = GetPaginationInfo<TestimonyResponseApi>(response);
+
+        if (paginationInfo is not null)
+            paginationInfo!.Data = testimonyGenericHttpResponse.Data;
+
+        genericHttpResponse.Data = paginationInfo;
+
+        return genericHttpResponse;
+    }
+
+    private static PagedList<T>? GetPaginationInfo<T>(HttpResponseMessage httpResponseMessage)
+    {
+        try
+        {
+            var paginationInfoString = httpResponseMessage.Headers.GetValues(X_PAGINATION_HEADER).FirstOrDefault();
+
+            return JsonSerializer.Deserialize<PagedList<T>>(paginationInfoString!);
+        }
+        catch (Exception)
+        {
+            return default;
+        }
     }
 
     public async Task<GenericHttpResponse<GetCountEgressPerFinalSemesterResponseApi>> GetCountEgressPerFinalSemesterAsync()

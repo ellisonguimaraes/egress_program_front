@@ -1,9 +1,12 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace EgressPortal;
+namespace EgressPortal.Models.API.HttpClient.Egress.Testimony;
 
-public class GetRandomTestimonyResponseApi
+public class TestimonyResponseApi
 {
+    [JsonPropertyName("id")]
+    public Guid Id { get; set; }
+
     [JsonPropertyName("name")]
     public string Name { get; set; }
 
@@ -18,4 +21,10 @@ public class GetRandomTestimonyResponseApi
 
     [JsonPropertyName("wasAccepted")]
     public bool WasAccepted { get; set; }
+
+    [JsonPropertyName("createdAt")]
+    public DateTime CreatedAt { get; set; }
+
+    [JsonPropertyName("updatedAt")]
+    public DateTime UpdatedAt { get; set; }
 }

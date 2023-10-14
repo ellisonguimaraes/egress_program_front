@@ -1,4 +1,5 @@
 @using System.Net
+@using EgressPortal.Models.API.HttpClient.Egress.Testimony
 @inject IEgressServices EgressServices
 
 <div class="d-flex flex-column align-items-center w-100 h-100 p-0 m-0">
@@ -76,7 +77,7 @@
     private const int QUANTITY_TESTIMONIES = 2;
     #endregion
 
-    private IList<GetRandomTestimonyResponseApi>?  _randomTestimonies;
+    private IList<TestimonyResponseApi>?  _randomTestimonies;
 
     protected override async Task OnInitializedAsync()
     {

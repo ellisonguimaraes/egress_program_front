@@ -1,0 +1,20 @@
+@using EgressPortal.Models
+<MudGrid class="d-flex flex-row w-100 gap-3 my-3">
+    <MudItem xs="12" sm="12" md="3" lg="3" Class="d-flex flex-column m-0 p-0 align-items-center">
+        <MudImage Alt="@($"Image represents: {Highlights.Title}")" Src="@Highlights.AdvertisingImageSrc" Style="max-width: 300px; width: 100%; max-height: 180px"/>
+    </MudItem>
+    <MudItem xs="12" sm="12" md="8" lg="8" Class="d-flex flex-column m-0 p-0 gap-1">
+        <MudText Typo="Typo.subtitle1" Align="Align.Justify" Class="fw-bold lh-base">@Highlights.Title</MudText>
+        <MudText Typo="Typo.caption" Class="fw-bold text_color_gray_1">@Highlights.Name.Split(" ")[0].ToUpper() · @Highlights.CreatedAt.ToString("dd/MM/yyyy")</MudText>
+        <MudText Typo="Typo.body2" Align="Align.Justify" Class="my-1">@((Highlights.Description.Length > 256)? $"{Highlights.Description[..256]}..." : Highlights.Description)</MudText>
+        <MudLink Typo="Typo.button" Color="Color.Primary" Href="@($"{RouteSettings.HighlightsRoute}/{Highlights.Id}")">Ler mais</MudLink>
+    </MudItem>
+</MudGrid>
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public HighlightResponseApi Highlights { get; set; } = null!;
+
+    public string CourseMessage => string.Join(", ", Highlights.Courses.ToList());
+}

@@ -1,0 +1,42 @@
+<div class="d-flex flex-row w-100 m-0 p-0">
+    <div class="d-flex m-0 p-0" style="min-width: 70px">
+        @if (string.IsNullOrEmpty(Highlights.PerfilImageSrc))
+        {
+            <MudAvatar Color="Color.Tertiary" Style="height:50px; width:50px; font-size:2rem;">@Highlights.Name[0]</MudAvatar>
+        }
+        else
+        {
+            <MudAvatar Style="height:50px; width:50px; font-size:2rem;">
+                <MudImage Src="@Highlights.PerfilImageSrc" Alt="Profile photo"></MudImage>
+            </MudAvatar>
+        }
+    </div>
+    <div class="d-flex flex-column m-0 p-0 w-100 align-self-center">
+        <MudText Color="Color.Dark" Typo="Typo.body1">@Highlights.Name</MudText>
+        <MudText Color="Color.Dark" Typo="Typo.caption" Class="fw-bold text_color_gray_1">@string.Join(", ", Highlights.Courses).ToUpper()</MudText>
+    </div>
+</div>
+
+<MudDivider DividerType="DividerType.Middle" Class="my-6"/>
+
+<MudText Color="Color.Dark" Typo="Typo.caption" Class="fw-bold" Align="Align.Start">PUBLICADO EM @Highlights.CreatedAt.ToString("dd/MM/yyyy")</MudText>
+
+<MudImage Src="@Highlights.AdvertisingImageSrc" ObjectFit="ObjectFit.Cover" Class="rounded-lg mb-4 mt-2"></MudImage>
+
+<MudText Typo="Typo.h5" Color="Color.Dark">@Highlights.Title</MudText>
+<MudText Color="Color.Dark" Typo="Typo.body1" Align="Align.Justify" Class="my-5">@Highlights.Description</MudText>
+
+@if (!string.IsNullOrEmpty(Highlights.Link))
+{
+    <div class="d-flex flex-row gap-2">
+        <MudText Color="Color.Dark" Typo="Typo.body2">Link:</MudText>
+        <MudLink Color="Color.Primary" Target="_blank" Href="@Highlights.Link" Typo="Typo.body2">@Highlights.Link</MudLink>
+    </div>
+}
+
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public HighlightResponseApi Highlights { get; set; } = null!;
+}

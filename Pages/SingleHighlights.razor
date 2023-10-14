@@ -1,0 +1,72 @@
+@page "/destaques/{HighlightsId:guid}"
+@using System.Net
+@using EgressPortal.Shared.Highlights
+@inject IEgressServices EgressServices
+@inject ISnackbar Snackbar
+
+<div class="d-flex flex-column align-items-center w-100 pb-5 mb-5">
+    <div class="d-flex flex-column my-5 p-5" style="width:100%;max-width: 700px;">
+        @if (_apiLoading)
+        {
+            <div class="d-flex w-100 justify-content-center align-items-center align-content-center p-5">
+                <MudProgressCircular Color="Color.Primary" Size="Size.Medium" Indeterminate="true" />
+            </div>
+        }
+        else
+        {
+            if (_notFoundApi)
+            {
+                <NotFoundComponent/>
+            }
+            else
+            {
+                <HighlightsItemComponent Highlights="_highlights"/>
+            }
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public Guid HighlightsId { get; set; }
+
+    private HighlightResponseApi _highlights = null!;
+
+    private bool _apiLoading = false;
+    private bool _notFoundApi = false;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        _apiLoading = true;
+        StateHasChanged();
+        await Task.Delay(3000);
+        await GetHighlightsAsync(HighlightsId);
+
+        _apiLoading = false;
+        StateHasChanged();
+    }
+
+    private async Task GetHighlightsAsync(Guid id)
+    {
+        var result = await EgressServices.GetHighlightsAsync(id);
+
+        if (result.StatusCode.Equals((int)HttpStatusCode.OK))
+        {
+            if (result.Data is not null)
+            {
+                _highlights = result.Data;
+            }
+            else
+            {
+                _notFoundApi = true;
+            }
+        }
+        else
+        {
+            foreach (var error in result.Errors)
+            {
+                Snackbar.Add(error, Severity.Error);
+            }
+        }
+    }
+}

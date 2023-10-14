@@ -1,4 +1,5 @@
 using EgressPortal.Models.API.HttpClient;
+using EgressPortal.Models.API.HttpClient.Contact;
 using Refit;
 
 namespace EgressPortal.Services.HttpClients;
@@ -30,4 +31,7 @@ public interface IUserApi
 
     [Post("/api/v1/user/refresh_token")]
     Task<HttpResponseMessage> RefreshTokenAsync([Header(REFRESH_TOKEN_HEADER)] string refreshToken);
+
+    [Post("/api/v1/contact")]
+    Task<HttpResponseMessage> SendContactEmailAsync([Body] ContactEmailRequestApi request);
 }

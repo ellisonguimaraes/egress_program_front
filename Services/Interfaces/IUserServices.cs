@@ -51,4 +51,11 @@ public interface IUserServices
     /// <param name="refreshToken">Refresh token</param>
     /// <returns>GenericHttpResponse with AuthenticationResponseApi</returns>
     Task<GenericHttpResponse<AuthenticationResponseApi>> RefreshTokenAsync(string refreshToken);
+
+    /// <summary>
+    /// Reset password (return to email)
+    /// </summary>
+    /// <param name="contactForm">Subject, name, email, phone number and message</param>
+    /// <returns>GenericHttpResponse</returns>
+    Task<GenericHttpResponse<object>> SendContactEmailAsync(ContactForm contactForm);
 }

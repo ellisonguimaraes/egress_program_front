@@ -1,29 +1,45 @@
 @page "/contatos"
 @using EgressPortal.Models.Form
 @using EgressPortal.Models
+@using System.Net
+@inject ISnackbar Snackbar
+@inject IUserServices UserServices
 
 <PageTitle>Contatos | Entre em contato com a equipe de gestão de egressos.</PageTitle>
 
 <TitlePageComponent Title="Contatos" SubTitle="Entre em contato com a equipe de gestão de egressos."/>
+
+@if (_loadingApiResponse)
+{
+    <MudProgressLinear Color="Color.Warning" Indeterminate="true" />
+}
 
 <div class="d-flex flex-column align-items-center w-100">
     <div class="d-flex flex-column m-0 p-5 contact_main_center" style="width:100%;max-width: 1000px;">
         <MudText Align="Align.Start" Typo="Typo.h6" Class="mb-5">Formulário de Contato</MudText>
         <MudGrid Class="m-0 p-0">
             <MudItem xs="12" sm="12" md="6" lg="6">
-                <EditForm OnValidSubmit="OnValidSubmit" Model="_contactForm">
+                <EditForm OnValidSubmit="OnValidSubmitAsync" Model="_contactForm">
                     <DataAnnotationsValidator/>
                     <MudGrid Class="gap-3">
+                        <MudItem xs="12" sm="12" md="12" lg="12" Class="m-0 p-0">
+                            <MudTextField Variant="Variant.Outlined" Placeholder="Nome" Label="Nome" @bind-Value="_contactForm.Name" For="@(() => _contactForm.Name)"/>
+                        </MudItem>
+
                         <MudItem xs="12" sm="12" md="12" lg="12" Class="m-0 p-0">
                             <MudTextField Variant="Variant.Outlined" Placeholder="Assunto" Label="Assunto" @bind-Value="_contactForm.Subject" For="@(() => _contactForm.Subject)"/>
                         </MudItem>
 
                         <MudItem xs="12" sm="12" md="12" lg="12" Class="m-0 p-0">
-                            <MudTextField InputType="InputType.Email" Variant="Variant.Outlined" Placeholder="E-mail" Label="E-mail" HelperText="E-mail para contato" @bind-Value="_contactForm.Email" For="@(() => _contactForm.Email)"/>
+                            <MudTextField InputType="InputType.Email" Variant="Variant.Outlined" Placeholder="E-mail" Label="E-mail" HelperText="E-mail para contato" @bind-Value="_contactForm.Email" For="@(() => _contactForm.Email)" IconSize="Size.Small" Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.Email"/>
                         </MudItem>
 
                         <MudItem xs="12" sm="12" md="12" lg="12" Class="m-0 p-0">
-                            <MudTextField Variant="Variant.Outlined" Placeholder="Mensagem" Label="Mensagem" Lines="5" @bind-Value="_contactForm.Message" For="@(() => _contactForm.Message)"/>
+                            <MudTextField Mask="@(new PatternMask("(00) 0 0000-0000"))" Variant="Variant.Outlined" Placeholder="Telefone" Label="Telefone" HelperText="Telefone para contato ou Whatsapp" @bind-Value="_contactForm.PhoneNumber" For="@(() => _contactForm.PhoneNumber)" IconSize="Size.Small" Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.Phone"/>
+                        </MudItem>
+
+                        <MudItem xs="12" sm="12" md="12" lg="12" Class="m-0 p-0">
+                            <MudTextField Variant="Variant.Outlined" Placeholder="Mensagem" Label="Mensagem" Immediate="true" Lines="5" Counter="400" MaxLength="400"  @bind-Value="_contactForm.Message" For="@(() => _contactForm.Message)"/>
                         </MudItem>
 
                         <MudItem xs="12" sm="12" md="12" lg="12" Class="m-0 p-0 py-4 text-end">
@@ -59,13 +75,39 @@
 </div>
 
 @code {
+    #region Constants
+    private const string SUCCESS_MESSAGE_SEND_CONTACT = "Enviado com sucesso";
+    #endregion
+
+    private bool _loadingApiResponse = false;
+
     private ContactForm _contactForm = new ContactForm();
 
-    private void OnValidSubmit()
+    private async Task OnValidSubmitAsync()
     {
-        Console.WriteLine("OnValidSubmit Contact");
-        Console.WriteLine(_contactForm.Subject);
-        Console.WriteLine(_contactForm.Email);
-        Console.WriteLine(_contactForm.Message);
+        _loadingApiResponse = true;
+        StateHasChanged();
+
+        await SendContactEmailAsync();
+
+        _loadingApiResponse = false;
+        StateHasChanged();
+    }
+
+    private async Task SendContactEmailAsync()
+    {
+        var result = await UserServices.SendContactEmailAsync(_contactForm);
+
+        if (result.StatusCode.Equals((int)HttpStatusCode.NoContent))
+        {
+            Snackbar.Add(SUCCESS_MESSAGE_SEND_CONTACT, Severity.Success);
+        }
+        else
+        {
+            foreach (var error in result.Errors)
+            {
+                Snackbar.Add(error, Severity.Error);
+            }
+        }
     }
 }

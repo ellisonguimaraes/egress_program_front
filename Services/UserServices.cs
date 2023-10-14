@@ -1,5 +1,6 @@
 using EgressPortal.Models.API;
 using EgressPortal.Models.API.HttpClient;
+using EgressPortal.Models.API.HttpClient.Contact;
 using EgressPortal.Models.Form;
 using EgressPortal.Services.Extensions;
 using EgressPortal.Services.HttpClients;
@@ -74,6 +75,21 @@ public class UserServices : IUserServices
     {
         var response = await _userApi.RefreshTokenAsync(refreshToken);
         return await HandleResponseAsync<AuthenticationResponseApi>(response);
+    }
+
+    public async Task<GenericHttpResponse<object>> SendContactEmailAsync(ContactForm contactForm)
+    {
+        var request = new ContactEmailRequestApi
+        {
+            Name = contactForm.Name,
+            Subject = contactForm.Subject,
+            Email = contactForm.Email,
+            PhoneNumber = contactForm.PhoneNumber,
+            Message = contactForm.Message
+        };
+
+        var response = await _userApi.SendContactEmailAsync(request);
+        return await HandleResponseAsync<object>(response);
     }
 
     /// <summary>

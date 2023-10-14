@@ -37,6 +37,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXMvRWdyZXNzUHJvZmlsZS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
+[/Users/ellisonguimaraes/repos/EgressPortal/Pages/Highlights.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvSGlnaGxpZ2h0cy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
 [/Users/ellisonguimaraes/repos/EgressPortal/Pages/Login.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXMvTG9naW4ucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
@@ -51,6 +55,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [/Users/ellisonguimaraes/repos/EgressPortal/Pages/Register.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXMvUmVnaXN0ZXIucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/ellisonguimaraes/repos/EgressPortal/Pages/SingleHighlights.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvU2luZ2xlSGlnaGxpZ2h0cy5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Users/ellisonguimaraes/repos/EgressPortal/Pages/Testimonies.razor]
@@ -81,12 +89,20 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkL0F1dGgvVW5hdXRob3JpemVkQ29tcG9uZW50LnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
+[/Users/ellisonguimaraes/repos/EgressPortal/Shared/Highlights/HighlightsItemComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkL0hpZ2hsaWdodHMvSGlnaGxpZ2h0c0l0ZW1Db21wb25lbnQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/ellisonguimaraes/repos/EgressPortal/Shared/Highlights/HighlightsItemPaginationComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkL0hpZ2hsaWdodHMvSGlnaGxpZ2h0c0l0ZW1QYWdpbmF0aW9uQ29tcG9uZW50LnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
 [/Users/ellisonguimaraes/repos/EgressPortal/Shared/NotFoundComponent.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkL05vdEZvdW5kQ29tcG9uZW50LnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[/Users/ellisonguimaraes/repos/EgressPortal/Shared/Testimonies/TestimonyItemPagination.razor]
-build_metadata.AdditionalFiles.TargetPath = U2hhcmVkL1Rlc3RpbW9uaWVzL1Rlc3RpbW9ueUl0ZW1QYWdpbmF0aW9uLnJhem9y
+[/Users/ellisonguimaraes/repos/EgressPortal/Shared/Testimonies/TestimonyItemPaginationComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkL1Rlc3RpbW9uaWVzL1Rlc3RpbW9ueUl0ZW1QYWdpbmF0aW9uQ29tcG9uZW50LnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Users/ellisonguimaraes/repos/EgressPortal/Shared/Utils/PaginationComponent.razor]
