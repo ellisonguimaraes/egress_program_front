@@ -8,6 +8,8 @@ public class EgressFilterForm
 
     public bool CheckModalityClassroom { get; set; }
 
+    public bool CheckModalityHybrid { get; set; }
+
     public bool CheckModalityVirtualClass { get; set; }
 
     public bool CheckLevelGraduation { get; set; }
@@ -18,7 +20,5 @@ public class EgressFilterForm
 
     public bool CheckLevelDoctorateDegree { get; set; }
 
-    public int IngressYear { get; set; }
-
-    public int ConclusionYear { get; set; }
+    public string FinalSemester { get; set; }
 }

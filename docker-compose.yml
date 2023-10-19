@@ -1,0 +1,9 @@
+﻿services:
+  egressportal:
+    image: egressportal
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "9970:80"
+      - "9971:443"

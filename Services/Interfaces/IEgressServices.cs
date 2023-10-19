@@ -3,6 +3,7 @@ using EgressPortal.Models.API;
 using EgressPortal.Models.API.HttpClient.Egress;
 using EgressPortal.Models.API.HttpClient.Egress.Highlights;
 using EgressPortal.Models.API.HttpClient.Egress.Testimony;
+using EgressPortal.Models.Form;
 
 namespace EgressPortal.Services.Interfaces;
 
@@ -50,4 +51,13 @@ public interface IEgressServices
     /// </summary>
     /// <returns>List count per year</returns>
     Task<GenericHttpResponse<GetCountEgressPerFinalSemesterResponseApi>> GetCountEgressPerFinalSemesterAsync();
+
+    /// <summary>
+    /// Get pagination egresses
+    /// </summary>
+    /// <param name="pageNumber">Page number</param>
+    /// <param name="pageSize">Page size</param>
+    /// <param name="egressFilterForm">Egress search filters</param>
+    /// <returns>Paginated egresses</returns>
+    Task<GenericHttpResponse<PagedList<GetEgressPaginateResponseApi>>> GetPaginateEgressAsync(int pageNumber, int pageSize, EgressFilterForm egressFilterForm);
 }

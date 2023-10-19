@@ -10,21 +10,30 @@
         }
         else
         {
-            @foreach (var item in Items)
+            if (ViewItemComponent is not null)
             {
-                @ViewItemComponent(item)
+                @foreach (var item in Items)
+                {
+                    @ViewItemComponent(item)
+                }
+            }
+            else if (ViewAllItemsComponent is not null)
+            {
+                @ViewAllItemsComponent(Items)
             }
         }
     </div>
     <div class="d-flex w-100 justify-content-center">
-        <MudPagination Variant="Variant.Text" BoundaryCount="1" MiddleCount="3" Count="@TotalPages" SelectedChanged="SelectedChangedAsync" Class="mt-4"/>
+        <MudPagination @ref="_mudPagination" Variant="Variant.Text" BoundaryCount="1" MiddleCount="3" Count="@TotalPages" SelectedChanged="SelectedChangedAsync" Class="mt-4"/>
     </div>
 </div>
 
 @code {
     [Parameter]
-    [EditorRequired]
     public RenderFragment<TItem> ViewItemComponent { get; set; } = null!;
+
+    [Parameter]
+    public RenderFragment<List<TItem>> ViewAllItemsComponent { get; set; } = null!;
 
     [Parameter]
     [EditorRequired]
@@ -42,6 +51,8 @@
 
     private bool _loadingChangePage = false;
 
+    private MudPagination _mudPagination = null!;
+
     protected override async Task OnInitializedAsync()
     {
         await SelectedChangedAsync(_selected);
@@ -58,5 +69,18 @@
 
         _loadingChangePage = false;
         StateHasChanged();
+    }
+
+    public async Task ChangePageNumberAsync(int pageNumber)
+    {
+        if (pageNumber.Equals(_mudPagination.Selected))
+        {
+            await ChangePageNumberCallback.InvokeAsync(pageNumber);
+        }
+        else
+        {
+            _mudPagination.Selected = pageNumber;
+            StateHasChanged();
+        }
     }
 }

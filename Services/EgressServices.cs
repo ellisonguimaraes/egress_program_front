@@ -1,9 +1,11 @@
+using System.Text;
 using System.Text.Json;
 using EgressPortal.Models;
 using EgressPortal.Models.API;
 using EgressPortal.Models.API.HttpClient.Egress;
 using EgressPortal.Models.API.HttpClient.Egress.Highlights;
 using EgressPortal.Models.API.HttpClient.Egress.Testimony;
+using EgressPortal.Models.Form;
 using EgressPortal.Services.Extensions;
 using EgressPortal.Services.HttpClients;
 using EgressPortal.Services.Interfaces;
@@ -116,6 +118,79 @@ public class EgressServices : IEgressServices
     {
         var response = await _egressApi.GetCountEgressPerFinalSemesterAsync();
         return await HandleResponseAsync<GetCountEgressPerFinalSemesterResponseApi>(response);
+    }
+
+    public async Task<GenericHttpResponse<PagedList<GetEgressPaginateResponseApi>>> GetPaginateEgressAsync(int pageNumber, int pageSize, EgressFilterForm egressFilterForm)
+    {
+        var query = BuildQueryString(egressFilterForm);
+
+        Console.WriteLine(query);
+
+        var response = await _egressApi.GetPaginateEgressAsync(pageNumber, pageSize, query, "FinalSemester desc");
+
+        var egressGenericHttpResponse = await HandleResponseAsync<List<GetEgressPaginateResponseApi>>(response);
+
+        var genericHttpResponse = new GenericHttpResponse<PagedList<GetEgressPaginateResponseApi>>
+        {
+            TraceId = egressGenericHttpResponse.TraceId,
+            StatusCode = egressGenericHttpResponse.StatusCode,
+            Data = default,
+            Errors = egressGenericHttpResponse.Errors
+        };
+
+        var paginationInfo = GetPaginationInfo<GetEgressPaginateResponseApi>(response);
+
+        if (paginationInfo is not null)
+            paginationInfo!.Data = egressGenericHttpResponse.Data;
+
+        genericHttpResponse.Data = paginationInfo;
+
+        return genericHttpResponse;
+    }
+
+    private string BuildQueryString(EgressFilterForm egressFilterForm)
+    {
+        var query = new List<string>();
+        var levelQuery = new List<string>();
+        var modalityQuery = new List<string>();
+
+        if (!string.IsNullOrWhiteSpace(egressFilterForm.CourseName))
+            query.Add($"Course.CourseName = \"{egressFilterForm.CourseName}\"");
+
+        if (!string.IsNullOrWhiteSpace(egressFilterForm.FinalSemester) && !egressFilterForm.FinalSemester.Equals("Todos os semestres"))
+            query.Add($"FinalSemester = \"{egressFilterForm.FinalSemester}\"");
+
+        // Check level
+        if (egressFilterForm.CheckLevelGraduation)
+            levelQuery.Add($"Level equal 0");
+
+        if (egressFilterForm.CheckLevelPostgraduate)
+            levelQuery.Add($"Level equal 1");
+
+        if (egressFilterForm.CheckLevelMasterDegree)
+            levelQuery.Add($"Level equal 2");
+
+        if (egressFilterForm.CheckLevelDoctorateDegree)
+            levelQuery.Add($"Level equal 3");
+
+        // Check modality
+        if (egressFilterForm.CheckModalityClassroom)
+            modalityQuery.Add($"Modality equal 1");
+
+        if (egressFilterForm.CheckModalityHybrid)
+            modalityQuery.Add($"Modality equal 2");
+
+        if (egressFilterForm.CheckModalityVirtualClass)
+            modalityQuery.Add($"Modality equal 3");
+
+
+        if (levelQuery.Count > 0)
+            query.Add($"({string.Join(" or ", levelQuery)})");
+
+        if (modalityQuery.Count > 0)
+            query.Add($"({string.Join(" or ", modalityQuery)})");
+
+        return string.Join(" and ", query);
     }
 
     /// <summary>
