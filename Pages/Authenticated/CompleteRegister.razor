@@ -16,10 +16,11 @@
                     <MudTextField Variant="Variant.Outlined" Mask="@(new PatternMask("000.000.000-00"))" Placeholder="Cpf" Label="Cpf" @bind-Value="_completeRegisterForm.Cpf" For="@(() => _completeRegisterForm.Cpf)"></MudTextField>
                 </MudItem>
                 <MudItem xs="12" sm="12" md="3" lg="3" Class="d-flex w-100 m-0 p-0">
-                    <MudTextField Variant="Variant.Outlined" Format="dd-MM-yyyy" Label="Data de Nascimento" @bind-Value="_completeRegisterForm.BirthDate" For="@(() => _completeRegisterForm.BirthDate)" InputType="InputType.Date"/>
+                    <MudDatePicker Variant="Variant.Outlined" Label="Data de Nascimento" Editable="true" @bind-Date="_completeRegisterForm.BirthDate" For="@(() => _completeRegisterForm.BirthDate)" Placeholder="dd/MM/aaaa" />
                 </MudItem>
-                
             </MudGrid>
+
+            <MudButton ButtonType="ButtonType.Submit">Cadastrar</MudButton>
         </EditForm>
     </div>
 </div>
