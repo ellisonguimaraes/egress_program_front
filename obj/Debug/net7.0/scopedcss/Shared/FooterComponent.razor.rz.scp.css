@@ -1,18 +1,18 @@
-[b-luu46lk4br] .text_color_white {
+[b-qf766v80us] .text_color_white {
     color: var(--egress-color-white);
 }
 
-[b-luu46lk4br] .text_color_darkgreen {
+[b-qf766v80us] .text_color_darkgreen {
     color: var(--egress-color-darkgreen);
 }
 
-footer[b-luu46lk4br] {
+footer[b-qf766v80us] {
     min-height: 200px;
     height:100%;
     background-color: #000012;
 }
 
-[b-luu46lk4br] .footer_center {
+[b-qf766v80us] .footer_center {
     max-width:1200px;
     width: 100%;
     min-height:200px;

@@ -2,30 +2,34 @@
 services:
   egressportal:
     build:
-      context: "/Users/ellisonguimaraes/repos/EgressPortal"
+      context: "C:\\Users\\ellis\\source\\repos\\egress_program_front"
       dockerfile: "Dockerfile"
       target: "base"
     command: []
     entrypoint:
-    - "/riderDebugger/linux-arm64/dotnet/dotnet"
+    - "/riderDebugger/linux-x64/dotnet/dotnet"
     - "/riderDebugger/JetBrains.Debugger.Worker.exe"
     - "--mode=server"
     - "--frontend-port=57100"
     - "--backend-port=57300"
     environment:
       ASPNETCORE_ENVIRONMENT: "Development"
-      ASPNETCORE_URLS: "https://+:443;http://+:80"
+      DOTNET_USE_POLLING_FILE_WATCHER: "true"
+      NUGET_PACKAGES: "C:\\Users\\ellis\\.nuget\\packages"
+      NUGET_FALLBACK_PACKAGES: "C:\\Users\\ellis\\.nuget\\packages"
       RIDER_DEBUGGER_LOG_DIR: "/riderLogs"
       RESHARPER_LOG_CONF: "/riderLogsConf/backend-log.xml"
     image: "egressportal:dev"
     ports:
-    - "57001:57100"
-    - "57201:57300"
+    - "127.0.0.1:57000:57100"
+    - "127.0.0.1:57200:57300"
     volumes:
-    - "/Users/ellisonguimaraes/.aspnet/https:/root/.aspnet/https"
-    - "/Users/ellisonguimaraes/.microsoft/usersecrets:/root/.microsoft/usersecrets"
-    - "/Users/ellisonguimaraes/repos/EgressPortal:/app:rw"
-    - "/Users/ellisonguimaraes/.local/share/JetBrains/RiderRemoteDebugger/2023.1/LinuxArm64:/riderDebugger"
-    - "/Applications/Rider.app/Contents/bin:/riderLogsConf"
-    - "/Users/ellisonguimaraes/Library/Logs/JetBrains/Rider2023.1/DebuggerWorker/JetBrains.Debugger.Worker.2023_10_18_03_48_04:/riderLogs:rw"
+    - "C:\\Users\\ellis\\.nuget\\packages:/root/.nuget/fallbackpackages"
+    - "C:\\Users\\ellis\\source\\repos\\egress_program_front:/app:rw"
+    - "C:\\Users\\ellis\\source\\repos\\egress_program_front:/src:rw"
+    - "C:\\Users\\ellis\\AppData\\Local\\JetBrains\\RiderRemoteDebugger\\2023.2.2\\\
+      Linux64:/riderDebugger"
+    - "C:\\Users\\ellis\\AppData\\Local\\JetBrains\\Toolbox\\apps\\Rider\\ch-0\\232.9921.83/bin:/riderLogsConf"
+    - "C:\\Users\\ellis\\AppData\\Local\\JetBrains\\Rider2023.2\\log\\DebuggerWorker\\\
+      JetBrains.Debugger.Worker.2023_10_19_02_09_01:/riderLogs:rw"
     working_dir: "/app"

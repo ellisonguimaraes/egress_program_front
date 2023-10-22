@@ -1,0 +1,42 @@
+@page "/completar-cadastro"
+
+<PageTitle>CADASTRO | Complete o seu cadastro</PageTitle>
+
+<TitlePageComponent Title="Cadastro" SubTitle="Complete o seu cadastro"/>
+
+<div class="d-flex flex-column align-items-center w-100">
+    <div class="d-flex flex-column m-0 p-5" style="width:100%;max-width: 1000px;">
+        <EditForm OnValidSubmit="OnValidSubmitAsync" Model="_completeRegisterForm">
+            <DataAnnotationsValidator/>
+            <MudGrid Class="d-flex w-100 m-0 p-0">
+                <MudItem xs="12" sm="12" md="3" lg="3" Class="d-flex w-100 m-0 p-0">
+                    <MudTextField Variant="Variant.Outlined" Placeholder="Nome" Label="Nome" @bind-Value="_completeRegisterForm.Name" For="@(() => _completeRegisterForm.Name)"></MudTextField>
+                </MudItem>
+                <MudItem xs="12" sm="12" md="3" lg="3" Class="d-flex w-100 m-0 p-0">
+                    <MudTextField Variant="Variant.Outlined" Mask="@(new PatternMask("000.000.000-00"))" Placeholder="Cpf" Label="Cpf" @bind-Value="_completeRegisterForm.Cpf" For="@(() => _completeRegisterForm.Cpf)"></MudTextField>
+                </MudItem>
+                <MudItem xs="12" sm="12" md="3" lg="3" Class="d-flex w-100 m-0 p-0">
+                    <MudTextField Variant="Variant.Outlined" Format="dd-MM-yyyy" Label="Data de Nascimento" @bind-Value="_completeRegisterForm.BirthDate" For="@(() => _completeRegisterForm.BirthDate)" InputType="InputType.Date"/>
+                </MudItem>
+                
+            </MudGrid>
+        </EditForm>
+    </div>
+</div>
+
+@code {
+    private CompleteRegisterForm _completeRegisterForm = new ();
+
+    override protected void OnInitialized()
+    {
+        _completeRegisterForm.Address = new CompleteRegisterAddressForm();
+        _completeRegisterForm.Contact = new CompleteRegisterContactForm();
+        _completeRegisterForm.Courses = new List<CompleteRegisterCourseForm>();
+        _completeRegisterForm.Employments = new List<CompleteRegisterEmploymentForm>();
+    }
+
+    private async Task OnValidSubmitAsync()
+    {
+        Console.WriteLine("Nome: " + _completeRegisterForm.Name);
+    }
+}
