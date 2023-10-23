@@ -2799,24 +2799,26 @@
     ]
   },
   "packageFolders": {
-    "/Users/ellisonguimaraes/.nuget/packages/": {}
+    "C:\\Users\\ellis\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/ellisonguimaraes/repos/EgressPortal/EgressPortal.csproj",
+      "projectUniqueName": "C:\\Users\\ellis\\source\\repos\\egress_program_front\\EgressPortal.csproj",
       "projectName": "EgressPortal",
-      "projectPath": "/Users/ellisonguimaraes/repos/EgressPortal/EgressPortal.csproj",
-      "packagesPath": "/Users/ellisonguimaraes/.nuget/packages/",
-      "outputPath": "/Users/ellisonguimaraes/repos/EgressPortal/obj/",
+      "projectPath": "C:\\Users\\ellis\\source\\repos\\egress_program_front\\EgressPortal.csproj",
+      "packagesPath": "C:\\Users\\ellis\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\ellis\\source\\repos\\egress_program_front\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/Users/ellisonguimaraes/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\ellis\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net7.0"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -2879,7 +2881,7 @@
         "downloadDependencies": [
           {
             "name": "Microsoft.NETCore.App.Runtime.Mono.browser-wasm",
-            "version": "[7.0.11, 7.0.11]"
+            "version": "[7.0.12, 7.0.12]"
           }
         ],
         "frameworkReferences": {
@@ -2887,7 +2889,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/7.0.308/RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.402\\RuntimeIdentifierGraph.json"
       }
     },
     "runtimes": {

@@ -81,7 +81,7 @@ public class CompleteRegisterCourseForm
     public Level Level { get; set; }
 
     [Required(ErrorMessage = "O campo Data de Início é requerido")]
-    public DateTime StartDate { get; set; }
+    public DateTime? StartDate { get; set; }
 
     public DateTime? EndDate { get; set; }
 }

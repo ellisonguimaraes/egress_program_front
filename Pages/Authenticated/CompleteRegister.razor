@@ -101,12 +101,14 @@
                         </HeaderContent>
                         <RowTemplate>
                             <MudTd DataLabel="Nome">@course.CourseName</MudTd>
-                            <MudTd DataLabel="Tipo">@course.Level</MudTd>
-                            <MudTd DataLabel="Nome">@course.InstitutionName</MudTd>
-                            <MudTd DataLabel="Nome">@course.Modality</MudTd>
-                            <MudTd DataLabel="Data de Ínicio">@course.StartDate</MudTd>
-                            <MudTd DataLabel="Data de Conclusão">@course.EndDate</MudTd>
-                            <MudTd DataLabel=".">Options</MudTd>
+                            <MudTd DataLabel="Tipo">@LevelToString(course.Level)</MudTd>
+                            <MudTd DataLabel="Instituição">@course.InstitutionName</MudTd>
+                            <MudTd DataLabel="Modalidade">@ModalityToString(course.Modality)</MudTd>
+                            <MudTd DataLabel="Data de Ínicio">@(course.StartDate is null? string.Empty : DateToStringFormat((DateTime)course.StartDate))</MudTd>
+                            <MudTd DataLabel="Data de Conclusão">@(course.EndDate is null? string.Empty : DateToStringFormat((DateTime)course.EndDate))</MudTd>
+                            <MudTd DataLabel=".">
+                                <MudIconButton Icon="@Icons.Material.Filled.Delete" Variant="Variant.Filled" Color="Color.Error" Size="Size.Small" @onclick="@(() => DeleteCourse(course.CourseName))"/>
+                            </MudTd>
                         </RowTemplate>
                     </MudTable>
                 }
@@ -121,7 +123,7 @@
             <div class="d-flex w-100 flex-column">
                 <div Class="d-flex w-100 m-0 px-2 pb-3 pt-5 align-items-center justify-content-between">
                     <MudText Typo="Typo.h6" Class="fw-bold" Color="Color.Dark">Dados Profissionais</MudText>
-                    <MudFab Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" Size="Size.Small" @onclick="OpenAddEmploymentDialog"/>
+                    <MudFab Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" Size="Size.Small"/>
                 </div>
 
                 @if (_completeRegisterForm.Employments.Any())
@@ -162,14 +164,17 @@
             <div class="d-flex w-100 p-5 justify-content-center">
                 <MudButton ButtonType="ButtonType.Submit" Color="Color.Tertiary" Variant="Variant.Outlined">Cadastrar Vaga</MudButton>
             </div>
-
-            <DialogAddCoursesComponent/>
         </EditForm>
     </div>
 </div>
 
+
+<DialogAddCoursesComponent OnValidSubmitCallback="CallbackAddCourseDialog" @ref="_dialogAddCoursesComponent"/>
+
 @code {
     private CompleteRegisterForm _completeRegisterForm = new ();
+
+    private DialogAddCoursesComponent _dialogAddCoursesComponent = null!;
 
     override protected void OnInitialized()
     {
@@ -187,13 +192,41 @@
 
     private void OpenAddCourseDialog()
     {
-        var options = new DialogOptions { CloseOnEscapeKey = true };
-        DialogService.Show<DialogAddCoursesComponent>("Simple Dialog", options);
+        _dialogAddCoursesComponent.Open();
+        StateHasChanged();
     }
 
-    private void OpenAddEmploymentDialog()
+    private void CallbackAddCourseDialog(CompleteRegisterCourseForm course)
     {
-        var options = new DialogOptions { CloseOnEscapeKey = true };
-        DialogService.Show<DialogAddEmploymentComponent>("Simple Dialog", options);
+        _completeRegisterForm.Courses.Add(course);
+        _dialogAddCoursesComponent.Close();
     }
+
+    private void DeleteCourse(string name)
+    {
+        var course = _completeRegisterForm.Courses.FirstOrDefault(c => c.CourseName.Equals(name, StringComparison.OrdinalIgnoreCase));
+
+        if (course is not null)
+            _completeRegisterForm.Courses.Remove(course);
+
+        StateHasChanged();
+    }
+
+
+    private string ModalityToString(Modality modality)
+        => modality switch {
+            Modality.Presential => "Presencial",
+            Modality.Hybrid => "Híbrido",
+            Modality.Remote => "Remote",
+            _ => string.Empty};
+
+    private string LevelToString(Level level)
+        => level switch {
+            Level.Graduation => "Graduação",
+            Level.Postgraduate => "Pós Graduação",
+            Level.MasterDegree => "Mestrado",
+            Level.DoctorateDegree => "Doutorado",
+            _ => string.Empty};   
+
+    private string DateToStringFormat(DateTime date) => date.ToString("dd/MM/yyyy");
 }
