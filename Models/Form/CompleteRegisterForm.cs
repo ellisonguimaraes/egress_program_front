@@ -17,7 +17,7 @@ public class CompleteRegisterForm
     public DateTime? BirthDate { get; set; }
 
     [Required(ErrorMessage = "Sexo é requerido")]
-    public Sex? Sex { get; set; }
+    public Sex Sex { get; set; }
 
     public CompleteRegisterAddressForm Address { get; set; }
 

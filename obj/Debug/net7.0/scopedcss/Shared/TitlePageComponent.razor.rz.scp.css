@@ -1,34 +1,34 @@
-[b-nivydxvd76] .text_color_white {
+[b-tb28kyx1of] .text_color_white {
     color: var(--egress-color-white);
 }
 
-.background_color_darkgreen[b-nivydxvd76] {
+.background_color_darkgreen[b-tb28kyx1of] {
     background-color: var(--egress-color-darkgreen);
 }
 
-.title_page[b-nivydxvd76] {
+.title_page[b-tb28kyx1of] {
     min-height:115px;
 }
 
-[b-nivydxvd76] .title_page_center {
+[b-tb28kyx1of] .title_page_center {
     max-width: 1000px;
 }
 
-[b-nivydxvd76] .page_title_text_align {
+[b-tb28kyx1of] .page_title_text_align {
     text-align: right;
 }
 
-[b-nivydxvd76] .page_subtitle_text_align {
+[b-tb28kyx1of] .page_subtitle_text_align {
     text-align: left;
 }
 
 
 @media (max-width: 960px) {
-    [b-nivydxvd76] .page_title_text_align {
+    [b-tb28kyx1of] .page_title_text_align {
         text-align: center;
     }
 
-    [b-nivydxvd76] .page_subtitle_text_align {
+    [b-tb28kyx1of] .page_subtitle_text_align {
         text-align: center;
     }
 }

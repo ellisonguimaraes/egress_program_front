@@ -1,26 +1,169 @@
 @page "/completar-cadastro"
+@using EgressPortal.Shared.Auth.CompleteRegister
+@inject IDialogService DialogService
 
 <PageTitle>CADASTRO | Complete o seu cadastro</PageTitle>
 
 <TitlePageComponent Title="Cadastro" SubTitle="Complete o seu cadastro"/>
 
 <div class="d-flex flex-column align-items-center w-100">
-    <div class="d-flex flex-column m-0 p-5" style="width:100%;max-width: 1000px;">
-        <EditForm OnValidSubmit="OnValidSubmitAsync" Model="_completeRegisterForm">
+    <div class="d-flex flex-column m-0 p-5" style="width:100%;max-width: 1300px;">
+        <EditForm OnValidSubmit="OnValidSubmitAsync" Model="_completeRegisterForm" Class="d-flex flex-column gap-3">
             <DataAnnotationsValidator/>
-            <MudGrid Class="d-flex w-100 m-0 p-0">
-                <MudItem xs="12" sm="12" md="3" lg="3" Class="d-flex w-100 m-0 p-0">
-                    <MudTextField Variant="Variant.Outlined" Placeholder="Nome" Label="Nome" @bind-Value="_completeRegisterForm.Name" For="@(() => _completeRegisterForm.Name)"></MudTextField>
-                </MudItem>
-                <MudItem xs="12" sm="12" md="3" lg="3" Class="d-flex w-100 m-0 p-0">
-                    <MudTextField Variant="Variant.Outlined" Mask="@(new PatternMask("000.000.000-00"))" Placeholder="Cpf" Label="Cpf" @bind-Value="_completeRegisterForm.Cpf" For="@(() => _completeRegisterForm.Cpf)"></MudTextField>
-                </MudItem>
-                <MudItem xs="12" sm="12" md="3" lg="3" Class="d-flex w-100 m-0 p-0">
-                    <MudDatePicker Variant="Variant.Outlined" Label="Data de Nascimento" Editable="true" @bind-Date="_completeRegisterForm.BirthDate" For="@(() => _completeRegisterForm.BirthDate)" Placeholder="dd/MM/aaaa" />
-                </MudItem>
-            </MudGrid>
 
-            <MudButton ButtonType="ButtonType.Submit">Cadastrar</MudButton>
+            <div class="d-flex w-100 flex-column">
+                <div Class="d-flex w-100 m-0 px-2 py-3">
+                    <MudText Typo="Typo.h6" Class="fw-bold" Color="Color.Dark">Informações Gerais</MudText>
+                </div>
+
+                <MudGrid Class="d-flex w-100 m-0 p-0">
+                    <MudItem xs="12" sm="12" md="3" lg="3" Class="d-flex w-100 m-0 p-0 px-2">
+                        <MudTextField Variant="Variant.Outlined" Placeholder="Nome" Label="Nome" @bind-Value="_completeRegisterForm.Name" For="@(() => _completeRegisterForm.Name)"></MudTextField>
+                    </MudItem>
+                    <MudItem xs="12" sm="12" md="3" lg="3" Class="d-flex w-100 m-0 p-0 px-2">
+                        <MudTextField Variant="Variant.Outlined" Mask="@(new PatternMask("000.000.000-00"))" Placeholder="Cpf" Label="Cpf" @bind-Value="_completeRegisterForm.Cpf" For="@(() => _completeRegisterForm.Cpf)"></MudTextField>
+                    </MudItem>
+                    <MudItem xs="12" sm="12" md="2" lg="2" Class="d-flex w-100 m-0 p-0 px-2">
+                        <MudDatePicker DateFormat="dd/MM/yyyy" Mask="@(new DateMask("dd/MM/yyyy"))" Variant="Variant.Outlined" Label="Data de Nascimento" Editable="true" @bind-Date="_completeRegisterForm.BirthDate" For="@(() => _completeRegisterForm.BirthDate)" Placeholder="dd/MM/aaaa" />
+                    </MudItem>
+                    <MudItem xs="12" sm="12" md="4" lg="4" Class="d-flex w-100 m-0 p-0 px-2">
+                        <MudField Label="Sexo" Variant="Variant.Outlined">
+                            <MudRadioGroup @bind-SelectedOption="@_completeRegisterForm.Sex" For="@(() => @_completeRegisterForm.Sex)" Class="text-center">
+                                <MudRadio Option="@(Sex.MALE)" Color="Color.Primary">Masculino</MudRadio>
+                                <MudRadio Option="@(Sex.FEMALE)" Color="Color.Primary">Feminino</MudRadio>
+                            </MudRadioGroup>
+                        </MudField>
+                    </MudItem>
+                </MudGrid>
+            </div>
+
+            <div class="d-flex w-100 flex-column">
+                <div Class="d-flex w-100 m-0 px-2 py-3">
+                    <MudText Typo="Typo.h6" Class="fw-bold" Color="Color.Dark">Endereço</MudText>
+                </div>
+
+                <MudGrid Class="d-flex w-100 m-0 p-0">
+                    <MudItem xs="12" sm="12" md="3" lg="3" Class="d-flex w-100 m-0 p-0 px-2">
+                        <MudTextField Variant="Variant.Outlined" Placeholder="Endereço" Label="Endereço" @bind-Value="_completeRegisterForm.Address.Address" For="@(() => _completeRegisterForm.Address.Address)"></MudTextField>
+                    </MudItem>
+
+                    <MudItem xs="12" sm="12" md="3" lg="3" Class="d-flex w-100 m-0 p-0 px-2">
+                        <MudTextField Variant="Variant.Outlined" Placeholder="Cidade" Label="Cidade" @bind-Value="_completeRegisterForm.Address.City" For="@(() => _completeRegisterForm.Address.City)"></MudTextField>
+                    </MudItem>
+
+                    <MudItem xs="12" sm="12" md="3" lg="3" Class="d-flex w-100 m-0 p-0 px-2">
+                        <MudTextField Variant="Variant.Outlined" Placeholder="Estado" Label="Estado" @bind-Value="_completeRegisterForm.Address.State" For="@(() => _completeRegisterForm.Address.State)"></MudTextField>
+                    </MudItem>
+
+                    <MudItem xs="12" sm="12" md="3" lg="3" Class="d-flex w-100 m-0 p-0 px-2">
+                        <MudTextField Variant="Variant.Outlined" Placeholder="País" Label="País" @bind-Value="_completeRegisterForm.Address.Country" For="@(() => _completeRegisterForm.Address.Country)"></MudTextField>
+                    </MudItem>
+                </MudGrid>
+            </div>
+
+            <div class="d-flex w-100 flex-column">
+                <div Class="d-flex w-100 m-0 px-2 py-3">
+                    <MudText Typo="Typo.h6" Class="fw-bold" Color="Color.Dark">Contato</MudText>
+                </div>
+
+                <MudGrid Class="d-flex w-100 m-0 p-0">
+                    <MudItem xs="12" sm="12" md="4" lg="4" Class="d-flex w-100 m-0 p-0 px-2">
+                        <MudTextField Variant="Variant.Outlined" Placeholder="Email" Label="Email" @bind-Value="_completeRegisterForm.Contact.Email" For="@(() => _completeRegisterForm.Contact.Email)" InputType="InputType.Email"></MudTextField>
+                    </MudItem>
+
+                    <MudItem xs="12" sm="12" md="4" lg="4" Class="d-flex w-100 m-0 p-0 px-2">
+                        <MudTextField Variant="Variant.Outlined" Mask="@(new PatternMask("(00) 0 0000-0000"))" Placeholder="Telefone fixo" Label="Telefone fixo" @bind-Value="_completeRegisterForm.Contact.Telephone" For="@(() => _completeRegisterForm.Contact.Telephone)"></MudTextField>
+                    </MudItem>
+
+                    <MudItem xs="12" sm="12" md="4" lg="4" Class="d-flex w-100 m-0 p-0 px-2">
+                        <MudTextField Variant="Variant.Outlined" Mask="@(new PatternMask("(00) 0 0000-0000"))" Placeholder="Celular" Label="Celular" @bind-Value="_completeRegisterForm.Contact.MobilePhoneNumber" For="@(() => _completeRegisterForm.Contact.MobilePhoneNumber)"></MudTextField>
+                    </MudItem>
+                </MudGrid>
+            </div>
+
+            <div class="d-flex w-100 flex-column">
+                <div Class="d-flex w-100 m-0 px-2 pb-3 pt-5 align-items-center justify-content-between">
+                    <MudText Typo="Typo.h6" Class="fw-bold" Color="Color.Dark">Outros Cursos</MudText>
+                    <MudFab Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" Size="Size.Small" @onclick="OpenAddCourseDialog"/>
+                </div>
+
+                @if (_completeRegisterForm.Courses.Any())
+                {
+                    <MudTable Items="@_completeRegisterForm.Courses" Hover="true" Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info" Context="course">
+                        <HeaderContent>
+                            <MudTh>Nome</MudTh>
+                            <MudTh>Tipo</MudTh>
+                            <MudTh>Instituição</MudTh>
+                            <MudTh>Modalidade</MudTh>
+                            <MudTh>Data de Ínicio</MudTh>
+                            <MudTh>Data de Conclusão</MudTh>
+                            <MudTh>.</MudTh>
+                        </HeaderContent>
+                        <RowTemplate>
+                            <MudTd DataLabel="Nome">@course.CourseName</MudTd>
+                            <MudTd DataLabel="Tipo">@course.Level</MudTd>
+                            <MudTd DataLabel="Nome">@course.InstitutionName</MudTd>
+                            <MudTd DataLabel="Nome">@course.Modality</MudTd>
+                            <MudTd DataLabel="Data de Ínicio">@course.StartDate</MudTd>
+                            <MudTd DataLabel="Data de Conclusão">@course.EndDate</MudTd>
+                            <MudTd DataLabel=".">Options</MudTd>
+                        </RowTemplate>
+                    </MudTable>
+                }
+                else
+                {
+                    <div class="d-flex w-100 p-3 justify-content-center">
+                        <MudText Typo="Typo.body1" Align="Align.Center">Não há cursos cadastrados</MudText>
+                    </div>
+                }
+            </div>
+
+            <div class="d-flex w-100 flex-column">
+                <div Class="d-flex w-100 m-0 px-2 pb-3 pt-5 align-items-center justify-content-between">
+                    <MudText Typo="Typo.h6" Class="fw-bold" Color="Color.Dark">Dados Profissionais</MudText>
+                    <MudFab Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" Size="Size.Small" @onclick="OpenAddEmploymentDialog"/>
+                </div>
+
+                @if (_completeRegisterForm.Employments.Any())
+                {
+                    <MudTable Items="@_completeRegisterForm.Employments" Hover="true" Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info" Context="employment">
+                        <HeaderContent>
+                            <MudTh>Empresa</MudTh>
+                            <MudTh>Cargo</MudTh>
+                            <MudTh>Setor</MudTh>
+                            <MudTh>Iniciativa</MudTh>
+                            <MudTh>Status</MudTh>
+                            <MudTh>Data de Ínicio</MudTh>
+                            <MudTh>Data de Conclusão</MudTh>
+                            <MudTh>Faixa Salarial</MudTh>
+                            <MudTh>.</MudTh>
+                        </HeaderContent>
+                        <RowTemplate>
+                            <MudTd DataLabel="Empresa">@employment.EnterpriseName</MudTd>
+                            <MudTd DataLabel="Cargo">@employment.Role</MudTd>
+                            <MudTd DataLabel="Setor">@employment.Section</MudTd>
+                            <MudTd DataLabel="Iniciativa">@employment.IsPublicInitiative</MudTd>
+                            <MudTd DataLabel="Status">.</MudTd>
+                            <MudTd DataLabel="Data de Ínicio">@employment.StartDate</MudTd>
+                            <MudTd DataLabel="Data de Conclusão">@employment.EndDate</MudTd>
+                            <MudTd DataLabel="Faixa Salarial">@employment.SalaryRange</MudTd>
+                            <MudTd DataLabel=".">Options</MudTd>
+                        </RowTemplate>
+                    </MudTable>
+                }
+                else
+                {
+                    <div class="d-flex w-100 p-3 justify-content-center">
+                        <MudText Typo="Typo.body1" Align="Align.Center">Não há dados profissionais cadastrados</MudText>
+                    </div>
+                }
+            </div>
+
+            <div class="d-flex w-100 p-5 justify-content-center">
+                <MudButton ButtonType="ButtonType.Submit" Color="Color.Tertiary" Variant="Variant.Outlined">Cadastrar Vaga</MudButton>
+            </div>
+
+            <DialogAddCoursesComponent/>
         </EditForm>
     </div>
 </div>
@@ -30,6 +173,7 @@
 
     override protected void OnInitialized()
     {
+        _completeRegisterForm.Sex = Sex.MALE;
         _completeRegisterForm.Address = new CompleteRegisterAddressForm();
         _completeRegisterForm.Contact = new CompleteRegisterContactForm();
         _completeRegisterForm.Courses = new List<CompleteRegisterCourseForm>();
@@ -39,5 +183,17 @@
     private async Task OnValidSubmitAsync()
     {
         Console.WriteLine("Nome: " + _completeRegisterForm.Name);
+    }
+
+    private void OpenAddCourseDialog()
+    {
+        var options = new DialogOptions { CloseOnEscapeKey = true };
+        DialogService.Show<DialogAddCoursesComponent>("Simple Dialog", options);
+    }
+
+    private void OpenAddEmploymentDialog()
+    {
+        var options = new DialogOptions { CloseOnEscapeKey = true };
+        DialogService.Show<DialogAddEmploymentComponent>("Simple Dialog", options);
     }
 }

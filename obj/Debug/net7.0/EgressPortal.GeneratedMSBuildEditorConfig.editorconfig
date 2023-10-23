@@ -10,145 +10,153 @@ build_property.EnforceExtendedAnalyzerRules =
 build_property._SupportedPlatformList = browser
 build_property.RootNamespace = EgressPortal
 build_property.RootNamespace = EgressPortal
-build_property.ProjectDir = C:\Users\ellis\source\repos\egress_program_front\
+build_property.ProjectDir = /Users/ellisonguimaraes/repos/EgressPortal/
 build_property.RazorLangVersion = 7.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = C:\Users\ellis\source\repos\egress_program_front
+build_property.MSBuildProjectDirectory = /Users/ellisonguimaraes/repos/EgressPortal
 build_property._RazorSourceGeneratorDebug = 
 
-[C:/Users/ellis/source/repos/egress_program_front/App.razor]
+[/Users/ellisonguimaraes/repos/EgressPortal/App.razor]
 build_metadata.AdditionalFiles.TargetPath = QXBwLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ellis/source/repos/egress_program_front/Pages/Authenticated/CompleteRegister.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQXV0aGVudGljYXRlZFxDb21wbGV0ZVJlZ2lzdGVyLnJhem9y
+[/Users/ellisonguimaraes/repos/EgressPortal/Pages/Authenticated/CompleteRegister.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvQXV0aGVudGljYXRlZC9Db21wbGV0ZVJlZ2lzdGVyLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ellis/source/repos/egress_program_front/Pages/ConfirmAccount.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ29uZmlybUFjY291bnQucmF6b3I=
+[/Users/ellisonguimaraes/repos/EgressPortal/Pages/ConfirmAccount.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvQ29uZmlybUFjY291bnQucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ellis/source/repos/egress_program_front/Pages/Contact.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ29udGFjdC5yYXpvcg==
+[/Users/ellisonguimaraes/repos/EgressPortal/Pages/Contact.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvQ29udGFjdC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ellis/source/repos/egress_program_front/Pages/Egress.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRWdyZXNzLnJhem9y
+[/Users/ellisonguimaraes/repos/EgressPortal/Pages/Egress.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvRWdyZXNzLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ellis/source/repos/egress_program_front/Pages/EgressProfile.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRWdyZXNzUHJvZmlsZS5yYXpvcg==
+[/Users/ellisonguimaraes/repos/EgressPortal/Pages/EgressProfile.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvRWdyZXNzUHJvZmlsZS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ellis/source/repos/egress_program_front/Pages/Highlights.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSGlnaGxpZ2h0cy5yYXpvcg==
+[/Users/ellisonguimaraes/repos/EgressPortal/Pages/Highlights.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvSGlnaGxpZ2h0cy5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ellis/source/repos/egress_program_front/Pages/Login.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTG9naW4ucmF6b3I=
+[/Users/ellisonguimaraes/repos/EgressPortal/Pages/Login.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvTG9naW4ucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ellis/source/repos/egress_program_front/Pages/RecoveryPassword.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUmVjb3ZlcnlQYXNzd29yZC5yYXpvcg==
+[/Users/ellisonguimaraes/repos/EgressPortal/Pages/RecoveryPassword.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvUmVjb3ZlcnlQYXNzd29yZC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ellis/source/repos/egress_program_front/Pages/RecoveryPasswordNewPassword.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUmVjb3ZlcnlQYXNzd29yZE5ld1Bhc3N3b3JkLnJhem9y
+[/Users/ellisonguimaraes/repos/EgressPortal/Pages/RecoveryPasswordNewPassword.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvUmVjb3ZlcnlQYXNzd29yZE5ld1Bhc3N3b3JkLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ellis/source/repos/egress_program_front/Pages/Register.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUmVnaXN0ZXIucmF6b3I=
+[/Users/ellisonguimaraes/repos/EgressPortal/Pages/Register.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvUmVnaXN0ZXIucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ellis/source/repos/egress_program_front/Pages/SingleHighlights.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2luZ2xlSGlnaGxpZ2h0cy5yYXpvcg==
+[/Users/ellisonguimaraes/repos/EgressPortal/Pages/SingleHighlights.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvU2luZ2xlSGlnaGxpZ2h0cy5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ellis/source/repos/egress_program_front/Pages/Testimonies.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVGVzdGltb25pZXMucmF6b3I=
+[/Users/ellisonguimaraes/repos/EgressPortal/Pages/Testimonies.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvVGVzdGltb25pZXMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ellis/source/repos/egress_program_front/Pages/TestimoniesHighlights.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVGVzdGltb25pZXNIaWdobGlnaHRzLnJhem9y
+[/Users/ellisonguimaraes/repos/EgressPortal/Pages/TestimoniesHighlights.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvVGVzdGltb25pZXNIaWdobGlnaHRzLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ellis/source/repos/egress_program_front/Shared/Auth/AuthorizingComponent.razor]
-build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXEF1dGhcQXV0aG9yaXppbmdDb21wb25lbnQucmF6b3I=
+[/Users/ellisonguimaraes/repos/EgressPortal/Shared/Auth/AuthorizingComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkL0F1dGgvQXV0aG9yaXppbmdDb21wb25lbnQucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ellis/source/repos/egress_program_front/Shared/Auth/RecoveryPasswordFormComponent.razor]
-build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXEF1dGhcUmVjb3ZlcnlQYXNzd29yZEZvcm1Db21wb25lbnQucmF6b3I=
+[/Users/ellisonguimaraes/repos/EgressPortal/Shared/Auth/CompleteRegister/DialogAddCoursesComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkL0F1dGgvQ29tcGxldGVSZWdpc3Rlci9EaWFsb2dBZGRDb3Vyc2VzQ29tcG9uZW50LnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ellis/source/repos/egress_program_front/Shared/Auth/RecoveryPasswordNewPasswordComponent.razor]
-build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXEF1dGhcUmVjb3ZlcnlQYXNzd29yZE5ld1Bhc3N3b3JkQ29tcG9uZW50LnJhem9y
+[/Users/ellisonguimaraes/repos/EgressPortal/Shared/Auth/CompleteRegister/DialogAddEmploymentComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkL0F1dGgvQ29tcGxldGVSZWdpc3Rlci9EaWFsb2dBZGRFbXBsb3ltZW50Q29tcG9uZW50LnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ellis/source/repos/egress_program_front/Shared/Auth/RegisterFormComponent.razor]
-build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXEF1dGhcUmVnaXN0ZXJGb3JtQ29tcG9uZW50LnJhem9y
+[/Users/ellisonguimaraes/repos/EgressPortal/Shared/Auth/RecoveryPasswordFormComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkL0F1dGgvUmVjb3ZlcnlQYXNzd29yZEZvcm1Db21wb25lbnQucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ellis/source/repos/egress_program_front/Shared/Auth/UnauthorizedComponent.razor]
-build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXEF1dGhcVW5hdXRob3JpemVkQ29tcG9uZW50LnJhem9y
+[/Users/ellisonguimaraes/repos/EgressPortal/Shared/Auth/RecoveryPasswordNewPasswordComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkL0F1dGgvUmVjb3ZlcnlQYXNzd29yZE5ld1Bhc3N3b3JkQ29tcG9uZW50LnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ellis/source/repos/egress_program_front/Shared/Highlights/HighlightsItemComponent.razor]
-build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXEhpZ2hsaWdodHNcSGlnaGxpZ2h0c0l0ZW1Db21wb25lbnQucmF6b3I=
+[/Users/ellisonguimaraes/repos/EgressPortal/Shared/Auth/RegisterFormComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkL0F1dGgvUmVnaXN0ZXJGb3JtQ29tcG9uZW50LnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ellis/source/repos/egress_program_front/Shared/Highlights/HighlightsItemPaginationComponent.razor]
-build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXEhpZ2hsaWdodHNcSGlnaGxpZ2h0c0l0ZW1QYWdpbmF0aW9uQ29tcG9uZW50LnJhem9y
+[/Users/ellisonguimaraes/repos/EgressPortal/Shared/Auth/UnauthorizedComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkL0F1dGgvVW5hdXRob3JpemVkQ29tcG9uZW50LnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ellis/source/repos/egress_program_front/Shared/NotFoundComponent.razor]
-build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXE5vdEZvdW5kQ29tcG9uZW50LnJhem9y
+[/Users/ellisonguimaraes/repos/EgressPortal/Shared/Highlights/HighlightsItemComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkL0hpZ2hsaWdodHMvSGlnaGxpZ2h0c0l0ZW1Db21wb25lbnQucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ellis/source/repos/egress_program_front/Shared/Testimonies/TestimonyItemPaginationComponent.razor]
-build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXFRlc3RpbW9uaWVzXFRlc3RpbW9ueUl0ZW1QYWdpbmF0aW9uQ29tcG9uZW50LnJhem9y
+[/Users/ellisonguimaraes/repos/EgressPortal/Shared/Highlights/HighlightsItemPaginationComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkL0hpZ2hsaWdodHMvSGlnaGxpZ2h0c0l0ZW1QYWdpbmF0aW9uQ29tcG9uZW50LnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ellis/source/repos/egress_program_front/Shared/Utils/PaginationComponent.razor]
-build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXFV0aWxzXFBhZ2luYXRpb25Db21wb25lbnQucmF6b3I=
+[/Users/ellisonguimaraes/repos/EgressPortal/Shared/NotFoundComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkL05vdEZvdW5kQ29tcG9uZW50LnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ellis/source/repos/egress_program_front/_Imports.razor]
+[/Users/ellisonguimaraes/repos/EgressPortal/Shared/Testimonies/TestimonyItemPaginationComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkL1Rlc3RpbW9uaWVzL1Rlc3RpbW9ueUl0ZW1QYWdpbmF0aW9uQ29tcG9uZW50LnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/ellisonguimaraes/repos/EgressPortal/Shared/Utils/PaginationComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkL1V0aWxzL1BhZ2luYXRpb25Db21wb25lbnQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/ellisonguimaraes/repos/EgressPortal/_Imports.razor]
 build_metadata.AdditionalFiles.TargetPath = X0ltcG9ydHMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ellis/source/repos/egress_program_front/Pages/Index.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSW5kZXgucmF6b3I=
+[/Users/ellisonguimaraes/repos/EgressPortal/Pages/Index.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvSW5kZXgucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = custom-scope-identifier
 
-[C:/Users/ellis/source/repos/egress_program_front/Shared/FooterComponent.razor]
-build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXEZvb3RlckNvbXBvbmVudC5yYXpvcg==
-build_metadata.AdditionalFiles.CssScope = b-qf766v80us
+[/Users/ellisonguimaraes/repos/EgressPortal/Shared/FooterComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkL0Zvb3RlckNvbXBvbmVudC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = b-luu46lk4br
 
-[C:/Users/ellis/source/repos/egress_program_front/Shared/Index/EgressChartComponent.razor]
-build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXEluZGV4XEVncmVzc0NoYXJ0Q29tcG9uZW50LnJhem9y
-build_metadata.AdditionalFiles.CssScope = b-mi71bwfgrk
+[/Users/ellisonguimaraes/repos/EgressPortal/Shared/Index/EgressChartComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkL0luZGV4L0VncmVzc0NoYXJ0Q29tcG9uZW50LnJhem9y
+build_metadata.AdditionalFiles.CssScope = b-u1c65whmwe
 
-[C:/Users/ellis/source/repos/egress_program_front/Shared/Index/EgressRandomHighlightsIndexComponent.razor]
-build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXEluZGV4XEVncmVzc1JhbmRvbUhpZ2hsaWdodHNJbmRleENvbXBvbmVudC5yYXpvcg==
-build_metadata.AdditionalFiles.CssScope = b-i5a1lm9wyl
+[/Users/ellisonguimaraes/repos/EgressPortal/Shared/Index/EgressRandomHighlightsIndexComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkL0luZGV4L0VncmVzc1JhbmRvbUhpZ2hsaWdodHNJbmRleENvbXBvbmVudC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = b-huxz80puxk
 
-[C:/Users/ellis/source/repos/egress_program_front/Shared/Index/EgressRandomTestimoniesComponent.razor]
-build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXEluZGV4XEVncmVzc1JhbmRvbVRlc3RpbW9uaWVzQ29tcG9uZW50LnJhem9y
-build_metadata.AdditionalFiles.CssScope = b-jou6ekmjx1
+[/Users/ellisonguimaraes/repos/EgressPortal/Shared/Index/EgressRandomTestimoniesComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkL0luZGV4L0VncmVzc1JhbmRvbVRlc3RpbW9uaWVzQ29tcG9uZW50LnJhem9y
+build_metadata.AdditionalFiles.CssScope = b-7cemfi2a64
 
-[C:/Users/ellis/source/repos/egress_program_front/Shared/MainLayout.razor]
-build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXE1haW5MYXlvdXQucmF6b3I=
-build_metadata.AdditionalFiles.CssScope = b-0pwkcpkyl9
+[/Users/ellisonguimaraes/repos/EgressPortal/Shared/MainLayout.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkL01haW5MYXlvdXQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = b-nfwxva671o
 
-[C:/Users/ellis/source/repos/egress_program_front/Shared/NavMenuComponent.razor]
-build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXE5hdk1lbnVDb21wb25lbnQucmF6b3I=
-build_metadata.AdditionalFiles.CssScope = b-7q4s4latd0
+[/Users/ellisonguimaraes/repos/EgressPortal/Shared/NavMenuComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkL05hdk1lbnVDb21wb25lbnQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = b-d67n8qhy31
 
-[C:/Users/ellis/source/repos/egress_program_front/Shared/NavMenuLogInLogOutComponent.razor]
-build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXE5hdk1lbnVMb2dJbkxvZ091dENvbXBvbmVudC5yYXpvcg==
-build_metadata.AdditionalFiles.CssScope = b-vqopt682ti
+[/Users/ellisonguimaraes/repos/EgressPortal/Shared/NavMenuLogInLogOutComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkL05hdk1lbnVMb2dJbkxvZ091dENvbXBvbmVudC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = b-64cdy17d03
 
-[C:/Users/ellis/source/repos/egress_program_front/Shared/TitlePageComponent.razor]
-build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXFRpdGxlUGFnZUNvbXBvbmVudC5yYXpvcg==
-build_metadata.AdditionalFiles.CssScope = b-nivydxvd76
+[/Users/ellisonguimaraes/repos/EgressPortal/Shared/TitlePageComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkL1RpdGxlUGFnZUNvbXBvbmVudC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = b-tb28kyx1of

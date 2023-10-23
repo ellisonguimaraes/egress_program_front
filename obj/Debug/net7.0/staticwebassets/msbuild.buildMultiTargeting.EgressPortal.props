@@ -1,3 +1,3 @@
 ﻿<Project>
-  <Import Project="..\build\EgressPortal.props" />
+  <Import Project="../build/EgressPortal.props" />
 </Project>
