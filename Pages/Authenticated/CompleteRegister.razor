@@ -1,5 +1,6 @@
 @page "/completar-cadastro"
 @using EgressPortal.Shared.Auth.CompleteRegister
+@using System.Globalization
 @inject IDialogService DialogService
 
 <PageTitle>CADASTRO | Complete o seu cadastro</PageTitle>
@@ -107,7 +108,7 @@
                             <MudTd DataLabel="Data de Ínicio">@(course.StartDate is null? string.Empty : DateToStringFormat((DateTime)course.StartDate))</MudTd>
                             <MudTd DataLabel="Data de Conclusão">@(course.EndDate is null? string.Empty : DateToStringFormat((DateTime)course.EndDate))</MudTd>
                             <MudTd DataLabel=".">
-                                <MudIconButton Icon="@Icons.Material.Filled.Delete" Variant="Variant.Filled" Color="Color.Error" Size="Size.Small" @onclick="@(() => DeleteCourse(course.CourseName))"/>
+                                <MudIconButton Icon="@Icons.Material.Filled.Delete" Variant="Variant.Filled" Color="Color.Error" Size="Size.Small" @onclick="@(() =>    DeleteCourse(course.CourseName))"/>
                             </MudTd>
                         </RowTemplate>
                     </MudTable>
@@ -123,7 +124,7 @@
             <div class="d-flex w-100 flex-column">
                 <div Class="d-flex w-100 m-0 px-2 pb-3 pt-5 align-items-center justify-content-between">
                     <MudText Typo="Typo.h6" Class="fw-bold" Color="Color.Dark">Dados Profissionais</MudText>
-                    <MudFab Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" Size="Size.Small"/>
+                    <MudFab Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" Size="Size.Small" @onclick="OpenAddEmploymentDialog"/>
                 </div>
 
                 @if (_completeRegisterForm.Employments.Any())
@@ -134,22 +135,22 @@
                             <MudTh>Cargo</MudTh>
                             <MudTh>Setor</MudTh>
                             <MudTh>Iniciativa</MudTh>
-                            <MudTh>Status</MudTh>
+                            <MudTh>Faixa Salarial</MudTh>
                             <MudTh>Data de Ínicio</MudTh>
                             <MudTh>Data de Conclusão</MudTh>
-                            <MudTh>Faixa Salarial</MudTh>
                             <MudTh>.</MudTh>
                         </HeaderContent>
                         <RowTemplate>
                             <MudTd DataLabel="Empresa">@employment.EnterpriseName</MudTd>
                             <MudTd DataLabel="Cargo">@employment.Role</MudTd>
                             <MudTd DataLabel="Setor">@employment.Section</MudTd>
-                            <MudTd DataLabel="Iniciativa">@employment.IsPublicInitiative</MudTd>
-                            <MudTd DataLabel="Status">.</MudTd>
-                            <MudTd DataLabel="Data de Ínicio">@employment.StartDate</MudTd>
-                            <MudTd DataLabel="Data de Conclusão">@employment.EndDate</MudTd>
-                            <MudTd DataLabel="Faixa Salarial">@employment.SalaryRange</MudTd>
-                            <MudTd DataLabel=".">Options</MudTd>
+                            <MudTd DataLabel="Iniciativa">@(employment.IsPublicInitiative is true? "Publica" : "Privada")</MudTd>
+                            <MudTd DataLabel="Faixa Salarial">@DoubleToBrazilMoney((double)employment.SalaryRange)</MudTd>
+                            <MudTd DataLabel="Data de Ínicio">@(employment.StartDate is null? string.Empty : DateToStringFormat((DateTime)employment.StartDate))</MudTd>
+                            <MudTd DataLabel="Data de Conclusão">@(employment.EndDate is null? string.Empty : DateToStringFormat((DateTime)employment.EndDate))</MudTd>
+                            <MudTd DataLabel=".">
+                                <MudIconButton Icon="@Icons.Material.Filled.Delete" Variant="Variant.Filled" Color="Color.Error" Size="Size.Small" @onclick="@(() => DeleteEmployment(employment.EnterpriseName))"/>
+                            </MudTd>
                         </RowTemplate>
                     </MudTable>
                 }
@@ -170,11 +171,13 @@
 
 
 <DialogAddCoursesComponent OnValidSubmitCallback="CallbackAddCourseDialog" @ref="_dialogAddCoursesComponent"/>
+<DialogAddEmploymentComponent OnValidSubmitCallback="CallbackAddEmploymentDialog" @ref="_dialogAddEmploymentsComponent"/>
 
 @code {
     private CompleteRegisterForm _completeRegisterForm = new ();
 
     private DialogAddCoursesComponent _dialogAddCoursesComponent = null!;
+    private DialogAddEmploymentComponent _dialogAddEmploymentsComponent = null!;
 
     override protected void OnInitialized()
     {
@@ -212,7 +215,6 @@
         StateHasChanged();
     }
 
-
     private string ModalityToString(Modality modality)
         => modality switch {
             Modality.Presential => "Presencial",
@@ -229,4 +231,28 @@
             _ => string.Empty};   
 
     private string DateToStringFormat(DateTime date) => date.ToString("dd/MM/yyyy");
+
+    private string DoubleToBrazilMoney(double number) => number.ToString("C2", CultureInfo.GetCultureInfo("pt-BR"));
+
+    private void OpenAddEmploymentDialog()
+    {
+        _dialogAddEmploymentsComponent.Open();
+        StateHasChanged();
+    }
+
+    private void CallbackAddEmploymentDialog(CompleteRegisterEmploymentForm employment)
+    {
+        _completeRegisterForm.Employments.Add(employment);
+        _dialogAddEmploymentsComponent.Close();
+    }
+
+    private void DeleteEmployment(string name)
+    {
+        var employment = _completeRegisterForm.Employments.FirstOrDefault(c => c.EnterpriseName.Equals(name, StringComparison.OrdinalIgnoreCase));
+
+        if (employment is not null)
+            _completeRegisterForm.Employments.Remove(employment);
+
+        StateHasChanged();
+    }
 }

@@ -104,13 +104,13 @@ public class CompleteRegisterEmploymentForm
     public bool IsCurrent { get; set; }
 
     [Required(ErrorMessage = "O campo Salário é requerido")]
-    public string SalaryRange { get; set; }
+    public double? SalaryRange { get; set; }
 
     [Required(ErrorMessage = "O campo Iniciativa é requerido")]
     public bool IsPublicInitiative { get; set; }
 
     [Required(ErrorMessage = "O campo Data de Início é requerido")]
-    public DateTime StartDate { get; set; }
+    public DateTime? StartDate { get; set; }
 
     public DateTime? EndDate { get; set; }
 }
