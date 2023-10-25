@@ -38,6 +38,9 @@
                 <MudItem xs="12" sm="12" md="6" lg="6">
                     <MudDatePicker DateFormat="dd/MM/yyyy" Mask="@(new DateMask("dd/MM/yyyy"))" Variant="Variant.Outlined" Label="Data de Término" Editable="true" @bind-Date="_courseForm.EndDate" For="@(() => _courseForm.EndDate)" Placeholder="dd/MM/aaaa" />
                 </MudItem>
+                <MudItem xs="12" sm="12" md="6" lg="6">
+                    <MudCheckBox @bind-Checked="_courseForm.Status" Label="Em andamento?" Color="Color.Primary"></MudCheckBox>
+                </MudItem>
             </MudGrid>
 
             <div class="d-flex flex-row w-100 justify-content-end gap-3 pb-3">

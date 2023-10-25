@@ -6,7 +6,7 @@ namespace EgressPortal;
 public class CompleteRegisterForm
 {
     [Required(ErrorMessage = "O campo Nome é requerido")]
-    [MaxLength(100, ErrorMessage = "Nome deve ter no máximo 100 caracteres")]
+    [MaxLength(200, ErrorMessage = "Nome deve ter no máximo 200 caracteres")]
     public string Name { get; set; }
 
     [Required(ErrorMessage = "O campo Cpf é requerido")]
@@ -30,20 +30,24 @@ public class CompleteRegisterForm
 
 public class CompleteRegisterAddressForm
 {
-    [Required(ErrorMessage = "O campo Endereço é requerido")]
-    [MaxLength(100, ErrorMessage = "Endereço deve ter no máximo 100 caracteres")]
-    public string Address { get; set; }
+    public int? Number { get; set; }
+
+    [MaxLength(45, ErrorMessage = "Rua deve ter no máximo 45 caracteres")]
+    public string Street { get; set; }
+
+    [MaxLength(45, ErrorMessage = "Bairro deve ter no máximo 45 caracteres")]
+    public string District { get; set; }
 
     [Required(ErrorMessage = "O campo Cidade é requerido")]
-    [MaxLength(50, ErrorMessage = "Cidade deve ter no máximo 50 caracteres")]
+    [MaxLength(45, ErrorMessage = "Cidade deve ter no máximo 45 caracteres")]
     public string City { get; set; }
 
     [Required(ErrorMessage = "O campo Estado é requerido")]
-    [MaxLength(50, ErrorMessage = "Estado deve ter no máximo 50 caracteres")]
+    [MaxLength(45, ErrorMessage = "Estado deve ter no máximo 45 caracteres")]
     public string State { get; set; }
 
     [Required(ErrorMessage = "O campo País é requerido")]
-    [MaxLength(50, ErrorMessage = "País deve ter no máximo 50 caracteres")]
+    [MaxLength(45, ErrorMessage = "País deve ter no máximo 45 caracteres")]
     public string Country { get; set; }
 }
 
@@ -51,17 +55,12 @@ public class CompleteRegisterContactForm
 {
     
     [Required(ErrorMessage = "O campo Email é requerido")]
-    [MaxLength(30, ErrorMessage = "Email deve ter no máximo 30 caracteres")]
+    [MaxLength(80, ErrorMessage = "Email deve ter no máximo 80 caracteres")]
     [EmailAddress(ErrorMessage = "Formato incorreto de email")]
     public string Email { get; set; }
 
-    [Required(ErrorMessage = "O campo Telefone é requerido")]
-    [MaxLength(30, ErrorMessage = "Telefone deve ter no máximo 30 caracteres")]
-    public string Telephone { get; set; }
-
-    [Required(ErrorMessage = "O campo Celular é requerido")]
-    [MaxLength(30, ErrorMessage = "Celular deve ter no máximo 30 caracteres")]
-    public string MobilePhoneNumber { get; set; }
+    [MaxLength(45, ErrorMessage = "Celular deve ter no máximo 45 caracteres")]
+    public string PhoneNumber { get; set; }
 }
 
 public class CompleteRegisterCourseForm
@@ -73,6 +72,9 @@ public class CompleteRegisterCourseForm
     [Required(ErrorMessage = "O campo Instituição é requerido")]
     [MaxLength(100, ErrorMessage = "Instituição deve ter no máximo 100 caracteres")]
     public string InstitutionName { get; set; }
+
+    [Required(ErrorMessage = "O campo Status é requerido")]
+    public bool Status { get; set; }
 
     [Required(ErrorMessage = "O campo Modalidade é requerido")]
     public Modality Modality { get; set; }
@@ -89,21 +91,20 @@ public class CompleteRegisterCourseForm
 public class CompleteRegisterEmploymentForm
 {
     [Required(ErrorMessage = "O campo Empresa é requerido")]
-    [MaxLength(50, ErrorMessage = "Empresa deve ter no máximo 50 caracteres")]
+    [MaxLength(80, ErrorMessage = "Empresa deve ter no máximo 80 caracteres")]
     public string EnterpriseName { get; set; }
 
     [Required(ErrorMessage = "O campo Cargo é requerido")]
-    [MaxLength(50, ErrorMessage = "Cargo deve ter no máximo 50 caracteres")]
+    [MaxLength(150, ErrorMessage = "Cargo deve ter no máximo 150 caracteres")]
     public string Role { get; set; }
 
     [Required(ErrorMessage = "O campo Setor é requerido")]
-    [MaxLength(50, ErrorMessage = "Setor deve ter no máximo 50 caracteres")]
+    [MaxLength(45, ErrorMessage = "Setor deve ter no máximo 45 caracteres")]
     public string Section { get; set; }
 
     [Required(ErrorMessage = "O campo Status é requerido")]
     public bool IsCurrent { get; set; }
 
-    [Required(ErrorMessage = "O campo Salário é requerido")]
     public double? SalaryRange { get; set; }
 
     [Required(ErrorMessage = "O campo Iniciativa é requerido")]

@@ -44,19 +44,27 @@
                 </div>
 
                 <MudGrid Class="d-flex w-100 m-0 p-0">
-                    <MudItem xs="12" sm="12" md="3" lg="3" Class="d-flex w-100 m-0 p-0 px-2">
-                        <MudTextField Variant="Variant.Outlined" Placeholder="Endereço" Label="Endereço" @bind-Value="_completeRegisterForm.Address.Address" For="@(() => _completeRegisterForm.Address.Address)"></MudTextField>
+                    <MudItem xs="12" sm="12" md="6" lg="6" Class="d-flex w-100 m-0 p-2">
+                        <MudTextField Variant="Variant.Outlined" Placeholder="Rua" Label="Rua" @bind-Value="_completeRegisterForm.Address.Street" For="@(() => _completeRegisterForm.Address.Street)"></MudTextField>
                     </MudItem>
 
-                    <MudItem xs="12" sm="12" md="3" lg="3" Class="d-flex w-100 m-0 p-0 px-2">
+                    <MudItem xs="12" sm="12" md="6" lg="6" Class="d-flex w-100 m-0 p-2">
+                        <MudTextField Variant="Variant.Outlined" Placeholder="Bairro" Label="Bairro" @bind-Value="_completeRegisterForm.Address.District" For="@(() => _completeRegisterForm.Address.District)"></MudTextField>
+                    </MudItem>
+
+                    <MudItem xs="12" sm="12" md="3" lg="3" Class="d-flex w-100 m-0 p-2">
+                        <MudNumericField Variant="Variant.Outlined" Placeholder="Número" Label="Número" @bind-Value="_completeRegisterForm.Address.Number" For="@(() => _completeRegisterForm.Address.Number)"></MudNumericField>
+                    </MudItem>
+
+                    <MudItem xs="12" sm="12" md="3" lg="3" Class="d-flex w-100 m-0 p-2">
                         <MudTextField Variant="Variant.Outlined" Placeholder="Cidade" Label="Cidade" @bind-Value="_completeRegisterForm.Address.City" For="@(() => _completeRegisterForm.Address.City)"></MudTextField>
                     </MudItem>
 
-                    <MudItem xs="12" sm="12" md="3" lg="3" Class="d-flex w-100 m-0 p-0 px-2">
+                    <MudItem xs="12" sm="12" md="3" lg="3" Class="d-flex w-100 m-0 p-2">
                         <MudTextField Variant="Variant.Outlined" Placeholder="Estado" Label="Estado" @bind-Value="_completeRegisterForm.Address.State" For="@(() => _completeRegisterForm.Address.State)"></MudTextField>
                     </MudItem>
 
-                    <MudItem xs="12" sm="12" md="3" lg="3" Class="d-flex w-100 m-0 p-0 px-2">
+                    <MudItem xs="12" sm="12" md="3" lg="3" Class="d-flex w-100 m-0 p-2">
                         <MudTextField Variant="Variant.Outlined" Placeholder="País" Label="País" @bind-Value="_completeRegisterForm.Address.Country" For="@(() => _completeRegisterForm.Address.Country)"></MudTextField>
                     </MudItem>
                 </MudGrid>
@@ -68,23 +76,19 @@
                 </div>
 
                 <MudGrid Class="d-flex w-100 m-0 p-0">
-                    <MudItem xs="12" sm="12" md="4" lg="4" Class="d-flex w-100 m-0 p-0 px-2">
+                    <MudItem xs="12" sm="12" md="6" lg="6" Class="d-flex w-100 m-0 p-0 px-2">
                         <MudTextField Variant="Variant.Outlined" Placeholder="Email" Label="Email" @bind-Value="_completeRegisterForm.Contact.Email" For="@(() => _completeRegisterForm.Contact.Email)" InputType="InputType.Email"></MudTextField>
                     </MudItem>
 
-                    <MudItem xs="12" sm="12" md="4" lg="4" Class="d-flex w-100 m-0 p-0 px-2">
-                        <MudTextField Variant="Variant.Outlined" Mask="@(new PatternMask("(00) 0 0000-0000"))" Placeholder="Telefone fixo" Label="Telefone fixo" @bind-Value="_completeRegisterForm.Contact.Telephone" For="@(() => _completeRegisterForm.Contact.Telephone)"></MudTextField>
-                    </MudItem>
-
-                    <MudItem xs="12" sm="12" md="4" lg="4" Class="d-flex w-100 m-0 p-0 px-2">
-                        <MudTextField Variant="Variant.Outlined" Mask="@(new PatternMask("(00) 0 0000-0000"))" Placeholder="Celular" Label="Celular" @bind-Value="_completeRegisterForm.Contact.MobilePhoneNumber" For="@(() => _completeRegisterForm.Contact.MobilePhoneNumber)"></MudTextField>
+                    <MudItem xs="12" sm="12" md="6" lg="6" Class="d-flex w-100 m-0 p-0 px-2">
+                        <MudTextField Variant="Variant.Outlined" Mask="@(new PatternMask("(00) 0 0000-0000"))" Placeholder="Celular" Label="Celular" @bind-Value="_completeRegisterForm.Contact.PhoneNumber" For="@(() => _completeRegisterForm.Contact.PhoneNumber)"></MudTextField>
                     </MudItem>
                 </MudGrid>
             </div>
 
             <div class="d-flex w-100 flex-column">
                 <div Class="d-flex w-100 m-0 px-2 pb-3 pt-5 align-items-center justify-content-between">
-                    <MudText Typo="Typo.h6" Class="fw-bold" Color="Color.Dark">Outros Cursos</MudText>
+                    <MudText Typo="Typo.h6" Class="fw-bold" Color="Color.Dark">Cursos</MudText>
                     <MudFab Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" Size="Size.Small" @onclick="OpenAddCourseDialog"/>
                 </div>
 
@@ -96,6 +100,7 @@
                             <MudTh>Tipo</MudTh>
                             <MudTh>Instituição</MudTh>
                             <MudTh>Modalidade</MudTh>
+                            <MudTh>Status</MudTh>
                             <MudTh>Data de Ínicio</MudTh>
                             <MudTh>Data de Conclusão</MudTh>
                             <MudTh>.</MudTh>
@@ -105,6 +110,7 @@
                             <MudTd DataLabel="Tipo">@LevelToString(course.Level)</MudTd>
                             <MudTd DataLabel="Instituição">@course.InstitutionName</MudTd>
                             <MudTd DataLabel="Modalidade">@ModalityToString(course.Modality)</MudTd>
+                            <MudTd DataLabel="Status">@(course.Status? "Em andamento" : "Concluído")</MudTd>
                             <MudTd DataLabel="Data de Ínicio">@(course.StartDate is null? string.Empty : DateToStringFormat((DateTime)course.StartDate))</MudTd>
                             <MudTd DataLabel="Data de Conclusão">@(course.EndDate is null? string.Empty : DateToStringFormat((DateTime)course.EndDate))</MudTd>
                             <MudTd DataLabel=".">
@@ -136,6 +142,7 @@
                             <MudTh>Setor</MudTh>
                             <MudTh>Iniciativa</MudTh>
                             <MudTh>Faixa Salarial</MudTh>
+                            <MudTh>Status</MudTh>
                             <MudTh>Data de Ínicio</MudTh>
                             <MudTh>Data de Conclusão</MudTh>
                             <MudTh>.</MudTh>
@@ -144,8 +151,9 @@
                             <MudTd DataLabel="Empresa">@employment.EnterpriseName</MudTd>
                             <MudTd DataLabel="Cargo">@employment.Role</MudTd>
                             <MudTd DataLabel="Setor">@employment.Section</MudTd>
-                            <MudTd DataLabel="Iniciativa">@(employment.IsPublicInitiative is true? "Publica" : "Privada")</MudTd>
+                            <MudTd DataLabel="Iniciativa">@(employment.IsPublicInitiative is true? "Pública" : "Privada")</MudTd>
                             <MudTd DataLabel="Faixa Salarial">@DoubleToBrazilMoney((double)employment.SalaryRange)</MudTd>
+                            <MudTd DataLabel="Status">@(employment.IsCurrent? "Atual" : "Anterior")</MudTd>
                             <MudTd DataLabel="Data de Ínicio">@(employment.StartDate is null? string.Empty : DateToStringFormat((DateTime)employment.StartDate))</MudTd>
                             <MudTd DataLabel="Data de Conclusão">@(employment.EndDate is null? string.Empty : DateToStringFormat((DateTime)employment.EndDate))</MudTd>
                             <MudTd DataLabel=".">
@@ -219,7 +227,7 @@
         => modality switch {
             Modality.Presential => "Presencial",
             Modality.Hybrid => "Híbrido",
-            Modality.Remote => "Remote",
+            Modality.Remote => "Remoto",
             _ => string.Empty};
 
     private string LevelToString(Level level)
