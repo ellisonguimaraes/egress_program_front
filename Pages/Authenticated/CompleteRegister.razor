@@ -2,6 +2,7 @@
 @using EgressPortal.Shared.Auth.CompleteRegister
 @using System.Globalization
 @inject IDialogService DialogService
+@inject ISnackbar Snackbar
 
 <PageTitle>CADASTRO | Complete o seu cadastro</PageTitle>
 
@@ -16,24 +17,57 @@
                 <div Class="d-flex w-100 m-0 px-2 py-3">
                     <MudText Typo="Typo.h6" Class="fw-bold" Color="Color.Dark">Informações Gerais</MudText>
                 </div>
-
                 <MudGrid Class="d-flex w-100 m-0 p-0">
-                    <MudItem xs="12" sm="12" md="3" lg="3" Class="d-flex w-100 m-0 p-0 px-2">
-                        <MudTextField Variant="Variant.Outlined" Placeholder="Nome" Label="Nome" @bind-Value="_completeRegisterForm.Name" For="@(() => _completeRegisterForm.Name)"></MudTextField>
+                    <MudItem xs="12" sm="12" md="8" lg="8" Class="m-0 p-0">
+                        <MudGrid Class="d-flex w-100 m-0 p-0">
+                            <MudItem xs="12" sm="12" md="6" lg="6" Class="m-0">
+                                <MudTextField Variant="Variant.Outlined" Placeholder="Nome" Label="Nome" @bind-Value="_completeRegisterForm.Name" For="@(() => _completeRegisterForm.Name)"></MudTextField>
+                            </MudItem>
+                            <MudItem xs="12" sm="12" md="6" lg="6" Class="m-0">
+                                <MudTextField Variant="Variant.Outlined" Mask="@(new PatternMask("000.000.000-00"))" Placeholder="Cpf" Label="Cpf" @bind-Value="_completeRegisterForm.Cpf" For="@(() => _completeRegisterForm.Cpf)"></MudTextField>
+                            </MudItem>
+                            <MudItem xs="12" sm="12" md="6" lg="6" Class="m-0">
+                                <MudDatePicker DateFormat="dd/MM/yyyy" Mask="@(new DateMask("dd/MM/yyyy"))" Variant="Variant.Outlined" Label="Data de Nascimento" Editable="true" @bind-Date="_completeRegisterForm.BirthDate" For="@(() => _completeRegisterForm.BirthDate)" Placeholder="dd/MM/aaaa" />
+                            </MudItem>
+                            <MudItem xs="12" sm="12" md="6" lg="6" Class="m-0">
+                                <MudField Label="Sexo" Variant="Variant.Outlined">
+                                    <MudRadioGroup @bind-SelectedOption="@_completeRegisterForm.Sex" For="@(() => @_completeRegisterForm.Sex)" Class="text-center">
+                                        <MudRadio Option="@(Sex.MALE)" Color="Color.Primary">Masculino</MudRadio>
+                                        <MudRadio Option="@(Sex.FEMALE)" Color="Color.Primary">Feminino</MudRadio>
+                                    </MudRadioGroup>
+                                </MudField>
+                            </MudItem>
+                        </MudGrid>
                     </MudItem>
-                    <MudItem xs="12" sm="12" md="3" lg="3" Class="d-flex w-100 m-0 p-0 px-2">
-                        <MudTextField Variant="Variant.Outlined" Mask="@(new PatternMask("000.000.000-00"))" Placeholder="Cpf" Label="Cpf" @bind-Value="_completeRegisterForm.Cpf" For="@(() => _completeRegisterForm.Cpf)"></MudTextField>
-                    </MudItem>
-                    <MudItem xs="12" sm="12" md="2" lg="2" Class="d-flex w-100 m-0 p-0 px-2">
-                        <MudDatePicker DateFormat="dd/MM/yyyy" Mask="@(new DateMask("dd/MM/yyyy"))" Variant="Variant.Outlined" Label="Data de Nascimento" Editable="true" @bind-Date="_completeRegisterForm.BirthDate" For="@(() => _completeRegisterForm.BirthDate)" Placeholder="dd/MM/aaaa" />
-                    </MudItem>
-                    <MudItem xs="12" sm="12" md="4" lg="4" Class="d-flex w-100 m-0 p-0 px-2">
-                        <MudField Label="Sexo" Variant="Variant.Outlined">
-                            <MudRadioGroup @bind-SelectedOption="@_completeRegisterForm.Sex" For="@(() => @_completeRegisterForm.Sex)" Class="text-center">
-                                <MudRadio Option="@(Sex.MALE)" Color="Color.Primary">Masculino</MudRadio>
-                                <MudRadio Option="@(Sex.FEMALE)" Color="Color.Primary">Feminino</MudRadio>
-                            </MudRadioGroup>
+                    <MudItem xs="12" sm="12" md="4" lg="4" Class="d-flex flex-row w-100">
+                        <MudField Label="Imagem Perfil" Variant="Variant.Outlined" Class="d-flex w-100 m-1">
+                            <div class="d-flex flex-row justify-content-center">
+                                <MudFileUpload T="IBrowserFile" FilesChanged="BrowserFileToBase64ImageAsync" Accept=".png, .jpg" Class="d-flex m-0 p-0">
+                                    <ButtonTemplate Context="perfilImageButtonContext">
+                                        <MudFab HtmlTag="label"
+                                                Color="Color.Info"
+                                                Variant="Variant.Filled"
+                                                Icon="@Icons.Material.Filled.PhotoCamera"
+                                                for="@perfilImageButtonContext">
+                                        </MudFab>
+                                    </ButtonTemplate>
+                                </MudFileUpload>
+                            </div>
+                            <div class="d-flex flex-column align-items-center w-100 p-3">
+                                @if (_completeRegisterForm.PerfilImage is null)
+                                {
+                                    <MudText Typo="Typo.body2" Color="Color.Dark">Não há nenhuma imagem</MudText>
+                                }
+                                else
+                                {
+                                    <div class="d-flex w-100 flex-column align-items-center">
+                                        <img src="@_perfilImage" alt="Imagem perfil" class="w-50 rounded-lg"/>
+                                        <MudText Typo="Typo.body2" Color="Color.Dark">@_completeRegisterForm.PerfilImage.Name</MudText>
+                                    </div>
+                                }
+                            </div>
                         </MudField>
+
                     </MudItem>
                 </MudGrid>
             </div>
@@ -187,6 +221,9 @@
     private DialogAddCoursesComponent _dialogAddCoursesComponent = null!;
     private DialogAddEmploymentComponent _dialogAddEmploymentsComponent = null!;
 
+    private string _perfilImage = string.Empty;
+    private const long MAX_ALLOWED_SIZE_IMAGE = 2000000;
+
     override protected void OnInitialized()
     {
         _completeRegisterForm.Sex = Sex.MALE;
@@ -201,6 +238,7 @@
         Console.WriteLine("Nome: " + _completeRegisterForm.Name);
     }
 
+    #region Course Dialog
     private void OpenAddCourseDialog()
     {
         _dialogAddCoursesComponent.Open();
@@ -222,26 +260,9 @@
 
         StateHasChanged();
     }
+    #endregion
 
-    private string ModalityToString(Modality modality)
-        => modality switch {
-            Modality.Presential => "Presencial",
-            Modality.Hybrid => "Híbrido",
-            Modality.Remote => "Remoto",
-            _ => string.Empty};
-
-    private string LevelToString(Level level)
-        => level switch {
-            Level.Graduation => "Graduação",
-            Level.Postgraduate => "Pós Graduação",
-            Level.MasterDegree => "Mestrado",
-            Level.DoctorateDegree => "Doutorado",
-            _ => string.Empty};   
-
-    private string DateToStringFormat(DateTime date) => date.ToString("dd/MM/yyyy");
-
-    private string DoubleToBrazilMoney(double number) => number.ToString("C2", CultureInfo.GetCultureInfo("pt-BR"));
-
+    #region Employment Dialog
     private void OpenAddEmploymentDialog()
     {
         _dialogAddEmploymentsComponent.Open();
@@ -263,4 +284,52 @@
 
         StateHasChanged();
     }
+    #endregion
+
+    #region File Image
+    private async Task BrowserFileToBase64ImageAsync(IBrowserFile image)
+    {
+        if (image.Size > MAX_ALLOWED_SIZE_IMAGE)
+        {
+            Snackbar.Add("Imagem deve ter no máximo 2mb", Severity.Warning);
+        }
+        else
+        {
+            _completeRegisterForm.PerfilImage = image;
+            var stream = image.OpenReadStream(MAX_ALLOWED_SIZE_IMAGE);
+            _perfilImage = await StreamToBase64ImageAsync(stream);
+            StateHasChanged();
+        }
+    }
+
+    private async Task<string> StreamToBase64ImageAsync(Stream stream)
+    {
+        var ms = new MemoryStream();
+        await stream.CopyToAsync(ms);
+        var byteArray = ms.ToArray();
+        var base64String = Convert.ToBase64String(byteArray);
+        return "data:image/png;base64, " + base64String;
+    }
+    #endregion
+
+    #region Utils
+    private string ModalityToString(Modality modality)
+        => modality switch {
+            Modality.Presential => "Presencial",
+            Modality.Hybrid => "Híbrido",
+            Modality.Remote => "Remoto",
+            _ => string.Empty};
+
+    private string LevelToString(Level level)
+        => level switch {
+            Level.Graduation => "Graduação",
+            Level.Postgraduate => "Pós Graduação",
+            Level.MasterDegree => "Mestrado",
+            Level.DoctorateDegree => "Doutorado",
+            _ => string.Empty};
+
+    private string DateToStringFormat(DateTime date) => date.ToString("dd/MM/yyyy");
+
+    private string DoubleToBrazilMoney(double number) => number.ToString("C2", CultureInfo.GetCultureInfo("pt-BR"));
+    #endregion
 }

@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using EgressPortal.Models.Form.Enums;
+using Microsoft.AspNetCore.Components.Forms;
 
 namespace EgressPortal;
 
@@ -18,6 +19,8 @@ public class CompleteRegisterForm
 
     [Required(ErrorMessage = "Sexo é requerido")]
     public Sex Sex { get; set; }
+
+    public IBrowserFile PerfilImage { get; set; }
 
     public CompleteRegisterAddressForm Address { get; set; }
 
