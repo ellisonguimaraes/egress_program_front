@@ -60,4 +60,11 @@ public interface IEgressServices
     /// <param name="egressFilterForm">Egress search filters</param>
     /// <returns>Paginated egresses</returns>
     Task<GenericHttpResponse<PagedList<GetEgressPaginateResponseApi>>> GetPaginateEgressAsync(int pageNumber, int pageSize, EgressFilterForm egressFilterForm);
+
+    /// <summary>
+    /// Register person
+    /// </summary>
+    /// <param name="form">Complete register form</param>
+    /// <returns>Person id (GUID)</returns>
+    Task<GenericHttpResponse<object>> RegisterPersonAsync(CompleteRegisterForm completeRegisterForm);
 }

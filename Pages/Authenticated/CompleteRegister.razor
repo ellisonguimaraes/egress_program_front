@@ -1,8 +1,10 @@
 @page "/completar-cadastro"
 @using EgressPortal.Shared.Auth.CompleteRegister
 @using System.Globalization
+@using System.Net
 @inject IDialogService DialogService
 @inject ISnackbar Snackbar
+@inject IEgressServices EgressServices
 
 <PageTitle>CADASTRO | Complete o seu cadastro</PageTitle>
 
@@ -235,7 +237,20 @@
 
     private async Task OnValidSubmitAsync()
     {
-        Console.WriteLine("Nome: " + _completeRegisterForm.Name);
+        var result = await EgressServices.RegisterPersonAsync(_completeRegisterForm);
+
+        if (result.StatusCode.Equals((int)HttpStatusCode.OK))
+        {
+            Snackbar.Add("Criado com sucesso!!!", Severity.Success);
+        }
+        else
+        {
+            foreach (var error in result.Errors)
+            {
+                Snackbar.Add(error, Severity.Error);
+                Console.WriteLine(error);
+            }
+        }
     }
 
     #region Course Dialog

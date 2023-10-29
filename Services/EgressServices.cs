@@ -205,4 +205,51 @@ public class EgressServices : IEgressServices
         response.StatusCode = (int)httpResponseMessage.StatusCode;
         return response;
     }
+
+    public async Task<GenericHttpResponse<object>> RegisterPersonAsync(CompleteRegisterForm completeRegisterForm)
+    {
+        var request = new RegisterPersonRequestApi
+        {
+            Name = completeRegisterForm.Name,
+            BirthDate = completeRegisterForm.BirthDate,
+            Cpf = completeRegisterForm.Cpf,
+            PersonType = PersonType.Egress,
+            Sex = completeRegisterForm.Sex,
+            Email = completeRegisterForm.Contact.Email,
+            PhoneNumber = completeRegisterForm.Contact.PhoneNumber,
+            Address = new RegisterPersonAddressRequestApi 
+            {
+                Number = completeRegisterForm.Address.Number,
+                Street = completeRegisterForm.Address.Street,
+                District = completeRegisterForm.Address.District,
+                City = completeRegisterForm.Address.City,
+                State = completeRegisterForm.Address.Street,
+                Country = completeRegisterForm.Address.Country
+            },
+            Specializations = completeRegisterForm.Courses.Select(c => new RegisterPersonSpecializationRequestApi
+            {
+                CourseName = c.CourseName,
+                InstitutionName = c.InstitutionName,
+                Modality = c.Modality,
+                Type = c.Level,
+                Status = c.Status,
+                StartDate = (DateTime)c.StartDate!,
+                EndDate = c.EndDate
+            }).ToList(),
+            Employments = completeRegisterForm.Employments.Select(e => new RegisterPersonEmploymentRequestApi
+            {
+                 Enterprise = e.EnterpriseName,
+                Role = e.Role,
+                IsPublicInitiative = e.IsPublicInitiative,
+                SalaryRange = (decimal?)e.SalaryRange,
+                Status = e.IsCurrent,
+                Section = e.Section,
+                StartDate = e.StartDate,
+                EndDate = e.EndDate
+            }).ToList()
+        };
+
+        var response = await _egressApi.RegisterPersonAsync(request);
+        return await HandleResponseAsync<object>(response);
+    }
 }

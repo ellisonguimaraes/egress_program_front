@@ -33,4 +33,7 @@ public interface IEgressApi
 
     [Get("/api/v1/egress")]
     Task<HttpResponseMessage> GetPaginateEgressAsync([AliasAs(PAGE_NUMBER)] int pageNumber, [AliasAs(PAGE_SIZE)] int pageSize, [AliasAs(QUERY)] string query, [AliasAs(ORDER_BY)] string orderByProperty);
+
+    [Post("/api/v1/person/register")]
+    Task<HttpResponseMessage> RegisterPersonAsync([Body(BodySerializationMethod.UrlEncoded)] RegisterPersonRequestApi request);
 }
