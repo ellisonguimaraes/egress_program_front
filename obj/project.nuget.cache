@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "cswn4XICBjaVgoqIQedAvogpGkB5hGFoIr8NLCEtZFMt2mQyVXGH/djFNqh77BJA9DVau4aV+ZCg0lGFNTT12g==",
+  "dgSpecHash": "sCpLG0k7ppCjUtVOP40U+mRweWPkuzYTvR7wj0HHRKjaDpQKF0+vQeDwfyr9nWqBbMGrEz5iBJZrRBiBVb6crw==",
   "success": true,
   "projectFilePath": "/Users/ellisonguimaraes/repos/EgressPortal/EgressPortal.csproj",
   "expectedPackageFiles": [
@@ -38,6 +38,9 @@
     "/Users/ellisonguimaraes/.nuget/packages/microsoft.identitymodel.tokens/6.22.0/microsoft.identitymodel.tokens.6.22.0.nupkg.sha512",
     "/Users/ellisonguimaraes/.nuget/packages/microsoft.jsinterop/7.0.11/microsoft.jsinterop.7.0.11.nupkg.sha512",
     "/Users/ellisonguimaraes/.nuget/packages/microsoft.jsinterop.webassembly/7.0.11/microsoft.jsinterop.webassembly.7.0.11.nupkg.sha512",
+    "/Users/ellisonguimaraes/.nuget/packages/microsoft.net.illink.analyzers/7.0.100-1.23211.1/microsoft.net.illink.analyzers.7.0.100-1.23211.1.nupkg.sha512",
+    "/Users/ellisonguimaraes/.nuget/packages/microsoft.net.illink.tasks/7.0.100-1.23211.1/microsoft.net.illink.tasks.7.0.100-1.23211.1.nupkg.sha512",
+    "/Users/ellisonguimaraes/.nuget/packages/microsoft.net.sdk.webassembly.pack/8.0.0/microsoft.net.sdk.webassembly.pack.8.0.0.nupkg.sha512",
     "/Users/ellisonguimaraes/.nuget/packages/mudblazor/6.10.0/mudblazor.6.10.0.nupkg.sha512",
     "/Users/ellisonguimaraes/.nuget/packages/refit/7.0.0/refit.7.0.0.nupkg.sha512",
     "/Users/ellisonguimaraes/.nuget/packages/refit.httpclientfactory/7.0.0/refit.httpclientfactory.7.0.0.nupkg.sha512",
@@ -47,7 +50,9 @@
     "/Users/ellisonguimaraes/.nuget/packages/system.security.cryptography.cng/4.5.0/system.security.cryptography.cng.4.5.0.nupkg.sha512",
     "/Users/ellisonguimaraes/.nuget/packages/system.text.encodings.web/7.0.0/system.text.encodings.web.7.0.0.nupkg.sha512",
     "/Users/ellisonguimaraes/.nuget/packages/system.text.json/7.0.3/system.text.json.7.0.3.nupkg.sha512",
-    "/Users/ellisonguimaraes/.nuget/packages/microsoft.netcore.app.runtime.mono.browser-wasm/7.0.11/microsoft.netcore.app.runtime.mono.browser-wasm.7.0.11.nupkg.sha512"
+    "/Users/ellisonguimaraes/.nuget/packages/microsoft.netcore.app.ref/7.0.14/microsoft.netcore.app.ref.7.0.14.nupkg.sha512",
+    "/Users/ellisonguimaraes/.nuget/packages/microsoft.netcore.app.runtime.mono.browser-wasm/7.0.14/microsoft.netcore.app.runtime.mono.browser-wasm.7.0.14.nupkg.sha512",
+    "/Users/ellisonguimaraes/.nuget/packages/microsoft.aspnetcore.app.ref/7.0.14/microsoft.aspnetcore.app.ref.7.0.14.nupkg.sha512"
   ],
   "logs": []
 }

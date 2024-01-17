@@ -7,6 +7,7 @@ using EgressPortal.Models.Configuration;
 using EgressPortal.Services;
 using EgressPortal.Services.HttpClients;
 using EgressPortal.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
 using MudBlazor.Services;
@@ -35,7 +36,8 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
     services.AddScoped<IEgressServices, EgressServices>();
     services.AddSingleton<ILocalStorageServices, LocalStorageServices>();
 
-    services.AddAuthorizationCore();
+    services.AddSingleton<IAuthorizationHandler, PersonIdentifierAuthorizationHandler>();
+    services.AddAuthorizationCore(opt => opt.AddPolicy("PersonIdentifierPolicy", policy => policy.Requirements.Add(new PersonIdentifierAuthorizationRequirement())));
 
     services.AddScoped<ApplicationAuthenticationProvider>();
     services.AddScoped<AuthenticationStateProvider, ApplicationAuthenticationProvider>(provider =>

@@ -10,6 +10,7 @@ public static class RouteSettings
     public static string ContactRoute = "contatos";
     public static string LoginRoute = "login";
     public static string RegisterRoute = "cadastrar";
+    public static string CompleteRegisterRoute = "/completar-cadastro";
     public static string RecoveryPasswordRoute = "recuperar-senha";
     public static string InstagramRoute = "https://instagram.com/colcic_uesc";
     public static string FacebookRoute = "https://www.facebook.com/colcic.uesc?mibextid=LQQJ4d";

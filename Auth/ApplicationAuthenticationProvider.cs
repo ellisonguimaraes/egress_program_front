@@ -4,6 +4,7 @@ using System.Security.Claims;
 using System.Text.Json;
 using EgressPortal.Models.API.HttpClient;
 using EgressPortal.Services.Interfaces;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 
 namespace EgressPortal.Auth;
@@ -22,13 +23,15 @@ public class ApplicationAuthenticationProvider : AuthenticationStateProvider, IL
 
     private readonly ILocalStorageServices _localStorageServices;
     private readonly IUserServices _userServices;
+    private readonly NavigationManager _navigationManager;
 
     private readonly AuthenticationState _anonymous = new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
 
-    public ApplicationAuthenticationProvider(ILocalStorageServices localStorageServices, IUserServices userServices)
+    public ApplicationAuthenticationProvider(ILocalStorageServices localStorageServices, IUserServices userServices, NavigationManager navigationManager)
     {
         _localStorageServices = localStorageServices;
         _userServices = userServices;
+        _navigationManager = navigationManager;
     }
 
     public override async Task<AuthenticationState> GetAuthenticationStateAsync()
