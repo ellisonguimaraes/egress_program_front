@@ -238,7 +238,7 @@ public class EgressServices : IEgressServices
             }).ToList(),
             Employments = completeRegisterForm.Employments.Select(e => new RegisterPersonEmploymentRequestApi
             {
-                 Enterprise = e.EnterpriseName,
+                Enterprise = e.EnterpriseName,
                 Role = e.Role,
                 IsPublicInitiative = e.IsPublicInitiative,
                 SalaryRange = (decimal?)e.SalaryRange,
