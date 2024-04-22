@@ -40,8 +40,8 @@ public class RegisterPersonRequestApi
     [AliasAs("specializations")]
     public List<RegisterPersonSpecializationRequestApi>? Specializations { get; set; }
 
-    [AliasAs("employments")]
-    public List<RegisterPersonEmploymentRequestApi>? Employments { get; set; }
+    [AliasAs("employment")]
+    public RegisterPersonEmploymentRequestApi Employment { get; set; }
 }
 
 

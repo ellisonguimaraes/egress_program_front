@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\ellis\\Desktop\\Backup Linux\\source\\repos\\egress_program_front\\EgressPortal.csproj": {}
+    "C:\\Users\\ellis\\source\\repos\\egress_program_front\\EgressPortal.csproj": {}
   },
   "projects": {
-    "C:\\Users\\ellis\\Desktop\\Backup Linux\\source\\repos\\egress_program_front\\EgressPortal.csproj": {
+    "C:\\Users\\ellis\\source\\repos\\egress_program_front\\EgressPortal.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\ellis\\Desktop\\Backup Linux\\source\\repos\\egress_program_front\\EgressPortal.csproj",
+        "projectUniqueName": "C:\\Users\\ellis\\source\\repos\\egress_program_front\\EgressPortal.csproj",
         "projectName": "EgressPortal",
-        "projectPath": "C:\\Users\\ellis\\Desktop\\Backup Linux\\source\\repos\\egress_program_front\\EgressPortal.csproj",
+        "projectPath": "C:\\Users\\ellis\\source\\repos\\egress_program_front\\EgressPortal.csproj",
         "packagesPath": "C:\\Users\\ellis\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\ellis\\Desktop\\Backup Linux\\source\\repos\\egress_program_front\\obj\\",
+        "outputPath": "C:\\Users\\ellis\\source\\repos\\egress_program_front\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\ellis\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -73,7 +73,7 @@
             },
             "MudBlazor": {
               "target": "Package",
-              "version": "[6.10.0, )"
+              "version": "[6.19.1, )"
             },
             "Refit": {
               "target": "Package",

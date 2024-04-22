@@ -28,7 +28,7 @@ public interface IEgressApi
     [Get("/api/v1/egress/testimony")]
     Task<HttpResponseMessage> GetPaginateTestimoniesAsync([AliasAs(PAGE_NUMBER)] int pageNumber, [AliasAs(PAGE_SIZE)] int pageSize);
 
-    [Get("/api/v1/egress/egress-per-year")]
+    [Get("/api/v1/egress/per-year")]
     Task<HttpResponseMessage> GetCountEgressPerFinalSemesterAsync();
 
     [Get("/api/v1/egress")]

@@ -7,6 +7,6 @@ public class GetCountEgressPerFinalSemesterResponseApi
     [JsonPropertyName("total")]
     public int? Total { get; set; }
 
-    [JsonPropertyName("egressPerYearList")]
+    [JsonPropertyName("egress_per_year")]
     public List<CountGroupBy<string, double>> EgressPerYearList { get; set; } = null!;
 }
