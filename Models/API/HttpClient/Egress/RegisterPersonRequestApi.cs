@@ -1,139 +1,82 @@
-﻿using Refit;
-using EgressPortal.Models.Form.Enums;
+﻿using System.Text.Json.Serialization;
+using Refit;
 
 namespace EgressPortal;
 
 public class RegisterPersonRequestApi
 {
-    [AliasAs("cpf")]
-    public string Cpf { get; set; }
+    [JsonPropertyName("id")]
+    public Guid? Id { get; set; }
 
-    [AliasAs("name")]
-    public string Name { get; set; }
+    [JsonPropertyName("birth_date")]
+    public DateTime BirthDate { get; set; }
 
-    [AliasAs("birth_date")]
-    public DateTime? BirthDate { get; set; }
+    [JsonPropertyName("phone_number")]
+    public string PhoneNumber { get; set; }
 
-    [AliasAs("sex")]
-    public Sex? Sex { get; set; }
-
-    [AliasAs("email")]
-    public string? Email { get; set; }
-
-    [AliasAs("phone_number")]
-    public string? PhoneNumber { get; set; }
-
-    [AliasAs("perfil_image")]
-    public StreamPart? PerfilImage { get; set; }
-
-    #region Authentication Properties
-    [AliasAs("person_type")]
-    public PersonType? PersonType { get; set; }
-    #endregion
-
-    [AliasAs("address")]
-    public virtual RegisterPersonAddressRequestApi? Address { get; set; }
+    [JsonPropertyName("can_expose_data")]
+    public bool CanExposeData { get; set; }
     
-    [AliasAs("courses")]
-    public List<RegisterPersonCourseRequestApi>? Courses { get; set; }
-    
-    [AliasAs("specializations")]
-    public List<RegisterPersonSpecializationRequestApi>? Specializations { get; set; }
+    [JsonPropertyName("can_receive_message")]
+    public bool CanReceiveMessage { get; set; }
 
-    [AliasAs("employment")]
+    [JsonPropertyName("address")]
+    public RegisterPersonAddressRequestApi Address { get; set; }
+
+    [JsonPropertyName("employment")]
     public RegisterPersonEmploymentRequestApi Employment { get; set; }
-}
 
-
-public class RegisterPersonSpecializationRequestApi
-{
-    [AliasAs("course_name")]
-    public string CourseName { get; set; }
-
-    [AliasAs("institution")]
-    public string InstitutionName { get; set; }
-
-    [AliasAs("is_studying")]
-    public bool? Status { get; set; }
-
-    [AliasAs("type")]
-    public Level? Type { get; set; }
-
-    [AliasAs("modality")]
-    public Modality? Modality { get; set; }
-
-    [AliasAs("start_date")]
-    public DateTime StartDate { get; set; }
-
-    [AliasAs("end_date")]
-    public DateTime? EndDate { get; set; }
-}
-
-public class RegisterPersonEmploymentRequestApi
-{
-    [AliasAs("role")]
-    public string Role { get; set; }
-
-    [AliasAs("enterprise")]
-    public string Enterprise { get; set; }
-
-    [AliasAs("section")]
-    public string Section { get; set; }
-
-    [AliasAs("salary_range")]
-    public decimal? SalaryRange { get; set; }
-
-    [AliasAs("is_public_initiative")]
-    public bool IsPublicInitiative { get; set; }
-
-    [AliasAs("is_current")]
-    public bool? Status { get; set; }
-
-    [AliasAs("start_date")]
-    public DateTime? StartDate { get; set; }
-
-    [AliasAs("end_date")]
-    public DateTime? EndDate { get; set; }
+    [JsonPropertyName("continuing_education")]
+    public RegisterPersonContinuingEducationRequestApi ContinuingEducation { get; set; }
 }
 
 public class RegisterPersonAddressRequestApi
 {
-    [AliasAs("number")]
-    public long? Number { get; set; }
-
-    [AliasAs("street")]
-    public string? Street { get; set; }
-
-    [AliasAs("district")]
-    public string? District { get; set; }
-
-    [AliasAs("city")]
-    public string City { get; set; }
-
-    [AliasAs("state")]
+    [JsonPropertyName("state")]
     public string State { get; set; }
 
-    [AliasAs("country")]
+    [JsonPropertyName("country")]
     public string Country { get; set; }
+
+    [JsonPropertyName("is_public")]
+    public bool IsPublic { get; set; }
 }
 
-public class RegisterPersonCourseRequestApi
+public class RegisterPersonEmploymentRequestApi
 {
-    [AliasAs("course_id")]
-    public Guid? CourseId { get; set; }
+    [JsonPropertyName("role")]
+    public string Role { get; set; }
 
-    [AliasAs("beginning_semester")]
-    public string? BeginningSemester { get; set; }
+    [JsonPropertyName("enterprise")]
+    public string Enterprise { get; set; }
 
-    [AliasAs("final_semester")]
-    public string? FinalSemester { get; set; }
+    [JsonPropertyName("salary_range")]
+    public decimal? SalaryRange { get; set; }
 
-    [AliasAs("mat")]
-    public string Mat { get; set; }
+    [JsonPropertyName("is_public_initiative")]
+    public bool IsPublicInitiative { get; set; }
 
-    [AliasAs("level")]
-    public Level? Level { get; set; }
-    
-    [AliasAs("modality")]
-    public Modality? Modality { get; set; }
+    [JsonPropertyName("start_date")]
+    public DateTime? StartDate { get; set; }
+
+    [JsonPropertyName("is_public")]
+    public bool IsPublic { get; set; }
+}
+
+public class RegisterPersonContinuingEducationRequestApi
+{
+    [JsonPropertyName("has_certification")]
+    public bool? HasCertification { get; set; }
+
+    [JsonPropertyName("has_specialization")]
+    public bool? HasSpecialization { get; set; }
+
+    [JsonPropertyName("has_master_degree")]
+    public bool? HasMasterDegree { get; set; }
+
+    [JsonPropertyName("has_doctorate_degree")]
+    public bool? HasDoctorateDegree { get; set; }
+
+    [JsonPropertyName("is_public")]
+    public bool IsPublic { get; set; }
 }

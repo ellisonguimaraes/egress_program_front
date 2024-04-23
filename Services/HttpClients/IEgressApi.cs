@@ -1,3 +1,4 @@
+using System.Net.Http.Headers;
 using Refit;
 
 namespace EgressPortal.Services.HttpClients;
@@ -11,6 +12,7 @@ public interface IEgressApi
     private const string QUERY = "query";
     private const string ORDER_BY = "order_by";
     private const string ID = "id";
+    private const string AUTHORIZATION_HEADER = "authorization";
     #endregion
 
     [Get("/api/v1/egress/highlights/random/{quantity}")]
@@ -35,5 +37,5 @@ public interface IEgressApi
     Task<HttpResponseMessage> GetPaginateEgressAsync([AliasAs(PAGE_NUMBER)] int pageNumber, [AliasAs(PAGE_SIZE)] int pageSize, [AliasAs(QUERY)] string query, [AliasAs(ORDER_BY)] string orderByProperty);
 
     [Post("/api/v1/person/register")]
-    Task<HttpResponseMessage> RegisterPersonAsync([Body(BodySerializationMethod.UrlEncoded)] RegisterPersonRequestApi request);
+    Task<HttpResponseMessage> RegisterPersonAsync([Header(AUTHORIZATION_HEADER)] AuthenticationHeaderValue authorization, [Body] RegisterPersonRequestApi request);
 }

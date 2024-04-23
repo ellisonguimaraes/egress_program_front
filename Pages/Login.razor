@@ -6,6 +6,7 @@
 @inject IUserServices UserServices
 @inject ILoginServices LoginServices
 @inject ISnackbar Snackbar
+@inject NavigationManager NavigationManager
 
 <PageTitle>Login | Faça o login ou registre-se</PageTitle>
 
@@ -68,7 +69,7 @@
         {
             Snackbar.Add("Autenticado com sucesso.", Severity.Success);
             await LoginServices.LoginAsync(result.Data!);
-            Console.WriteLine("Autenticado com sucesso!");
+            NavigationManager.NavigateTo(RouteSettings.AuthStartPage);
         }
         else
         {
@@ -77,8 +78,6 @@
                 Snackbar.Add(error, Severity.Error);
                 Console.WriteLine(error);
             }
-
-            Console.WriteLine("Não autenticado com sucesso!");
         }
     }
 

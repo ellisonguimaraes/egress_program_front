@@ -1,3 +1,4 @@
+using System.Net.Http.Headers;
 using EgressPortal.Models;
 using EgressPortal.Models.API;
 using EgressPortal.Models.API.HttpClient.Egress;
@@ -62,9 +63,10 @@ public interface IEgressServices
     Task<GenericHttpResponse<PagedList<GetEgressPaginateResponseApi>>> GetPaginateEgressAsync(int pageNumber, int pageSize, EgressFilterForm egressFilterForm);
 
     /// <summary>
-    /// Register person
+    /// Complete register person
     /// </summary>
-    /// <param name="form">Complete register form</param>
+    /// <param name="authorization">Authorization header</param>
+    /// <param name="completeRegisterForm">Complete register form</param>
     /// <returns>Person id (GUID)</returns>
-    Task<GenericHttpResponse<object>> RegisterPersonAsync(CompleteRegisterForm completeRegisterForm);
+    Task<GenericHttpResponse<object>> RegisterPersonAsync(AuthenticationHeaderValue authorization, CompleteRegisterForm completeRegisterForm);
 }

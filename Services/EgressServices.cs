@@ -1,3 +1,4 @@
+using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using EgressPortal.Models;
@@ -206,29 +207,41 @@ public class EgressServices : IEgressServices
         return response;
     }
 
-    public async Task<GenericHttpResponse<object>> RegisterPersonAsync(CompleteRegisterForm completeRegisterForm)
+    public async Task<GenericHttpResponse<object>> RegisterPersonAsync(AuthenticationHeaderValue authorization, CompleteRegisterForm completeRegisterForm)
     {
         var request = new RegisterPersonRequestApi
         {
-            BirthDate = completeRegisterForm.BirthDate,
-            PersonType = PersonType.Egress,
+            BirthDate = (DateTime)completeRegisterForm.BirthDate!,
             PhoneNumber = completeRegisterForm.PhoneNumber,
-            // Address = new RegisterPersonAddressRequestApi 
-            // {
-            //     //State = completeRegisterForm.Address.State,
-            //     Country = completeRegisterForm.Address.Country
-            // },
-            // Employment = new RegisterPersonEmploymentRequestApi
-            // {
-            //     Enterprise = completeRegisterForm.Employment.EnterpriseName,
-            //     Role = completeRegisterForm.Employment.Role,
-            //     IsPublicInitiative = completeRegisterForm.Employment.IsPublicInitiative,
-            //     SalaryRange = (decimal?)completeRegisterForm.Employment.SalaryRange,
-            //     StartDate = completeRegisterForm.Employment.StartDate
-            // }
+            CanExposeData = completeRegisterForm.CanExposeData,
+            CanReceiveMessage = completeRegisterForm.CanReceivedMessage,
+            Address = new RegisterPersonAddressRequestApi 
+            {
+                State = completeRegisterForm.State,
+                Country = completeRegisterForm.Country,
+                IsPublic = completeRegisterForm.IsAddressPublic
+            },
+            Employment = new RegisterPersonEmploymentRequestApi
+            {
+                Enterprise = completeRegisterForm.EnterpriseName,
+                Role = completeRegisterForm.Role,
+                SalaryRange = (decimal?)completeRegisterForm.SalaryRange,
+                IsPublicInitiative = completeRegisterForm.IsPublicInitiative,
+                StartDate = (DateTime)completeRegisterForm.StartDate!,
+                IsPublic = completeRegisterForm.IsEmploymentPublic
+            },
+            ContinuingEducation = new RegisterPersonContinuingEducationRequestApi
+            {
+                HasCertification = completeRegisterForm.HasCertification,
+                HasSpecialization = completeRegisterForm.HasSpecialization,
+                HasMasterDegree = completeRegisterForm.HasMasterDegree,
+                HasDoctorateDegree = completeRegisterForm.HasDoctorateDegree,
+                IsPublic = completeRegisterForm.IsContinuingEducationPublic
+            }
         };
 
-        var response = await _egressApi.RegisterPersonAsync(request);
+        var response = await _egressApi.RegisterPersonAsync(authorization, request);
+        
         return await HandleResponseAsync<object>(response);
     }
 }

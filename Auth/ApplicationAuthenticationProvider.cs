@@ -150,4 +150,28 @@ public class ApplicationAuthenticationProvider : AuthenticationStateProvider, IL
         await _localStorageServices.RemoveAsync(TOKEN_LOCAL_STORAGE_NAME);
         NotifyAuthenticationStateChanged(Task.FromResult(_anonymous));
     }
+    
+    public async Task<AuthenticationResponseApi?> GetTokenAsync()
+    {
+        var tokenString = await _localStorageServices.GetAsync<string>(TOKEN_LOCAL_STORAGE_NAME);
+        return await HandlerTokenAsync(JsonSerializer.Deserialize<AuthenticationResponseApi>(tokenString)!);
+    }
+
+    public async Task ForceExchangeRefreshTokenAsync()
+    {
+        var tokenString = await _localStorageServices.GetAsync<string>(TOKEN_LOCAL_STORAGE_NAME);
+        
+        var token = JsonSerializer.Deserialize<AuthenticationResponseApi>(tokenString);
+
+        var response = await RefreshTokenAsync(token!.RefreshToken);
+        
+        if (response is null)
+        {
+            await LogoutAsync();
+            return;
+        }
+        
+        var authenticationState = BuildAuthenticationStateFromJwt(response.AccessToken!);
+        NotifyAuthenticationStateChanged(Task.FromResult(authenticationState));
+    }
 }

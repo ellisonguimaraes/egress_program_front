@@ -11,7 +11,7 @@ public class CompleteRegisterForm
     [Required(ErrorMessage = "Campo requerido")]
     [MaxLength(45, ErrorMessage = "Máximo de 45 caracteres")]
     [RegularExpression(@"\(\d{2}\)\s\d\s\d{4}-\d{4}", ErrorMessage = "Formato inválido, tente o formato (00) 0 0000-0000.")]
-    public string? PhoneNumber { get; set; }
+    public string PhoneNumber { get; set; }
     
     public bool CanExposeData { get; set; } = false;
     

@@ -1,0 +1,11 @@
+﻿@page "/user"
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(policy: "PersonIdentifierPolicy")]
+
+<PageTitle>Página Inicial</PageTitle>
+
+<TitlePageComponent Title="Página Inicial" SubTitle=""/>
+
+@code {
+    
+}

@@ -17,19 +17,19 @@ public interface IUserApi
     [Post("/api/v1/user/register")]
     Task<HttpResponseMessage> RegisterAsync([Body] RegisterRequestApi request);
 
-    [Get("/api/v1/user/confirm_account")]
+    [Get("/api/v1/user/confirm-account")]
     Task<HttpResponseMessage> ConfirmAccountAsync([Query(CONFIRM_ACCOUNT_HEADER_EMAIL)] string email, [Query(CONFIRM_ACCOUNT_HEADER_TOKEN)] string token);
 
-    [Post("/api/v1/user/password_reset/send")]
+    [Post("/api/v1/user/password-reset/send")]
     Task<HttpResponseMessage> SendResetPasswordEmailAsync([Header(SEND_EMAIL_RESET_PASSWORD_HEADER_EMAIL)] string email);
 
-    [Post("/api/v1/user/password_reset")]
+    [Post("/api/v1/user/password-reset")]
     Task<HttpResponseMessage> ResetPasswordAsync([Body] ResetPasswordRequestApi request);
 
     [Post("/api/v1/user/authenticate")]
     Task<HttpResponseMessage> AuthenticateAsync([Body] AuthenticationRequestApi request);
 
-    [Post("/api/v1/user/refresh_token")]
+    [Post("/api/v1/user/refresh-token")]
     Task<HttpResponseMessage> RefreshTokenAsync([Header(REFRESH_TOKEN_HEADER)] string refreshToken);
 
     [Post("/api/v1/contact")]

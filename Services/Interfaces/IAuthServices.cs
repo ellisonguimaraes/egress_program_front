@@ -17,4 +17,15 @@ public interface ILoginServices
     /// </summary>
     /// <returns></returns>
     Task LogoutAsync();
+
+    /// <summary>
+    /// Get token (or new token with refresh token)
+    /// </summary>
+    /// <returns>Token response</returns>
+    Task<AuthenticationResponseApi?> GetTokenAsync();
+
+    /// <summary>
+    /// Force exchange of Refresh Token to Token
+    /// </summary>
+    Task ForceExchangeRefreshTokenAsync();
 }

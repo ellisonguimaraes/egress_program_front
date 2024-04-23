@@ -31,5 +31,5 @@ public class PersonIdentifierAuthorizationHandler : AuthorizationHandler<PersonI
 
     private static bool HasPersonIdentifierAndCompleteRegister(ClaimsPrincipal principal)
         => principal.HasClaim(c => c.Type.Equals(PERSON_ID_CLAIM_NAME, StringComparison.OrdinalIgnoreCase) && !string.IsNullOrWhiteSpace(c.Value))
-        && principal.HasClaim(c => c.Type.Equals(PERSON_ID_CLAIM_NAME, StringComparison.OrdinalIgnoreCase) && bool.TryParse(c.Value, out var hasCompleteRegister) && hasCompleteRegister);
+        && principal.HasClaim(c => c.Type.Equals(COMPLETE_REGISTER_CLAIM_NAME, StringComparison.OrdinalIgnoreCase) && bool.TryParse(c.Value, out var hasCompleteRegister) && hasCompleteRegister);
 }

@@ -1,6 +1,14 @@
 @page "/completar-cadastro"
 @using System.Globalization
+@using System.Net
+@using System.Net.Http.Headers
+@using EgressPortal.Models
+@using Microsoft.AspNetCore.Authorization
 @inject ISnackbar Snackbar
+@inject IEgressServices EgressServices
+@inject ILoginServices LoginServices
+@inject NavigationManager NavigationManager
+@attribute [Authorize]
 
 <PageTitle>Cadastro | Complete o seu cadastro</PageTitle>
 
@@ -153,7 +161,6 @@
                     </MudItem>
                 </MudGrid>
             </div>
-
             
             @*=====================================================*@
             @*==================== PERMISSIONS ====================*@
@@ -187,47 +194,26 @@
 
     private async Task OnValidSubmitAsync()
     {
-        // var result = await EgressServices.RegisterPersonAsync(_completeRegisterForm);
-        //
-        // if (result.StatusCode.Equals((int)HttpStatusCode.OK))
-        // {
-        //     Snackbar.Add("Criado com sucesso!!!", Severity.Success);
-        // }
-        // else
-        // {
-        //     foreach (var error in result.Errors)
-        //     {
-        //         Snackbar.Add(error, Severity.Error);
-        //         Console.WriteLine(error);
-        //     }
-        // }
-        Console.WriteLine("##### GENERAL ######");
-        Console.WriteLine($"{nameof(_completeRegisterForm.BirthDate)}:{_completeRegisterForm.BirthDate}");
-        Console.WriteLine($"{nameof(_completeRegisterForm.PhoneNumber)}:{_completeRegisterForm.PhoneNumber}");
+        var token = await LoginServices.GetTokenAsync();
         
-        Console.WriteLine("##### ADDRESS ######");
-        Console.WriteLine($"{nameof(_completeRegisterForm.State)}:{_completeRegisterForm.State}");
-        Console.WriteLine($"{nameof(_completeRegisterForm.Country)}:{_completeRegisterForm.Country}");
+        var authorization = new AuthenticationHeaderValue(token!.TokenType, token.AccessToken);
         
-        Console.WriteLine("##### CONTINUING ######");
-        Console.WriteLine($"{nameof(_completeRegisterForm.HasCertification)}:{_completeRegisterForm.HasCertification}");
-        Console.WriteLine($"{nameof(_completeRegisterForm.HasSpecialization)}:{_completeRegisterForm.HasSpecialization}");
-        Console.WriteLine($"{nameof(_completeRegisterForm.HasMasterDegree)}:{_completeRegisterForm.HasMasterDegree}");
-        Console.WriteLine($"{nameof(_completeRegisterForm.HasDoctorateDegree)}:{_completeRegisterForm.HasDoctorateDegree}");
+        var result = await EgressServices.RegisterPersonAsync(authorization, _completeRegisterForm);
         
-        Console.WriteLine("##### EMPLOYMENT ######");
-        Console.WriteLine($"{nameof(_completeRegisterForm.EnterpriseName)}:{_completeRegisterForm.EnterpriseName}");
-        Console.WriteLine($"{nameof(_completeRegisterForm.Role)}:{_completeRegisterForm.Role}");
-        Console.WriteLine($"{nameof(_completeRegisterForm.SalaryRange)}:{_completeRegisterForm.SalaryRange}");
-        Console.WriteLine($"{nameof(_completeRegisterForm.StartDate)}:{_completeRegisterForm.StartDate}");
-        Console.WriteLine($"{nameof(_completeRegisterForm.IsPublicInitiative)}:{_completeRegisterForm.IsPublicInitiative}");
-        
-        Console.WriteLine("##### ACCEPTS ######");
-        Console.WriteLine($"{nameof(_completeRegisterForm.CanExposeData)}:{_completeRegisterForm.CanExposeData}");
-        Console.WriteLine($"{nameof(_completeRegisterForm.IsAddressPublic)}:{_completeRegisterForm.IsPublicInitiative}");
-        Console.WriteLine($"{nameof(_completeRegisterForm.IsContinuingEducationPublic)}:{_completeRegisterForm.IsContinuingEducationPublic}");
-        Console.WriteLine($"{nameof(_completeRegisterForm.IsEmploymentPublic)}:{_completeRegisterForm.IsEmploymentPublic}");
-        Console.WriteLine($"{nameof(_completeRegisterForm.CanReceivedMessage)}:{_completeRegisterForm.CanReceivedMessage}");
+        if (result.StatusCode.Equals((int)HttpStatusCode.OK))
+        {
+            Snackbar.Add("Cadastro realizado com sucesso!", Severity.Success);
+            await LoginServices.ForceExchangeRefreshTokenAsync();
+            NavigationManager.NavigateTo(RouteSettings.AuthStartPage);
+        }
+        else
+        {
+            foreach (var error in result.Errors)
+            {
+                Snackbar.Add(error, Severity.Error);
+                Console.WriteLine(error);
+            }
+        }
     }
     
     #region File Image
