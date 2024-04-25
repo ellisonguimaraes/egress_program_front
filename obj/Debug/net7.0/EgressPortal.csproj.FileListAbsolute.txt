@@ -3325,6 +3325,7 @@ C:\Users\ellis\source\repos\egress_program_front\obj\Debug\net7.0\scopedcss\Shar
 C:\Users\ellis\source\repos\egress_program_front\obj\Debug\net7.0\scopedcss\Shared\NavMenuComponent.razor.rz.scp.css
 C:\Users\ellis\source\repos\egress_program_front\obj\Debug\net7.0\scopedcss\Shared\NavMenuLogInLogOutComponent.razor.rz.scp.css
 C:\Users\ellis\source\repos\egress_program_front\obj\Debug\net7.0\scopedcss\Shared\TitlePageComponent.razor.rz.scp.css
+C:\Users\ellis\source\repos\egress_program_front\obj\Debug\net7.0\scopedcss\Shared\TitlePageLoggedComponent.razor.rz.scp.css
 C:\Users\ellis\source\repos\egress_program_front\obj\Debug\net7.0\scopedcss\bundle\EgressPortal.styles.css
 C:\Users\ellis\source\repos\egress_program_front\obj\Debug\net7.0\scopedcss\projectbundle\EgressPortal.bundle.scp.css
 C:\Users\ellis\source\repos\egress_program_front\obj\Debug\net7.0\compressed\4dscis07x7.gz
