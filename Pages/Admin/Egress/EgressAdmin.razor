@@ -1,0 +1,244 @@
+﻿@page "/admin/egressos"
+@using EgressPortal.Models.Form
+@using System.Net
+@using System.Net.Http.Headers
+@using EgressPortal.Models.API.HttpClient.Egress
+@using EgressPortal.Models.API.HttpClient.Egress.Person
+@using EgressPortal.Shared.Utils
+@inject IEgressServices EgressServices
+@inject IDialogService Dialog
+@inject ILoginServices LoginServices
+@inject ISnackbar Snackbar
+<PageTitle>Página Inicial</PageTitle>
+
+<TitlePageComponent Title="Administrador" SubTitle=""/>
+<div class="d-flex flex-column align-items-center w-100 py-8 gap-8">
+    <div class="d-flex justify-space-around flex-grow-1 w-100">
+        <MudText Align="Align.Left" Typo="Typo.h5" Style="font-weight: bold">Egressos</MudText>
+        <div class="d-flex justify-space-between gap-4">
+            <MudButton Variant="Variant.Filled" Color="Color.Primary">ADICIONAR EGRESSO</MudButton>
+            <MudButton Variant="Variant.Filled" Color="Color.Primary">ADICIONAR EM LOTE (CSV)</MudButton>
+        </div>
+    </div>
+
+    <div class="d-flex justify-space-around flex-grow-1 flex-column">
+        <EditForm Model="_egressAdminFilter" OnValidSubmit="OnValidSubmitAsync">
+            <MudGrid Class="d-flex w-100 m-0 p-0 pb-3">
+                <MudItem xs="12" sm="12" md="4" lg="3" Class="m-0">
+                    <MudTextField Variant="Variant.Outlined"
+                                  Margin="Margin.Dense"
+                                  Class="p-0 m-0"
+                                  Placeholder="John Doe"
+                                  Label="Nome"
+                                  @bind-Value="_egressAdminFilter.EgressName"
+                                  For="@(() => _egressAdminFilter.EgressName)"/>
+                </MudItem>
+                <MudItem xs="12" sm="12" md="4" lg="3" Class="m-0">
+                    <MudTextField Variant="Variant.Outlined"
+                                  Margin="Margin.Dense"
+                                  Class="p-0 m-0"
+                                  Placeholder="205009347"
+                                  Label="Matrícula"
+                                  @bind-Value="_egressAdminFilter.Subscription"
+                                  For="@(() => _egressAdminFilter.Subscription)"/>
+                </MudItem>
+                <MudItem xs="12" sm="12" md="4" lg="3" Class="m-0">
+                    <MudSelect T="string" Label="Ano de Ingresso"
+                               Placeholder="2023.1"
+                               Variant="Variant.Outlined"
+                               AnchorOrigin="Origin.BottomCenter"
+                               Margin="Margin.Dense"
+                               Class="p-0 m-0"
+                               @bind-Value="_egressAdminFilter.BeginningSemester"
+                               For="@(() => _egressAdminFilter.BeginningSemester)">
+                        <MudSelectItem T="string" Value="@("Todos os semestres")">Todos os semestres</MudSelectItem>
+                        @foreach (var s in GenerateFinalSemestersToSelect())
+                        {
+                            <MudSelectItem T="string" Value="@s"/>
+                        }
+                    </MudSelect>
+                </MudItem>
+                <MudItem xs="12" sm="12" md="4" lg="3" Class="m-0">
+                    <MudSelect T="string" Label="Ano de Conclusão"
+                               Placeholder="2023.1"
+                               Variant="Variant.Outlined"
+                               Margin="Margin.Dense"
+                               AnchorOrigin="Origin.BottomCenter"
+                               Class="p-0 m-0"
+                               @bind-Value="_egressAdminFilter.FinalSemester"
+                               For="@(() => _egressAdminFilter.FinalSemester)">
+                        <MudSelectItem T="string" Value="@("Todos os semestres")">Todos os semestres</MudSelectItem>
+                        @foreach (var s in GenerateFinalSemestersToSelect())
+                        {
+                            <MudSelectItem T="string" Value="@s"/>
+                        }
+                    </MudSelect>
+                </MudItem>
+            </MudGrid>
+            <div class="d-flex flex-grow-1 justify-end mr-3">
+                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="">Filtrar</MudButton>
+            </div>
+        </EditForm>
+    </div>
+
+    <div class="d-flex flex-column w-70">
+        <PaginationComponent Items="_egresses" TotalPages="_totalPages" ChangePageNumberCallback="GetEgressPaginateAsync" @ref="_paginationComponent">
+            <ViewAllItemsComponent Context="egressListContext">
+                <MudTable Items="egressListContext" Hover="true" Breakpoint="Breakpoint.Sm" Context="egressContext" Class="mb-5">
+                    <HeaderContent>
+                        <MudTh>Nome</MudTh>
+                        <MudTh>Email</MudTh>
+                        <MudTh>Matrícula</MudTh>
+                        <MudTh>Curso</MudTh>
+                        <MudTh>Nível</MudTh>
+                        <MudTh>Modalidade</MudTh>
+                        <MudTh>Ano Conclusão</MudTh>
+                        <MudTh>Ações</MudTh>
+                    </HeaderContent>
+                    <RowTemplate>
+                        <MudTd DataLabel="Nome">@egressContext.Name</MudTd>
+                        <MudTd DataLabel="Email">@egressContext.Email</MudTd>
+                        <MudTd DataLabel="Matrícula">@egressContext.Mat</MudTd>
+                        <MudTd DataLabel="Curso">@egressContext.Course</MudTd>
+                        <MudTd DataLabel="Nível">@TranslateLevel(egressContext.Level)</MudTd>
+                        <MudTd DataLabel="Modalidade">@TranslateModality(egressContext.Modality)</MudTd>
+                        <MudTd DataLabel="Ano Conclusão">@egressContext.FinalSemester</MudTd>
+                        <MudTd DataLabel="Ações" Class="gap-1">
+                            <MudButton Variant="Variant.Outlined" Size="Size.Small" Color="Color.Success" OnClick="@(async () => await GetPersonAsync(egressContext.Id))">Visualizar</MudButton>
+                            <MudButton Variant="Variant.Outlined" Size="Size.Small" Color="Color.Warning" Disabled>Aprovado</MudButton>
+                            <MudButton Variant="Variant.Outlined" Size="Size.Small" Color="Color.Error" OnClick="@(async () => await DeletePersonAsync(egressContext.Id))">
+                                Excluir
+                            </MudButton>
+                        </MudTd>
+                    </RowTemplate>
+                </MudTable>
+            </ViewAllItemsComponent>
+        </PaginationComponent>
+    </div>
+</div>
+
+@code {
+
+    #region Constants
+
+    private const int PAGE_SIZE = 3;
+
+    #endregion
+
+    private int _totalPages = 1;
+    
+    private EgressFilterForm _egressAdminFilter = new() { BeginningSemester = "Todos os semestres", FinalSemester = "Todos os semestres" };
+    
+    private List<GetEgressPaginateResponseApi> _egresses = new();
+    
+    private PaginationComponent<GetEgressPaginateResponseApi> _paginationComponent = null!;
+    
+    private async Task OnValidSubmitAsync() => await _paginationComponent.ChangePageNumberAsync(1);
+
+    private static IEnumerable<string> GenerateFinalSemestersToSelect()
+    {
+        var semesters = new List<string>();
+
+        for (var i = DateTime.UtcNow.Year; i >= 1960; i--)
+        {
+            semesters.Add($"{i}.2");
+            semesters.Add($"{i}.1");
+        }
+
+        return semesters.OrderDescending();
+    }
+
+    private async Task GetEgressPaginateAsync(int pageNumber)
+    {
+        var result = await EgressServices.GetPaginateEgressAsync(pageNumber, PAGE_SIZE, _egressAdminFilter);
+
+        if (result.StatusCode.Equals((int)HttpStatusCode.OK))
+        {
+            _egresses = result.Data!.Data!.ToList();
+            _totalPages = result.Data.TotalPages;
+        }
+        else
+        {
+            foreach (var error in result.Errors)
+            {
+                Snackbar.Add(error, Severity.Error);
+            }
+        }
+    }
+
+    private async Task GetPersonAsync(Guid id)
+    {
+        var token = await LoginServices.GetTokenAsync();
+        
+        var authorization = new AuthenticationHeaderValue(token!.TokenType, token.AccessToken);
+        
+        var result = await EgressServices.GetPersonAsync(authorization, id);
+        
+        if (result.StatusCode.Equals((int)HttpStatusCode.OK))
+        {
+            await LoginServices.ForceExchangeRefreshTokenAsync();
+            ShowEgressDetails(result.Data);
+        }
+        else
+        {
+            foreach (var error in result.Errors)
+            {
+                Snackbar.Add(error, Severity.Error);
+                Console.WriteLine(error);
+            }
+        }
+    }
+
+    private void ShowEgressDetails(PersonResponseApi person)
+    {
+        var parameters = new DialogParameters<EgressDetails>();
+        parameters.Add(x=> x.Person, person);
+
+        var options = new DialogOptions() { CloseButton = true, CloseOnEscapeKey = true, MaxWidth = MaxWidth.ExtraLarge, FullWidth = true};
+
+        Dialog.Show<EgressDetails>(string.Empty, parameters, options);
+    }
+    
+    private async Task DeletePersonAsync(Guid id)
+    {
+        var token = await LoginServices.GetTokenAsync();
+        
+        var authorization = new AuthenticationHeaderValue(token!.TokenType, token.AccessToken);
+        
+        var result = await EgressServices.DeletePersonAsync(authorization, id);
+        Console.WriteLine(result.StatusCode);
+        if (result.StatusCode.Equals((int)HttpStatusCode.NoContent))
+        {
+            Snackbar.Add("Egresso removido com sucesso!", Severity.Success);
+            await LoginServices.ForceExchangeRefreshTokenAsync();
+            await GetEgressPaginateAsync(1);
+        }
+        else
+        {
+            foreach (var error in result.Errors)
+            {
+                Snackbar.Add(error, Severity.Error);
+                Console.WriteLine(error);
+            }
+        }
+    }
+
+    private static string TranslateModality(Modality modality)
+        => modality switch
+        {
+            Modality.Presential => "Presencial",
+            Modality.Hybrid => "Híbrido",
+            Modality.Remote => "EAD",
+            _ => default!
+        };
+
+    private static string TranslateLevel(Level level)
+        => level switch
+        {
+            Level.Graduation => "Graduação",
+            Level.Postgraduate => "Pós Graduação",
+            Level.MasterDegree => "Mestrado",
+            Level.DoctorateDegree => "Doutorado",
+            _ => default!
+        };
+}

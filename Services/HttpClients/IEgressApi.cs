@@ -36,6 +36,12 @@ public interface IEgressApi
     [Get("/api/v1/egress")]
     Task<HttpResponseMessage> GetPaginateEgressAsync([AliasAs(PAGE_NUMBER)] int pageNumber, [AliasAs(PAGE_SIZE)] int pageSize, [AliasAs(QUERY)] string query, [AliasAs(ORDER_BY)] string orderByProperty);
 
+    [Get("/api/v1/admin/person/{id}")]
+    Task<HttpResponseMessage> GetPersonAsync([Header(AUTHORIZATION_HEADER)] AuthenticationHeaderValue authorization, [AliasAs(ID)] Guid id);
+    
     [Post("/api/v1/person/register")]
     Task<HttpResponseMessage> RegisterPersonAsync([Header(AUTHORIZATION_HEADER)] AuthenticationHeaderValue authorization, [Body] RegisterPersonRequestApi request);
+
+    [Delete("/api/v1/admin/person/{id}")]
+    Task<HttpResponseMessage> DeletePersonAsync([Header(AUTHORIZATION_HEADER)] AuthenticationHeaderValue authorization, [AliasAs(ID)] Guid id);
 }
