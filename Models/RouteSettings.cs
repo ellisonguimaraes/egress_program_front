@@ -18,4 +18,9 @@ public static class RouteSettings
     public static string AuthStartPage = "/user";
 
     public static string AdminEgressRoute = "/admin/egressos";
+  
+    public static string AuthStartPage = "me";
+    public static string AuthMyTestimony = $"{AuthStartPage}/meus-depoimentos";
+    public static string AuthMyHighlights = $"{AuthStartPage}/meus-destaques";
+    public static string AuthUpdate = $"{AuthStartPage}/meus-dados";
 }
