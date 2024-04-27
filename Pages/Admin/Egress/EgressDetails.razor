@@ -1,0 +1,90 @@
+@using EgressPortal.Models.API.HttpClient.Courses
+@using EgressPortal.Models.API.HttpClient.Egress.Person
+
+<MudDialog Class="h-90">
+    <DialogContent>
+        @if(Person is not null){
+            <MudGrid Class="py-4">
+                <MudItem lg="4" md="4" sm="12">
+                    <MudGrid Spacing="0">
+                        <MudItem>
+                            <div class="w-100 ma-2" style="height: 250px;">
+                                
+                            </div>
+                        </MudItem>
+                        <MudItem xs="12">
+                            <MudTable T="CourseResponseApi"
+                                      Items="Person.Courses"
+                                      Dense
+                                      Striped>
+                                <HeaderContent>
+                                    <MudTh>Curso</MudTh>
+                                    <MudTh>Matrícula</MudTh>
+                                    <MudTh>Início</MudTh>
+                                    <MudTh>Término</MudTh>
+                                    <MudTh>Grau</MudTh>
+                                </HeaderContent>
+                                <RowTemplate>
+                                    <MudTd DataLabel="">@context.CourseName</MudTd>
+                                    <MudTd DataLabel="">@context.Mat</MudTd>
+                                    <MudTd DataLabel="">@context.BeginningSemester</MudTd>
+                                    <MudTd DataLabel="">@context.FinalSemester</MudTd>
+                                    <MudTd DataLabel="">@TranslateLevel(context.Level)</MudTd>
+                                </RowTemplate>
+                            </MudTable>
+                        </MudItem>
+                    </MudGrid>
+                </MudItem>
+                <MudItem lg="8" md="8" sm="12">
+                    <MudGrid>
+                        <MudItem lg="4" md="4" sm="12">
+                            <MudTextField
+                                T="string"
+                                Label="Nome"
+                                Value="Person.Name"
+                                ReadOnly
+                                Variant="Variant.Outlined"
+                                Margin="Margin.Dense"
+                            />
+                        </MudItem>
+                        <MudItem lg="4" md="4" sm="12">
+                            <MudTextField
+                                T="string"
+                                Label="CPF"
+                                Value="Person.Cpf"
+                                ReadOnly
+                                Variant="Variant.Outlined"
+                                Margin="Margin.Dense"
+                            />
+                        </MudItem>
+                        <MudItem lg="4" md="4" sm="12">
+                            <MudTextField
+                                T="string"
+                                Label="Email"
+                                Value="Person.Email"
+                                ReadOnly
+                                Variant="Variant.Outlined"
+                                Margin="Margin.Dense"
+                            />
+                        </MudItem>
+                    </MudGrid>
+                </MudItem>
+            </MudGrid>
+        }
+    </DialogContent>
+</MudDialog>
+
+@code{
+    [Parameter]
+    public PersonResponseApi? Person { get; set; }
+    
+    private static string TranslateLevel(Level level)
+        => level switch
+        {
+            Level.Graduation => "Graduação",
+            Level.Postgraduate => "Pós Graduação",
+            Level.MasterDegree => "Mestrado",
+            Level.DoctorateDegree => "Doutorado",
+            _ => default!
+        };
+}

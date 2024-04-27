@@ -5,6 +5,7 @@ using EgressPortal.Models;
 using EgressPortal.Models.API;
 using EgressPortal.Models.API.HttpClient.Egress;
 using EgressPortal.Models.API.HttpClient.Egress.Highlights;
+using EgressPortal.Models.API.HttpClient.Egress.Person;
 using EgressPortal.Models.API.HttpClient.Egress.Testimony;
 using EgressPortal.Models.Form;
 using EgressPortal.Services.Extensions;
@@ -125,8 +126,6 @@ public class EgressServices : IEgressServices
     {
         var query = BuildQueryString(egressFilterForm);
 
-        Console.WriteLine(query);
-
         var response = await _egressApi.GetPaginateEgressAsync(pageNumber, pageSize, query, "FinalSemester desc");
 
         var egressGenericHttpResponse = await HandleResponseAsync<List<GetEgressPaginateResponseApi>>(response);
@@ -161,6 +160,12 @@ public class EgressServices : IEgressServices
         if (!string.IsNullOrWhiteSpace(egressFilterForm.FinalSemester) && !egressFilterForm.FinalSemester.Equals("Todos os semestres"))
             query.Add($"FinalSemester = \"{egressFilterForm.FinalSemester}\"");
 
+        if(!string.IsNullOrWhiteSpace(egressFilterForm.EgressName))
+            query.Add($"Person.Name.Contains(\"{egressFilterForm.EgressName}\")");
+        
+        if(!string.IsNullOrWhiteSpace(egressFilterForm.Subscription))
+            query.Add($"Mat = \"{egressFilterForm.Subscription}\"");
+        
         // Check level
         if (egressFilterForm.CheckLevelGraduation)
             levelQuery.Add($"Level equal 0");
@@ -243,5 +248,21 @@ public class EgressServices : IEgressServices
         var response = await _egressApi.RegisterPersonAsync(authorization, request);
         
         return await HandleResponseAsync<object>(response);
+    }
+
+    public async Task<GenericHttpResponse<PersonResponseApi>> GetPersonAsync(AuthenticationHeaderValue authorization, Guid id)
+    {
+        var responseApi = await _egressApi.GetPersonAsync(authorization, id);
+        var egressGenericHttpResponse = await HandleResponseAsync<PersonResponseApi>(responseApi);
+        
+        return egressGenericHttpResponse;
+    }
+
+    public async Task<GenericHttpResponse<object>> DeletePersonAsync(AuthenticationHeaderValue authorization, Guid id)
+    {
+        var responseApi = await _egressApi.DeletePersonAsync(authorization, id);
+        var genericHttpResponse = await HandleResponseAsync<object>(responseApi);
+
+        return genericHttpResponse;
     }
 }

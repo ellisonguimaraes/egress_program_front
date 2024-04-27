@@ -4,7 +4,11 @@ namespace EgressPortal.Models.Form;
 
 public class EgressFilterForm
 {
+    public string EgressName { get; set; }
+    
     public string CourseName { get; set; }
+
+    public string Subscription { get; set; }
 
     public bool CheckModalityClassroom { get; set; }
 
@@ -20,5 +24,7 @@ public class EgressFilterForm
 
     public bool CheckLevelDoctorateDegree { get; set; }
 
+    public string BeginningSemester { get; set; }
+    
     public string FinalSemester { get; set; }
 }

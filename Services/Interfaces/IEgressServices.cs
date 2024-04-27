@@ -3,6 +3,7 @@ using EgressPortal.Models;
 using EgressPortal.Models.API;
 using EgressPortal.Models.API.HttpClient.Egress;
 using EgressPortal.Models.API.HttpClient.Egress.Highlights;
+using EgressPortal.Models.API.HttpClient.Egress.Person;
 using EgressPortal.Models.API.HttpClient.Egress.Testimony;
 using EgressPortal.Models.Form;
 
@@ -63,10 +64,26 @@ public interface IEgressServices
     Task<GenericHttpResponse<PagedList<GetEgressPaginateResponseApi>>> GetPaginateEgressAsync(int pageNumber, int pageSize, EgressFilterForm egressFilterForm);
 
     /// <summary>
+    ///  Retrieve a person with all every information/data
+    /// </summary>
+    /// <param name="authorization">Authorization header</param>
+    /// <param name="id">Person identifier</param>
+    /// <returns>Person Object</returns>
+    Task<GenericHttpResponse<PersonResponseApi>> GetPersonAsync(AuthenticationHeaderValue authorization, Guid id);
+    
+    /// <summary>
     /// Complete register person
     /// </summary>
     /// <param name="authorization">Authorization header</param>
     /// <param name="completeRegisterForm">Complete register form</param>
     /// <returns>Person id (GUID)</returns>
     Task<GenericHttpResponse<object>> RegisterPersonAsync(AuthenticationHeaderValue authorization, CompleteRegisterForm completeRegisterForm);
+
+    /// <summary>
+    /// Remove person from the application
+    /// </summary>
+    /// <param name="authorization">Authorization header</param>
+    /// <param name="id">Person identifier</param>
+    /// <returns>Person id (GUID)</returns>
+    Task<GenericHttpResponse<object>> DeletePersonAsync(AuthenticationHeaderValue authorization, Guid id);
 }
