@@ -4,6 +4,37 @@
 
 <TitlePageLoggedComponent Name="Name"/>
 
+<div class="d-flex flex-column align-items-center w-100">
+    <div class="d-flex flex-column m-0 p-5 contact_main_center" style="width:100%;max-width: 1000px;">
+        <MudCard Outlined="true">
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudText Typo="Typo.h6">Highlight title</MudText>
+                    <MudText Typo="Typo.subtitle2">17 de janeiro de 2023</MudText>
+                </CardHeaderContent>
+                <CardHeaderActions>
+                    <MudChip Variant="Variant.Text" Color="Color.Success">Aprovado</MudChip>
+                </CardHeaderActions>
+            </MudCardHeader>
+            <MudCardContent>
+                <MudText Typo="Typo.body2">The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham.</MudText>
+
+                <div class="d-flex flex-row gap-2 mt-5">
+                    <MudText Typo="Typo.subtitle2">Link: </MudText>
+                    <MudLink Typo="Typo.body2" Href="https://www.youtube.com/watch?v=KHEs98w9kNQ">https://www.youtube.com/watch?v=KHEs98w9kNQ</MudLink>
+                </div>
+            </MudCardContent>
+            <MudCardActions Class="text-right">
+                <MudButton Variant="Variant.Filled" Color="Color.Error" Size="Size.Small">Excluir</MudButton>
+            </MudCardActions>
+        </MudCard>
+    </div>
+</div>
+
 @code {
-    
+    private bool arrows = true;
+    private bool bullets = true;
+    private bool enableSwipeGesture = true;
+    private bool autocycle = true;
+    private Transition transition = Transition.Slide;
 }

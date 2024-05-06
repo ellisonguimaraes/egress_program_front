@@ -1,0 +1,31 @@
+<MudDialog>
+    <DialogContent>
+        <div class="">
+            <MudText>@ContentText</MudText>
+        </div>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancelar</MudButton>
+        <MudButton Color="Color.Error" Variant="Variant.Filled" OnClick="SubmitAsync">Excluir</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] 
+    MudDialogInstance MudDialog { get; set; }
+
+    [Parameter] 
+    public string ContentText { get; set; }
+    
+    [Parameter]
+    [EditorRequired]
+    public EventCallback DeleteCallback { get; set; }
+
+    private async Task SubmitAsync()
+    {
+        await DeleteCallback.InvokeAsync();
+        MudDialog.Close(DialogResult.Ok(true));
+    }
+    
+    private void Cancel() => MudDialog.Cancel();
+}

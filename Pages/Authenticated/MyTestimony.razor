@@ -1,9 +1,168 @@
 ﻿@page "/me/meus-depoimentos"
+@using System.Net
+@using System.Net.Http.Headers
+@using EgressPortal.Models
+@using EgressPortal.Models.API.HttpClient.Egress.Person
+@using Microsoft.AspNetCore.Authorization
+@inject ILoginServices LoginServices
+@inject ISnackbar Snackbar
+@inject NavigationManager NavigationManager
+@inject IEgressServices EgressServices
+@inject IDialogService DialogService
+@attribute [Authorize(Policy = "PersonIdentifierPolicy")]
 
 <PageTitle>Meus depoimentos</PageTitle>
 
-<TitlePageLoggedComponent Name="Name"/>
+<AuthorizeView>
+    <TitlePageLoggedComponent Name="@GetFirstName(context.User.Identity?.Name!)"/>
+</AuthorizeView>
+
+<div class="d-flex flex-column align-items-center w-100">
+    <div class="d-flex flex-column m-0 p-5 contact_main_center" style="width:100%;max-width: 1000px">
+        <div class="d-flex flex-row justify-content-between align-items-center align-content-center m-0 p-0 mb-5">
+            <MudText Align="Align.Start" Typo="Typo.h6">Meus Depoimentos</MudText>
+            <MudButton Variant="Variant.Filled" Color="Color.Success" Class="m-0 p-0">Cadastrar</MudButton>
+        </div>
+        @if (_testimonies is not null && _testimonies.Any())
+        {
+            <MudGrid Class="w-100 m-0 p-0">
+                @foreach (var t in _testimonies)
+                {
+                    <MudItem xs="12" sm="12" md="6" lg="6">
+                        <MudCard Outlined="true">
+                            <MudCardHeader>
+                                <CardHeaderContent>
+                                    <MudText Typo="Typo.subtitle2">Solicitado em @FormatDate(t.CreatedAt)</MudText>
+                                </CardHeaderContent>
+                                <CardHeaderActions>
+                                    @if (t.WasAccepted)
+                                    {
+                                        <MudChip Variant="Variant.Filled" Color="Color.Success">Aprovado</MudChip>
+                                    }
+                                    else
+                                    {
+                                        <MudChip Variant="Variant.Filled" Color="Color.Warning">Pendente</MudChip>
+                                    }
+                                </CardHeaderActions>
+                            </MudCardHeader>
+                            <MudCardContent>
+                                <MudText Typo="Typo.body2" Align="Align.Justify">@t.Content</MudText>
+                            </MudCardContent>
+                            <MudCardActions Class="text-right">
+                                <MudButton Variant="Variant.Filled" Color="Color.Error" Size="Size.Small" OnClick="() => ShowGenericConfirmDeleteDialog(t)">Excluir</MudButton>
+                            </MudCardActions>
+                        </MudCard>
+                    </MudItem>
+                }
+            </MudGrid>
+        }
+        else
+        {
+            <div class="d-flex justify-content-center p-5">
+                <MudText Typo="Typo.body1">Nenhum depoimento cadastrado.</MudText>
+            </div>
+        }
+    </div>
+</div>
 
 @code {
+    #region Constants
+    private const string USER_NOT_AUTHENTICATED_SNACKBAR_MESSAGE = "Usuário não autenticado";
+    private const string SCHEME = "Bearer";
+    private const string DELETE_MESSAGE_HEADER = "Deseja excluir?";
+    private const string DELETE_MESSAGE_BODY = "Você tem certeza que deseja remover o depoimento solicitado dia {0}?";
+    private const string SUCCESS_DELETE_MESSAGE = "Excluído com sucesso!";
+    private const string WHITESPACE = " ";
+    #endregion
     
+    private IList<TestimonyResponseApi>? _testimonies;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await UpdateTestimoniesListAsync();
+    }
+    
+    private void ShowGenericConfirmDeleteDialog(BaseResponseApi testimony)
+    {
+        var parameters = new DialogParameters<GenericConfirmDeleteDialog>();
+        
+        parameters.Add(x => x.ContentText, string.Format(DELETE_MESSAGE_BODY, FormatDate(testimony.CreatedAt)));
+        parameters.Add(x => x.DeleteCallback, EventCallback.Factory.Create(this, async () => await DeleteTestimonyAsync(testimony.Id)));
+
+        var options = new DialogOptions
+        {
+            CloseButton = true, 
+            MaxWidth = MaxWidth.ExtraSmall
+        };
+
+        DialogService.Show<GenericConfirmDeleteDialog>(DELETE_MESSAGE_HEADER, parameters, options);
+    }
+
+    #region Api Requests
+    private async Task UpdateTestimoniesListAsync()
+    {
+        var token = await LoginServices.GetTokenAsync();
+
+        if (token is null)
+        {
+            Snackbar.Add(USER_NOT_AUTHENTICATED_SNACKBAR_MESSAGE);
+            await LoginServices.LogoutAsync();
+            NavigationManager.NavigateTo(RouteSettings.LoginRoute);
+            return;
+        }
+
+        var bearer = new AuthenticationHeaderValue(SCHEME, token!.AccessToken);
+
+        var person = await EgressServices.GetPersonInfoAsync(bearer);
+
+        if (person.StatusCode.Equals((int)HttpStatusCode.OK))
+        {
+            _testimonies = person.Data!.Testimonies;
+            StateHasChanged();
+        }
+        else
+        {
+            foreach (var error in person.Errors)
+                Snackbar.Add(error, Severity.Error);
+        }
+    }
+    
+    private async Task DeleteTestimonyAsync(Guid id)
+    {
+        var token = await LoginServices.GetTokenAsync();
+
+        if (token is null)
+        {
+            Snackbar.Add(USER_NOT_AUTHENTICATED_SNACKBAR_MESSAGE);
+            await LoginServices.LogoutAsync();
+            NavigationManager.NavigateTo(RouteSettings.LoginRoute);
+            return;
+        }
+        
+        var bearer = new AuthenticationHeaderValue(SCHEME, token!.AccessToken);
+
+        var person = await EgressServices.DeleteTestimonyAsync(bearer, id);
+
+        if (person.StatusCode.Equals((int)HttpStatusCode.NoContent))
+        {
+            await UpdateTestimoniesListAsync();
+            Snackbar.Add(SUCCESS_DELETE_MESSAGE, Severity.Success);
+        }
+        else
+        {
+            foreach (var error in person.Errors)
+                Snackbar.Add(error, Severity.Error);
+        }
+    }
+    #endregion
+
+    #region Static methods
+    private static string FormatDate(DateTime date)
+        => $"{date.Day:D2}/{date.Month:D2}/{date.Year}";
+
+    private static string GetFirstName(string name)
+        => name.Split(WHITESPACE).First();
+
+    #endregion
+
 }

@@ -1,16 +1,15 @@
 using System.Net.Http.Headers;
-using System.Text;
 using System.Text.Json;
 using EgressPortal.Models;
 using EgressPortal.Models.API;
 using EgressPortal.Models.API.HttpClient.Egress;
-using EgressPortal.Models.API.HttpClient.Egress.Highlights;
 using EgressPortal.Models.API.HttpClient.Egress.Person;
-using EgressPortal.Models.API.HttpClient.Egress.Testimony;
 using EgressPortal.Models.Form;
 using EgressPortal.Services.Extensions;
 using EgressPortal.Services.HttpClients;
 using EgressPortal.Services.Interfaces;
+using HighlightResponseApi = EgressPortal.Models.API.HttpClient.Egress.Highlights.HighlightResponseApi;
+using TestimonyResponseApi = EgressPortal.Models.API.HttpClient.Egress.Testimony.TestimonyResponseApi;
 
 namespace EgressPortal.Services;
 
@@ -257,6 +256,13 @@ public class EgressServices : IEgressServices
         
         return egressGenericHttpResponse;
     }
+    
+    public async Task<GenericHttpResponse<PersonResponseApi>> GetPersonInfoAsync(AuthenticationHeaderValue authorization)
+    {
+        var responseApi = await _egressApi.GetPersonInfoAsync(authorization);
+        var egressGenericHttpResponse = await HandleResponseAsync<PersonResponseApi>(responseApi);
+        return egressGenericHttpResponse;
+    }
 
     public async Task<GenericHttpResponse<object>> DeletePersonAsync(AuthenticationHeaderValue authorization, Guid id)
     {
@@ -264,5 +270,17 @@ public class EgressServices : IEgressServices
         var genericHttpResponse = await HandleResponseAsync<object>(responseApi);
 
         return genericHttpResponse;
+    }
+    
+    public async Task<GenericHttpResponse<object>> DeleteTestimonyAsync(AuthenticationHeaderValue authorization, Guid id)
+    {
+        var response = await _egressApi.DeleteTestimonyAsync(authorization, id);
+        return await HandleResponseAsync<object>(response);
+    }
+    
+    public async Task<GenericHttpResponse<object>> DeleteHighlightsAsync(AuthenticationHeaderValue authorization, Guid id)
+    {
+        var response = await _egressApi.DeleteHighlightsAsync(authorization, id);
+        return await HandleResponseAsync<object>(response);
     }
 }
