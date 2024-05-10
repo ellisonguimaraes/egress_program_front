@@ -4,6 +4,7 @@ using EgressPortal.Models;
 using EgressPortal.Models.API;
 using EgressPortal.Models.API.HttpClient.Egress;
 using EgressPortal.Models.API.HttpClient.Egress.Person;
+using EgressPortal.Models.API.HttpClient.Egress.Testimony;
 using EgressPortal.Models.Form;
 using EgressPortal.Services.Extensions;
 using EgressPortal.Services.HttpClients;
@@ -281,6 +282,17 @@ public class EgressServices : IEgressServices
     public async Task<GenericHttpResponse<object>> DeleteHighlightsAsync(AuthenticationHeaderValue authorization, Guid id)
     {
         var response = await _egressApi.DeleteHighlightsAsync(authorization, id);
+        return await HandleResponseAsync<object>(response);
+    }
+    
+    public async Task<GenericHttpResponse<object>> RequestTestimonyAsync(AuthenticationHeaderValue authorization, RequestTestimonyForm request)
+    {
+        var requestApi = new RequestTestimonyRequestApi
+        {
+            Content = request.Content,
+        };
+        
+        var response = await _egressApi.RequestTestimonyAsync(authorization, requestApi);
         return await HandleResponseAsync<object>(response);
     }
 }

@@ -3,6 +3,7 @@
 @using System.Net.Http.Headers
 @using EgressPortal.Models
 @using EgressPortal.Models.API.HttpClient.Egress.Person
+@using EgressPortal.Shared.Testimonies
 @using Microsoft.AspNetCore.Authorization
 @inject ILoginServices LoginServices
 @inject ISnackbar Snackbar
@@ -21,7 +22,7 @@
     <div class="d-flex flex-column m-0 p-5 contact_main_center" style="width:100%;max-width: 1000px">
         <div class="d-flex flex-row justify-content-between align-items-center align-content-center m-0 p-0 mb-5">
             <MudText Align="Align.Start" Typo="Typo.h6">Meus Depoimentos</MudText>
-            <MudButton Variant="Variant.Filled" Color="Color.Success" Class="m-0 p-0">Cadastrar</MudButton>
+            <MudButton Variant="Variant.Filled" Color="Color.Success" Class="m-0 p-0" OnClick="ShowRequestFormDialog">Cadastrar</MudButton>
         </div>
         @if (_testimonies is not null && _testimonies.Any())
         {
@@ -46,10 +47,20 @@
                                 </CardHeaderActions>
                             </MudCardHeader>
                             <MudCardContent>
-                                <MudText Typo="Typo.body2" Align="Align.Justify">@t.Content</MudText>
+                                @if (t.Content.Length > 200)
+                                {
+                                    <MudText Typo="Typo.body2" Align="Align.Justify">@t.Content.Substring(0, 200)...</MudText>
+                                }
+                                else
+                                {
+                                    <MudText Typo="Typo.body2" Align="Align.Justify">@t.Content</MudText>
+                                }
                             </MudCardContent>
                             <MudCardActions Class="text-right">
-                                <MudButton Variant="Variant.Filled" Color="Color.Error" Size="Size.Small" OnClick="() => ShowGenericConfirmDeleteDialog(t)">Excluir</MudButton>
+                                <a class="d-flex gap-2 w-100 justify-content-end pe-2 pb-2">
+                                    <MudButton Variant="Variant.Filled" Color="Color.Info" Size="Size.Small" OnClick="() => ShowMoreContentDialog(t)">Ver mais</MudButton>
+                                    <MudButton Variant="Variant.Filled" Color="Color.Error" Size="Size.Small" OnClick="() => ShowGenericConfirmDeleteDialog(t)">Excluir</MudButton>
+                                </a>
                             </MudCardActions>
                         </MudCard>
                     </MudItem>
@@ -73,6 +84,7 @@
     private const string DELETE_MESSAGE_BODY = "Você tem certeza que deseja remover o depoimento solicitado dia {0}?";
     private const string SUCCESS_DELETE_MESSAGE = "Excluído com sucesso!";
     private const string WHITESPACE = " ";
+    private const string REQUEST_MESSAGE_HEADER_DIALOG = "Solicitar Depoimento";
     #endregion
     
     private IList<TestimonyResponseApi>? _testimonies;
@@ -96,6 +108,38 @@
         };
 
         DialogService.Show<GenericConfirmDeleteDialog>(DELETE_MESSAGE_HEADER, parameters, options);
+    }
+    
+    private void ShowRequestFormDialog()
+    {
+        var parameters = new DialogParameters<RequestTestimonyDialog>();
+
+        parameters.Add(x => x.CallbackAsync, EventCallback.Factory.Create(this, async () => { await UpdateTestimoniesListAsync(); }));
+
+        var options = new DialogOptions
+        {
+            CloseButton = true, 
+            MaxWidth = MaxWidth.Small,
+            FullWidth = true
+        };
+
+        DialogService.Show<RequestTestimonyDialog>(REQUEST_MESSAGE_HEADER_DIALOG, parameters, options);
+    }
+    
+    private void ShowMoreContentDialog(TestimonyResponseApi testimony)
+    {
+        var parameters = new DialogParameters<ShowMoreContentTestimonyDialog>();
+
+        parameters.Add(x => x.Testimony, testimony);
+
+        var options = new DialogOptions
+        {
+            CloseButton = true, 
+            MaxWidth = MaxWidth.Small,
+            FullWidth = true
+        };
+
+        DialogService.Show<ShowMoreContentTestimonyDialog>(string.Empty, parameters, options);
     }
 
     #region Api Requests
@@ -162,7 +206,5 @@
 
     private static string GetFirstName(string name)
         => name.Split(WHITESPACE).First();
-
     #endregion
-
 }

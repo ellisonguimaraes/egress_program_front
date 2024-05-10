@@ -109,4 +109,11 @@ public interface IEgressServices
     /// <param name="authorization">Authorization header</param>
     /// <param name="id">Highlights identifier</param>
     Task<GenericHttpResponse<object>> DeleteHighlightsAsync(AuthenticationHeaderValue authorization, Guid id);
+    
+    /// <summary>
+    /// Request testimony
+    /// </summary>
+    /// <param name="authorization">Authorization header</param>
+    /// <param name="request">Testimony content</param>
+    Task<GenericHttpResponse<object>> RequestTestimonyAsync(AuthenticationHeaderValue authorization, RequestTestimonyForm request);
 }

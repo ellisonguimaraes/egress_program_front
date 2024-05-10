@@ -1,0 +1,27 @@
+@using EgressPortal.Models.API.HttpClient.Egress.Person
+
+<MudDialog>
+    <DialogContent>
+        <a class="d-flex flex-column gap-3 mt-4">
+            <MudText Align="Align.Justify" Typo="Typo.body1">@Testimony.Content</MudText>
+            <MudText Typo="Typo.subtitle2">Solicitado em @FormatDate(Testimony.CreatedAt)</MudText>
+        </a>
+    </DialogContent>
+    <DialogActions>
+        <MudButton Color="Color.Info" Variant="Variant.Filled" OnClick="Submit" Class="mb-3 me-3">Fechar</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] 
+    MudDialogInstance MudDialog { get; set; }
+    
+    [Parameter]
+    [EditorRequired]
+    public TestimonyResponseApi Testimony { get; set; } = new();
+    
+    private void Submit() => MudDialog.Close(DialogResult.Ok(true));
+    
+    private static string FormatDate(DateTime date)
+        => $"{date.Day:D2}/{date.Month:D2}/{date.Year}";
+}

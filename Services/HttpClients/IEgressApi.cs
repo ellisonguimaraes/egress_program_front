@@ -1,4 +1,5 @@
 using System.Net.Http.Headers;
+using EgressPortal.Models.API.HttpClient.Egress.Testimony;
 using Refit;
 
 namespace EgressPortal.Services.HttpClients;
@@ -53,4 +54,8 @@ public interface IEgressApi
     
     [Delete("/api/v1/egress/testimony/{id}")]
     Task<HttpResponseMessage> DeleteTestimonyAsync([Header(AUTHORIZATION_HEADER)] AuthenticationHeaderValue authorization, [AliasAs(ID)] Guid id);
+
+    [Post("/api/v1/egress/testimony")]
+    Task<HttpResponseMessage> RequestTestimonyAsync([Header(AUTHORIZATION_HEADER)] AuthenticationHeaderValue authorization, [Body] RequestTestimonyRequestApi request);
 }
+
