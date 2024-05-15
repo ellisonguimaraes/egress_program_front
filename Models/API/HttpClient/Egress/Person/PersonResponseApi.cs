@@ -85,6 +85,12 @@ public sealed class HighlightResponseApi : BaseResponseApi
 
     [JsonPropertyName("was_accepted")]
     public bool WasAccepted { get; set; }
+
+    [JsonPropertyName("advertising_image_src")]
+    public string? AdvertisingImageSrc { get; set; }
+
+    [JsonPropertyName("veracity_files_src")]
+    public IEnumerable<string> VeracityFilesSrc { get; set; }
 }
 
 public sealed class TestimonyResponseApi : BaseResponseApi

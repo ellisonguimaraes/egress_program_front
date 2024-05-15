@@ -1,4 +1,5 @@
 using System.Net.Http.Headers;
+using EgressPortal.Models.API.HttpClient.Egress.Highlights;
 using EgressPortal.Models.API.HttpClient.Egress.Testimony;
 using Refit;
 

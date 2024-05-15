@@ -21,10 +21,12 @@ public class EgressServices : IEgressServices
     #endregion
 
     private readonly IEgressApi _egressApi;
+    private readonly IHttpClientEgressApi _httpClientEgressApi;
 
-    public EgressServices(IEgressApi egressApi)
+    public EgressServices(IEgressApi egressApi, IHttpClientEgressApi httpClientEgressApi)
     {
         _egressApi = egressApi;
+        _httpClientEgressApi = httpClientEgressApi;
     }
 
     public async Task<GenericHttpResponse<List<HighlightResponseApi>>> GetRandomHighlightsAsync(int quantity)
@@ -293,6 +295,12 @@ public class EgressServices : IEgressServices
         };
         
         var response = await _egressApi.RequestTestimonyAsync(authorization, requestApi);
+        return await HandleResponseAsync<object>(response);
+    }
+    
+    public async Task<GenericHttpResponse<object>> RequestHighlightAsync(AuthenticationHeaderValue authorization, RequestHighlightForm request)
+    {
+        var response = await _httpClientEgressApi.RequestHighlightsAsync(authorization, request);
         return await HandleResponseAsync<object>(response);
     }
 }

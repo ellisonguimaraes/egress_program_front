@@ -116,4 +116,11 @@ public interface IEgressServices
     /// <param name="authorization">Authorization header</param>
     /// <param name="request">Testimony content</param>
     Task<GenericHttpResponse<object>> RequestTestimonyAsync(AuthenticationHeaderValue authorization, RequestTestimonyForm request);
+    
+    /// <summary>
+    /// Request highlight
+    /// </summary>
+    /// <param name="authorization">Authorization header</param>
+    /// <param name="request">Highlight content</param>
+    Task<GenericHttpResponse<object>> RequestHighlightAsync(AuthenticationHeaderValue authorization, RequestHighlightForm request);
 }
