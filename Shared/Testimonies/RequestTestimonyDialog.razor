@@ -1,0 +1,74 @@
+@using System.Net
+@using System.Net.Http.Headers
+@using EgressPortal.Models.Form
+@inject ILoginServices LoginServices
+@inject IEgressServices EgressServices
+@inject ISnackbar Snackbar
+
+<MudDialog>
+    <DialogContent>
+        <EditForm Model="_requestTestimonyForm" OnValidSubmit="OnValidSubmitAsync">
+            <DataAnnotationsValidator/>
+            <MudTextField Variant="Variant.Outlined" Placeholder="Digite seu depoimento" Lines="5" Label="Depoimento" @bind-Value="_requestTestimonyForm.Content" For="@(() => _requestTestimonyForm.Content)"></MudTextField>
+            <MudAlert Severity="Severity.Info" Class="mt-5">O depoimento será enviado ao colegiado para análise e aceite da publicação.</MudAlert>
+            <div class="d-flex flex-row flex-wrap justify-content-center py-5 gap-4">
+                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Success">Solicitar</MudButton>
+                <MudButton OnClick="Cancel">Cancelar</MudButton>
+            </div>
+        </EditForm>
+    </DialogContent>
+</MudDialog>
+
+@code {
+    #region Constants
+    private const string USER_NOT_AUTHENTICATED_SNACKBAR_MESSAGE = "Usuário não autenticado";
+    private const string SCHEME = "Bearer";
+    private const string SUCCESS_REQUEST_TESTIMONY = "Solicitado com sucesso!";
+    #endregion
+
+    private bool _hasSuccessfullyStatusCode = false;
+    
+    [CascadingParameter] 
+    MudDialogInstance MudDialog { get; set; }
+    
+    [Parameter]
+    [EditorRequired]
+    public EventCallback CallbackAsync { get; set; }
+
+    private RequestTestimonyForm _requestTestimonyForm = new();
+
+    private void Cancel() => MudDialog.Cancel();
+
+    private async Task OnValidSubmitAsync()
+    {
+        await RequestTestimonyAsync();
+    }
+    
+    private async Task RequestTestimonyAsync()
+    {
+        var token = await LoginServices.GetTokenAsync();
+
+        if (token is null)
+        {
+            Snackbar.Add(USER_NOT_AUTHENTICATED_SNACKBAR_MESSAGE);
+            await LoginServices.LogoutAsync();
+            return;
+        }
+        
+        var bearer = new AuthenticationHeaderValue(SCHEME, token!.AccessToken);
+
+        var person = await EgressServices.RequestTestimonyAsync(bearer, _requestTestimonyForm);
+
+        if (person.StatusCode.Equals((int)HttpStatusCode.OK))
+        {
+            Snackbar.Add(SUCCESS_REQUEST_TESTIMONY, Severity.Success);
+            await CallbackAsync.InvokeAsync();
+            MudDialog.Close(DialogResult.Ok(true));
+        }
+        else
+        {
+            foreach (var error in person.Errors)
+                Snackbar.Add(error, Severity.Error);
+        }
+    }
+}

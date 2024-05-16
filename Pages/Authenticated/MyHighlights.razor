@@ -1,9 +1,213 @@
 ﻿@page "/me/meus-destaques"
+@using System.Net
+@using System.Net.Http.Headers
+@using EgressPortal.Models
+@using EgressPortal.Models.API.HttpClient.Egress.Person
+@using EgressPortal.Shared.Highlights
+@using EgressPortal.Shared.Testimonies
+@using Microsoft.AspNetCore.Authorization
+@using HighlightResponseApi = EgressPortal.Models.API.HttpClient.Egress.Person.HighlightResponseApi
+@inject ILoginServices LoginServices
+@inject ISnackbar Snackbar
+@inject NavigationManager NavigationManager
+@inject IEgressServices EgressServices
+@inject IDialogService DialogService
+@attribute [Authorize(Policy = "PersonIdentifierPolicy")]
 
 <PageTitle>Meus destaques</PageTitle>
 
-<TitlePageLoggedComponent Name="Name"/>
+<AuthorizeView>
+    <TitlePageLoggedComponent Name="@GetFirstName(context.User.Identity?.Name!)"/>
+</AuthorizeView>
+
+<div class="d-flex flex-column align-items-center w-100">
+    <div class="d-flex flex-column m-0 p-5 contact_main_center" style="width:100%;max-width: 1000px">
+        <div class="d-flex flex-row justify-content-between align-items-center align-content-center m-0 p-0 mb-5">
+            <MudText Align="Align.Start" Typo="Typo.h6">Meus Destaques</MudText>
+            <MudButton Variant="Variant.Filled" Color="Color.Success" Class="m-0 p-0" OnClick="ShowRequestFormDialog">Solicitar</MudButton>
+        </div>
+        @if (_highlights is not null && _highlights.Any())
+        {
+            <MudGrid Class="w-100 m-0 p-0">
+                @foreach (var t in _highlights)
+                {
+                    <MudItem xs="12" sm="12" md="6" lg="6">
+                        <MudCard Outlined="true">
+                            <MudCardHeader>
+                                <CardHeaderContent>
+                                    <MudText Typo="Typo.body1" Class="fw-bold">@t.Title</MudText>
+                                </CardHeaderContent>
+                                <CardHeaderActions>
+                                    @if (t.WasAccepted)
+                                    {
+                                        <MudChip Variant="Variant.Filled" Color="Color.Success">Aprovado</MudChip>
+                                    }
+                                    else
+                                    {
+                                        <MudChip Variant="Variant.Filled" Color="Color.Warning">Pendente</MudChip>
+                                    }
+                                </CardHeaderActions>
+                            </MudCardHeader>
+                            <MudCardContent>
+                                @if (t.Description.Length > 200)
+                                {
+                                    <MudText Typo="Typo.body2" Align="Align.Justify">@t.Description.Substring(0, 200)...</MudText>
+                                }
+                                else
+                                {
+                                    <MudText Typo="Typo.body2" Align="Align.Justify">@t.Description</MudText>
+                                }
+                                <MudText Typo="Typo.subtitle2" Class="pt-4">Solicitado em @FormatDate(t.CreatedAt)</MudText>
+                            </MudCardContent>
+                            <MudCardActions Class="text-right">
+                                <a class="d-flex gap-2 w-100 justify-content-end pe-2 pb-2">
+                                    <MudButton Variant="Variant.Filled" Color="Color.Info" Size="Size.Small" OnClick="() => ShowMoreContentDialog(t)">Ver mais</MudButton>
+                                    <MudButton Variant="Variant.Filled" Color="Color.Error" Size="Size.Small" OnClick="() => ShowGenericConfirmDeleteDialog(t)">Excluir</MudButton>
+                                </a>
+                            </MudCardActions>
+                        </MudCard>
+                    </MudItem>
+                }
+            </MudGrid>
+        }
+        else
+        {
+            <div class="d-flex justify-content-center p-5">
+                <MudText Typo="Typo.body1">Nenhum depoimento cadastrado.</MudText>
+            </div>
+        }
+    </div>
+</div>
 
 @code {
+    #region Constants
+    private const string USER_NOT_AUTHENTICATED_SNACKBAR_MESSAGE = "Usuário não autenticado";
+    private const string SCHEME = "Bearer";
+    private const string DELETE_MESSAGE_HEADER = "Deseja excluir?";
+    private const string DELETE_MESSAGE_BODY = "Você tem certeza que deseja remover o destaque solicitado dia {0}?";
+    private const string SUCCESS_DELETE_MESSAGE = "Excluído com sucesso!";
+    private const string WHITESPACE = " ";
+    private const string REQUEST_MESSAGE_HEADER_DIALOG = "Solicitar Destaque";
+    #endregion
     
+    private IList<HighlightResponseApi>? _highlights;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await UpdateHighlightsListAsync();
+    }
+    
+    private void ShowGenericConfirmDeleteDialog(BaseResponseApi highlight)
+    {
+        var parameters = new DialogParameters<GenericConfirmDeleteDialog>();
+        
+        parameters.Add(x => x.ContentText, string.Format(DELETE_MESSAGE_BODY, FormatDate(highlight.CreatedAt)));
+        parameters.Add(x => x.DeleteCallback, EventCallback.Factory.Create(this, async () => await DeleteHighlightsAsync(highlight.Id)));
+
+        var options = new DialogOptions
+        {
+            CloseButton = true, 
+            MaxWidth = MaxWidth.ExtraSmall
+        };
+
+        DialogService.Show<GenericConfirmDeleteDialog>(DELETE_MESSAGE_HEADER, parameters, options);
+    }
+    
+    private void ShowRequestFormDialog()
+    {
+        var parameters = new DialogParameters<RequestHighlightDialog>();
+
+        parameters.Add(x => x.CallbackAsync, EventCallback.Factory.Create(this, async () => { await UpdateHighlightsListAsync(); }));
+
+        var options = new DialogOptions
+        {
+            CloseButton = true, 
+            MaxWidth = MaxWidth.Small,
+            FullWidth = true
+        };
+
+        DialogService.Show<RequestHighlightDialog>(REQUEST_MESSAGE_HEADER_DIALOG, parameters, options);
+    }
+    
+    private void ShowMoreContentDialog(HighlightResponseApi highlight)
+    {
+        var parameters = new DialogParameters<ShowMoreContentHighlightDialog>();
+
+        parameters.Add(x => x.Highlight, highlight);
+
+        var options = new DialogOptions
+        {
+            CloseButton = true, 
+            MaxWidth = MaxWidth.Small,
+            FullWidth = true
+        };
+
+        DialogService.Show<ShowMoreContentHighlightDialog>(string.Empty, parameters, options);
+    }
+
+    #region Api Requests
+    private async Task UpdateHighlightsListAsync()
+    {
+        var token = await LoginServices.GetTokenAsync();
+
+        if (token is null)
+        {
+            Snackbar.Add(USER_NOT_AUTHENTICATED_SNACKBAR_MESSAGE);
+            await LoginServices.LogoutAsync();
+            NavigationManager.NavigateTo(RouteSettings.LoginRoute);
+            return;
+        }
+
+        var bearer = new AuthenticationHeaderValue(SCHEME, token!.AccessToken);
+
+        var person = await EgressServices.GetPersonInfoAsync(bearer);
+
+        if (person.StatusCode.Equals((int)HttpStatusCode.OK))
+        {
+            _highlights = person.Data!.Highlights;
+            StateHasChanged();
+        }
+        else
+        {
+            foreach (var error in person.Errors)
+                Snackbar.Add(error, Severity.Error);
+        }
+    }
+    
+    private async Task DeleteHighlightsAsync(Guid id)
+    {
+        var token = await LoginServices.GetTokenAsync();
+
+        if (token is null)
+        {
+            Snackbar.Add(USER_NOT_AUTHENTICATED_SNACKBAR_MESSAGE);
+            await LoginServices.LogoutAsync();
+            NavigationManager.NavigateTo(RouteSettings.LoginRoute);
+            return;
+        }
+        
+        var bearer = new AuthenticationHeaderValue(SCHEME, token!.AccessToken);
+
+        var person = await EgressServices.DeleteHighlightsAsync(bearer, id);
+
+        if (person.StatusCode.Equals((int)HttpStatusCode.NoContent))
+        {
+            await UpdateHighlightsListAsync();
+            Snackbar.Add(SUCCESS_DELETE_MESSAGE, Severity.Success);
+        }
+        else
+        {
+            foreach (var error in person.Errors)
+                Snackbar.Add(error, Severity.Error);
+        }
+    }
+    #endregion
+
+    #region Static methods
+    private static string FormatDate(DateTime date)
+        => $"{date.Day:D2}/{date.Month:D2}/{date.Year}";
+
+    private static string GetFirstName(string name)
+        => name.Split(WHITESPACE).First();
+    #endregion
 }

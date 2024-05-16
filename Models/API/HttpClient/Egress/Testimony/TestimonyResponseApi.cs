@@ -10,7 +10,7 @@ public class TestimonyResponseApi
     [JsonPropertyName("name")]
     public string Name { get; set; }
 
-    [JsonPropertyName("perfilImageSrc")]
+    [JsonPropertyName("perfil_image_src")]
     public string? PerfilImageSrc { get; set; }
 
     [JsonPropertyName("courses")]
@@ -19,12 +19,12 @@ public class TestimonyResponseApi
     [JsonPropertyName("content")]
     public string Content { get; set; }
 
-    [JsonPropertyName("wasAccepted")]
+    [JsonPropertyName("was_accepted")]
     public bool WasAccepted { get; set; }
 
-    [JsonPropertyName("createdAt")]
+    [JsonPropertyName("created_at")]
     public DateTime CreatedAt { get; set; }
 
-    [JsonPropertyName("updatedAt")]
+    [JsonPropertyName("updated_at")]
     public DateTime UpdatedAt { get; set; }
 }

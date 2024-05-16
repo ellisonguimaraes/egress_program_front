@@ -6,6 +6,8 @@ using EgressPortal.Models.API.HttpClient.Egress.Highlights;
 using EgressPortal.Models.API.HttpClient.Egress.Person;
 using EgressPortal.Models.API.HttpClient.Egress.Testimony;
 using EgressPortal.Models.Form;
+using HighlightResponseApi = EgressPortal.Models.API.HttpClient.Egress.Highlights.HighlightResponseApi;
+using TestimonyResponseApi = EgressPortal.Models.API.HttpClient.Egress.Testimony.TestimonyResponseApi;
 
 namespace EgressPortal.Services.Interfaces;
 
@@ -86,4 +88,39 @@ public interface IEgressServices
     /// <param name="id">Person identifier</param>
     /// <returns>Person id (GUID)</returns>
     Task<GenericHttpResponse<object>> DeletePersonAsync(AuthenticationHeaderValue authorization, Guid id);
+
+    /// <summary>
+    /// Get person info with all every information/data
+    /// </summary>
+    /// <param name="authorization">Authorization header</param>
+    /// <returns>Person Object</returns>
+    Task<GenericHttpResponse<PersonResponseApi>> GetPersonInfoAsync(AuthenticationHeaderValue authorization);
+
+    /// <summary>
+    /// Remove Testimony from the application
+    /// </summary>
+    /// <param name="authorization">Authorization header</param>
+    /// <param name="id">Testimony identifier</param>
+    Task<GenericHttpResponse<object>> DeleteTestimonyAsync(AuthenticationHeaderValue authorization, Guid id);
+    
+    /// <summary>
+    /// Remove Highlights from the application
+    /// </summary>
+    /// <param name="authorization">Authorization header</param>
+    /// <param name="id">Highlights identifier</param>
+    Task<GenericHttpResponse<object>> DeleteHighlightsAsync(AuthenticationHeaderValue authorization, Guid id);
+    
+    /// <summary>
+    /// Request testimony
+    /// </summary>
+    /// <param name="authorization">Authorization header</param>
+    /// <param name="request">Testimony content</param>
+    Task<GenericHttpResponse<object>> RequestTestimonyAsync(AuthenticationHeaderValue authorization, RequestTestimonyForm request);
+    
+    /// <summary>
+    /// Request highlight
+    /// </summary>
+    /// <param name="authorization">Authorization header</param>
+    /// <param name="request">Highlight content</param>
+    Task<GenericHttpResponse<object>> RequestHighlightAsync(AuthenticationHeaderValue authorization, RequestHighlightForm request);
 }

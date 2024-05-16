@@ -1,0 +1,157 @@
+@using System.Net
+@using System.Net.Http.Headers
+@using EgressPortal.Models.Form
+@inject ILoginServices LoginServices
+@inject IEgressServices EgressServices
+@inject ISnackbar Snackbar
+
+<MudDialog>
+    <DialogContent>
+        <EditForm Model="_requestHighlightForm" OnValidSubmit="OnValidSubmitAsync" class="d-flex flex-column gap-3">
+            <DataAnnotationsValidator/>
+            
+            <MudAlert Severity="Severity.Info">O destaque será enviado ao colegiado para análise e aceite da publicação.</MudAlert>
+            
+            <MudTextField Variant="Variant.Outlined" Placeholder="Título de destaque" Label="Título" @bind-Value="_requestHighlightForm.Title" For="@(() => _requestHighlightForm.Title)"></MudTextField>
+            <MudTextField Variant="Variant.Outlined" Placeholder="Descrição" Lines="5" Label="Descrição" @bind-Value="_requestHighlightForm.Description" For="@(() => _requestHighlightForm.Description)"></MudTextField>
+            <MudTextField Variant="Variant.Outlined" Placeholder="Insira um link de referência" Label="Link" @bind-Value="_requestHighlightForm.Link" For="@(() => _requestHighlightForm.Link)"></MudTextField>
+
+            <MudField Label="Foto de Publicidade" Variant="Variant.Outlined" Class="d-flex w-100">
+                <div class="d-flex flex-column w-100 justify-content-around align-content-center align-items-center gap-2">
+                    <MudFileUpload T="IBrowserFile" FilesChanged="UploadAdvertisingImageFile" Accept=".png, .jpg" Class="d-flex m-0 p-0">
+                        <ButtonTemplate Context="perfilImageButtonContext">
+                            <MudButton HtmlTag="label"
+                                       Variant="Variant.Filled"
+                                       Color="Color.Info"
+                                       StartIcon="@Icons.Material.Filled.PhotoCamera"
+                                       for="@perfilImageButtonContext">
+                                Selecionar foto
+                            </MudButton>
+                        </ButtonTemplate>
+                    </MudFileUpload>
+                    @if (_requestHighlightForm.AdvertisingImage is not null)
+                    {
+                        <MudText Typo="Typo.body2">@_requestHighlightForm.AdvertisingImage?.Name</MudText>
+                    }
+                </div>
+            </MudField>
+            
+            <MudAlert Severity="Severity.Info"> A foto escolhida acima ficará pública na página de destaques.</MudAlert>
+
+            <MudField Label="Arquivos Comprovantes" Variant="Variant.Outlined" Class="d-flex w-100 p-0 m-0">
+                <div class="d-flex flex-column w-100 justify-content-around align-content-center align-items-center gap-2">
+                    <MudFileUpload T="IReadOnlyList<IBrowserFile>" FilesChanged="UploadVeracityFilesFiles">
+                        <ButtonTemplate Context="veracityFilesContext">
+                            <MudButton HtmlTag="label"
+                                       Variant="Variant.Filled"
+                                       Color="Color.Info"
+                                       StartIcon="@Icons.Material.Filled.CloudUpload"
+                                       for="@veracityFilesContext.Id">
+                                Selecionar Arquivos
+                            </MudButton>
+                        </ButtonTemplate>
+                    </MudFileUpload>
+                    
+                    @if (_requestHighlightForm.VeracityFiles != null)
+                    {
+                        <MudText Typo="@Typo.subtitle2">@_requestHighlightForm.VeracityFiles.Count arquivo@(_requestHighlightForm.VeracityFiles.Count == 1 ? "" : "s") selecionado@(_requestHighlightForm.VeracityFiles.Count == 1 ? "" : "s").</MudText>
+                        <MudList>
+                            @foreach (var file in _requestHighlightForm.VeracityFiles)
+                            {
+                                <MudListItem Icon="@Icons.Material.Filled.AttachFile" IconSize="Size.Small" @key="@file">
+                                    <MudText Typo="Typo.body2">@file.Name (<code>@($"{file.Size/1000000.0:F2}") mb</code>)</MudText>
+                                </MudListItem>
+                            }
+                        </MudList>
+                    }
+                </div>
+            </MudField>
+            
+            <MudAlert Severity="Severity.Info">Arquivos de comprovação deverão ser enviados para agilizar o processo de aceite do destaque e publicação.</MudAlert>
+            
+            <div class="d-flex flex-row flex-wrap justify-content-center py-5 gap-4">
+                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Success">Solicitar</MudButton>
+                <MudButton OnClick="Cancel">Cancelar</MudButton>
+            </div>
+        </EditForm>
+    </DialogContent>
+</MudDialog>
+
+@code {
+    #region Constants
+    private const string USER_NOT_AUTHENTICATED_SNACKBAR_MESSAGE = "Usuário não autenticado";
+    private const string SCHEME = "Bearer";
+    private const string SUCCESS_REQUEST = "Solicitado com sucesso!";
+    private const long MAX_ALLOWED_SIZE_IMAGE = 2000000;
+    #endregion
+
+    [CascadingParameter] 
+    MudDialogInstance MudDialog { get; set; }
+
+    [Parameter] [EditorRequired] 
+    public EventCallback CallbackAsync { get; set; }
+
+    private RequestHighlightForm _requestHighlightForm = new()
+    {
+        VeracityFiles = new List<IBrowserFile>()
+    };
+
+    private void Cancel() => MudDialog.Cancel();
+
+    private async Task OnValidSubmitAsync()
+    {
+        await RequestHighlightAsync();
+    }
+
+    private async Task RequestHighlightAsync()
+    {
+        var token = await LoginServices.GetTokenAsync();
+
+        if (token is null)
+        {
+            Snackbar.Add(USER_NOT_AUTHENTICATED_SNACKBAR_MESSAGE);
+            await LoginServices.LogoutAsync();
+            return;
+        }
+
+        var bearer = new AuthenticationHeaderValue(SCHEME, token!.AccessToken);
+
+        var person = await EgressServices.RequestHighlightAsync(bearer, _requestHighlightForm);
+
+        if (person.StatusCode.Equals((int)HttpStatusCode.OK))
+        {
+            Snackbar.Add(SUCCESS_REQUEST, Severity.Success);
+            await CallbackAsync.InvokeAsync();
+            MudDialog.Close(DialogResult.Ok(true));
+        }
+        else
+        {
+            foreach (var error in person.Errors)
+                Snackbar.Add(error, Severity.Error);
+        }
+    }
+    
+    private void UploadAdvertisingImageFile(IBrowserFile image)
+    {
+        if (image.Size > MAX_ALLOWED_SIZE_IMAGE)
+        {
+            Snackbar.Add("Imagem deve ter no máximo 2mb", Severity.Warning);
+        }
+        else
+        {
+            _requestHighlightForm.AdvertisingImage = image;
+            StateHasChanged();
+        }
+    }
+    
+    private void UploadVeracityFilesFiles(IReadOnlyList<IBrowserFile> files)
+    {
+        foreach (var file in files)
+        {
+            if (file.Size > MAX_ALLOWED_SIZE_IMAGE)
+                Snackbar.Add("Arquivo deve ter no máximo 2mb", Severity.Warning);
+            else
+                _requestHighlightForm.VeracityFiles!.Add(file);
+        }
+    }
+}

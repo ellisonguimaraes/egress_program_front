@@ -14,8 +14,6 @@ public static class RouteSettings
     public static string RecoveryPasswordRoute = "recuperar-senha";
     public static string InstagramRoute = "https://instagram.com/colcic_uesc";
     public static string FacebookRoute = "https://www.facebook.com/colcic.uesc?mibextid=LQQJ4d";
-    
-    // public static string AuthStartPage = "/user";
 
     public static string AdminEgressRoute = "/admin/egressos";
   
@@ -23,4 +21,6 @@ public static class RouteSettings
     public static string AuthMyTestimony = $"{AuthStartPage}/meus-depoimentos";
     public static string AuthMyHighlights = $"{AuthStartPage}/meus-destaques";
     public static string AuthUpdate = $"{AuthStartPage}/meus-dados";
+    
+    public static string AdminEgressRoute = "/admin/egressos";
 }

@@ -1,7 +1,11 @@
+@using System.Net
+@using System.Net.Http.Headers
 @using EgressPortal.Models
-@using EgressPortal.Services.Interfaces
+@using EgressPortal.Models.API.HttpClient.Egress.Person
+@inject IEgressServices EgressServices
 @inject ILoginServices LoginServices
 @inject NavigationManager NavigationManager
+@inject ISnackbar Snackbar
 
 <AuthorizeView>
     <Authorized>
@@ -10,22 +14,22 @@
                 <div class="d-flex flex-row align-content-center align-items-center justify-content-center">
                     <MudText Class="m-2 fw-bold text_color_darkgreen" Typo="Typo.body2">@GetFirstName(context.User.Identity!.Name!.ToUpper())</MudText>
                     <MudAvatar Color="Color.Primary">
-                        @* @if (string.IsNullOrWhiteSpace(context.User.Identity!.Name)) *@
-                        @* { *@
-                        <b>@context.User.Identity!.Name![0]</b>
-                        @* } *@
-                        @* else *@
-                        @* { *@
-                        @*     <MudImage Src="img/eu_quadrado.jpg" Alt="avatar"/> *@
-                        @* } *@
+                        @if (string.IsNullOrWhiteSpace(_person?.PerfilImage))
+                        {
+                            <b>@context.User.Identity!.Name![0]</b>
+                        }
+                        else
+                        {
+                            <MudImage Src="@_person.PerfilImage" Alt="avatar"/>
+                        }
                     </MudAvatar>
                     <MudIcon Icon="@Icons.Material.Filled.ArrowDropDown" Class="text_color_darkgreen" Size="Size.Medium"/>
                 </div>
             </ActivatorContent>
             <ChildContent>
-                <MudMenuItem>Meus depoimentos</MudMenuItem>
-                <MudMenuItem>Meus destaques</MudMenuItem>
-                <MudMenuItem>Atualizar Perfil</MudMenuItem>
+                <MudMenuItem Href="@RouteSettings.AuthMyTestimony">Meus depoimentos</MudMenuItem>
+                <MudMenuItem Href="@RouteSettings.AuthMyHighlights">Meus destaques</MudMenuItem>
+                <MudMenuItem Href="@RouteSettings.AuthUpdate">Atualizar Perfil</MudMenuItem>
                 <MudMenuItem OnClick="LogoutAsync">Sair</MudMenuItem>
             </ChildContent>
         </MudMenu>
@@ -38,12 +42,15 @@
 @code {
     #region Constants
     private const string SEPARATOR_NAME = " ";
+    private const string USER_NOT_AUTHENTICATED_SNACKBAR_MESSAGE = "Usuário não autenticado";
+    private const string SCHEME = "Bearer";
     #endregion
+    
+    private PersonResponseApi? _person = null!;
 
-    private string GetFirstName(string fullName)
+    protected override async Task OnInitializedAsync()
     {
-        var names = fullName.Split(SEPARATOR_NAME);
-        return names[0];
+        await UpdateHighlightsListAsync();
     }
 
     private async Task LogoutAsync()
@@ -51,4 +58,42 @@
         await LoginServices.LogoutAsync();
         NavigationManager.NavigateTo(RouteSettings.HomeRoute);
     }
+    
+    #region Api Requests
+    private async Task UpdateHighlightsListAsync()
+    {
+        var token = await LoginServices.GetTokenAsync();
+
+        if (token is null)
+        {
+            Snackbar.Add(USER_NOT_AUTHENTICATED_SNACKBAR_MESSAGE);
+            await LoginServices.LogoutAsync();
+            NavigationManager.NavigateTo(RouteSettings.LoginRoute);
+            return;
+        }
+
+        var bearer = new AuthenticationHeaderValue(SCHEME, token!.AccessToken);
+
+        var person = await EgressServices.GetPersonInfoAsync(bearer);
+
+        if (person.StatusCode.Equals((int)HttpStatusCode.OK))
+        {
+            _person = person.Data;
+            StateHasChanged();
+        }
+        else
+        {
+            foreach (var error in person.Errors)
+                Snackbar.Add(error, Severity.Error);
+        }
+    }
+    #endregion
+
+    #region Static Methods
+    private static string GetFirstName(string fullName)
+    {
+        var names = fullName.Split(SEPARATOR_NAME);
+        return names[0];
+    }
+    #endregion
 }

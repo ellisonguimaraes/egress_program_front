@@ -1,4 +1,6 @@
 using System.Net.Http.Headers;
+using EgressPortal.Models.API.HttpClient.Egress.Highlights;
+using EgressPortal.Models.API.HttpClient.Egress.Testimony;
 using Refit;
 
 namespace EgressPortal.Services.HttpClients;
@@ -42,6 +44,19 @@ public interface IEgressApi
     [Post("/api/v1/person/register")]
     Task<HttpResponseMessage> RegisterPersonAsync([Header(AUTHORIZATION_HEADER)] AuthenticationHeaderValue authorization, [Body] RegisterPersonRequestApi request);
 
+    [Get("/api/v1/person")]
+    Task<HttpResponseMessage> GetPersonInfoAsync([Header(AUTHORIZATION_HEADER)] AuthenticationHeaderValue authorization);
+
     [Delete("/api/v1/admin/person/{id}")]
     Task<HttpResponseMessage> DeletePersonAsync([Header(AUTHORIZATION_HEADER)] AuthenticationHeaderValue authorization, [AliasAs(ID)] Guid id);
+    
+    [Delete("/api/v1/egress/highlights/{id}")]
+    Task<HttpResponseMessage> DeleteHighlightsAsync([Header(AUTHORIZATION_HEADER)] AuthenticationHeaderValue authorization, [AliasAs(ID)] Guid id);
+    
+    [Delete("/api/v1/egress/testimony/{id}")]
+    Task<HttpResponseMessage> DeleteTestimonyAsync([Header(AUTHORIZATION_HEADER)] AuthenticationHeaderValue authorization, [AliasAs(ID)] Guid id);
+
+    [Post("/api/v1/egress/testimony")]
+    Task<HttpResponseMessage> RequestTestimonyAsync([Header(AUTHORIZATION_HEADER)] AuthenticationHeaderValue authorization, [Body] RequestTestimonyRequestApi request);
 }
+

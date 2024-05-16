@@ -1,3 +1,4 @@
+using System.Net;
 using System.Text.Json;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
@@ -6,6 +7,7 @@ using EgressPortal.Auth;
 using EgressPortal.Models.Configuration;
 using EgressPortal.Services;
 using EgressPortal.Services.HttpClients;
+using EgressPortal.Services.HttpClients.Implementation;
 using EgressPortal.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -61,6 +63,17 @@ static void ConfigureHttpClients(IServiceCollection services, IConfiguration con
         new RefitSettings {
             ContentSerializer = new SystemTextJsonContentSerializer(new JsonSerializerOptions())
         }).ConfigureHttpClient(cfg => cfg.BaseAddress = new Uri(egressApiConfiguration.Host!));
+    
+    var handler = new HttpClientHandler();
+    if (handler.SupportsAutomaticDecompression)
+    {
+        handler.AutomaticDecompression = DecompressionMethods.GZip |
+                                         DecompressionMethods.Deflate;
+    }
+    
+    services.AddHttpClient(EGRESS_API_CONFIGURATION,  c => c.BaseAddress = new Uri(egressApiConfiguration.Host!) );
+
+    services.AddTransient<IHttpClientEgressApi, HttpClientEgressApi>();
 }
 
 static void ConfigureMudServices(IServiceCollection services, IConfiguration configuration)
@@ -76,5 +89,10 @@ static void ConfigureMudServices(IServiceCollection services, IConfiguration con
         config.SnackbarConfiguration.ShowTransitionDuration = 500;
         config.SnackbarConfiguration.SnackbarVariant = Variant.Filled;
     });
+}
+
+static void RegisterHttpClients(IServiceCollection services, IConfiguration configuration)
+{
+    
 }
 #endregion
