@@ -106,7 +106,7 @@
                         <MudTd DataLabel="Ações" Class="gap-1">
                             <MudButton Variant="Variant.Outlined" Size="Size.Small" Color="Color.Success" OnClick="@(async () => await GetPersonAsync(egressContext.Id))">Visualizar</MudButton>
                             <MudButton Variant="Variant.Outlined" Size="Size.Small" Color="Color.Warning" Disabled>Aprovado</MudButton>
-                            <MudButton Variant="Variant.Outlined" Size="Size.Small" Color="Color.Error" OnClick="@(async () => await DeletePersonAsync(egressContext.Id))">
+                            <MudButton Variant="Variant.Outlined" Size="Size.Small" Color="Color.Error" OnClick="@(async () => await DeletePersonAsync(egressContext))">
                                 Excluir
                             </MudButton>
                         </MudTd>
@@ -126,13 +126,13 @@
     #endregion
 
     private int _totalPages = 1;
-    
+
     private EgressFilterForm _egressAdminFilter = new() { BeginningSemester = "Todos os semestres", FinalSemester = "Todos os semestres" };
-    
+
     private List<GetEgressPaginateResponseApi> _egresses = new();
-    
+
     private PaginationComponent<GetEgressPaginateResponseApi> _paginationComponent = null!;
-    
+
     private async Task OnValidSubmitAsync() => await _paginationComponent.ChangePageNumberAsync(1);
 
     private static IEnumerable<string> GenerateFinalSemestersToSelect()
@@ -169,11 +169,11 @@
     private async Task GetPersonAsync(Guid id)
     {
         var token = await LoginServices.GetTokenAsync();
-        
+
         var authorization = new AuthenticationHeaderValue(token!.TokenType, token.AccessToken);
-        
+
         var result = await EgressServices.GetPersonAsync(authorization, id);
-        
+
         if (result.StatusCode.Equals((int)HttpStatusCode.OK))
         {
             await LoginServices.ForceExchangeRefreshTokenAsync();
@@ -192,35 +192,54 @@
     private void ShowEgressDetails(PersonResponseApi person)
     {
         var parameters = new DialogParameters<EgressDetails>();
-        parameters.Add(x=> x.Person, person);
+        parameters.Add(x => x.Person, person);
 
-        var options = new DialogOptions() { CloseButton = true, CloseOnEscapeKey = true, MaxWidth = MaxWidth.ExtraLarge, FullWidth = true};
+        var options = new DialogOptions() { CloseButton = true, CloseOnEscapeKey = true, MaxWidth = MaxWidth.ExtraLarge, FullWidth = true };
 
         Dialog.Show<EgressDetails>(string.Empty, parameters, options);
     }
-    
-    private async Task DeletePersonAsync(Guid id)
+
+    private async Task DeletePersonAsync(GetEgressPaginateResponseApi egress)
     {
         var token = await LoginServices.GetTokenAsync();
-        
+
         var authorization = new AuthenticationHeaderValue(token!.TokenType, token.AccessToken);
-        
-        var result = await EgressServices.DeletePersonAsync(authorization, id);
-        Console.WriteLine(result.StatusCode);
-        if (result.StatusCode.Equals((int)HttpStatusCode.NoContent))
+
+        if (!await DeleteEgress(egress.Name))
         {
-            Snackbar.Add("Egresso removido com sucesso!", Severity.Success);
-            await LoginServices.ForceExchangeRefreshTokenAsync();
-            await GetEgressPaginateAsync(1);
-        }
-        else
-        {
-            foreach (var error in result.Errors)
+            var result = await EgressServices.DeletePersonAsync(authorization, egress.Id);
+            Console.WriteLine(result.StatusCode);
+            if (result.StatusCode.Equals((int)HttpStatusCode.NoContent))
             {
-                Snackbar.Add(error, Severity.Error);
-                Console.WriteLine(error);
+                Snackbar.Add("Egresso removido com sucesso!", Severity.Success);
+                await LoginServices.ForceExchangeRefreshTokenAsync();
+                await GetEgressPaginateAsync(1);
             }
+            else
+            {
+                foreach (var error in result.Errors)
+                {
+                    Snackbar.Add(error, Severity.Error);
+                    Console.WriteLine(error);
+                }
+            }  
         }
+    }
+
+    private async Task<bool> DeleteEgress( string name)
+    {
+        var parameters = new DialogParameters<ConfirmationDialog>();
+        parameters.Add(x => x.ContentText, $"Tem certeza que deseja remover {name} ?");
+        parameters.Add(x => x.ButtonText, "Deletar");
+        parameters.Add(x => x.Color, Color.Error);
+
+        var options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.ExtraSmall };
+
+        var dialog = Dialog.Show<ConfirmationDialog>("Deletar", parameters, options);
+
+        var result = await dialog.Result;
+
+        return result.Canceled;
     }
 
     private static string TranslateModality(Modality modality)
@@ -241,4 +260,5 @@
             Level.DoctorateDegree => "Doutorado",
             _ => default!
         };
+
 }

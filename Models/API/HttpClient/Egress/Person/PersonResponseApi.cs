@@ -55,7 +55,7 @@ public class PersonResponseApi
 
     [JsonPropertyName("testimonies")]
     public IList<TestimonyResponseApi> Testimonies { get; set; }
-    
+  
     [JsonPropertyName("courses")]
     public IList<CourseResponseApi> Courses { get; set; }
 }

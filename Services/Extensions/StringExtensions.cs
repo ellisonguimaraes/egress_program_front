@@ -10,7 +10,7 @@ public static class StringExtensions
         {
             return JsonSerializer.Deserialize<T>(content);
         }
-        catch
+        catch (Exception ex)
         {
             return default;
         }

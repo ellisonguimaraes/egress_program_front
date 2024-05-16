@@ -1,84 +1,275 @@
+@using System.Globalization
 @using EgressPortal.Models.API.HttpClient.Courses
 @using EgressPortal.Models.API.HttpClient.Egress.Person
 @using CourseResponseApi = EgressPortal.Models.API.HttpClient.Egress.Person.CourseResponseApi
 
-<MudDialog Class="h-90">
-    <DialogContent>
-        @if(Person is not null){
-            <MudGrid Class="py-4">
-                <MudItem lg="4" md="4" sm="12">
-                    <MudGrid Spacing="0">
-                        <MudItem>
-                            <div class="w-100 ma-2" style="height: 250px;">
-                                
-                            </div>
-                        </MudItem>
-                        <MudItem xs="12">
-                            <MudTable T="CourseResponseApi"
-                                      Items="Person.Courses"
-                                      Dense
-                                      Striped>
-                                <HeaderContent>
-                                    <MudTh>Curso</MudTh>
-                                    <MudTh>Matrícula</MudTh>
-                                    <MudTh>Início</MudTh>
-                                    <MudTh>Término</MudTh>
-                                    <MudTh>Grau</MudTh>
-                                </HeaderContent>
-                                <RowTemplate>
-                                    <MudTd DataLabel="">@context.CourseName</MudTd>
-                                    <MudTd DataLabel="">@context.Mat</MudTd>
-                                    <MudTd DataLabel="">@context.BeginningSemester</MudTd>
-                                    <MudTd DataLabel="">@context.FinalSemester</MudTd>
-                                    <MudTd DataLabel="">@TranslateLevel(context.Level)</MudTd>
-                                </RowTemplate>
-                            </MudTable>
-                        </MudItem>
-                    </MudGrid>
-                </MudItem>
-                <MudItem lg="8" md="8" sm="12">
-                    <MudGrid>
-                        <MudItem lg="4" md="4" sm="12">
-                            <MudTextField
-                                T="string"
-                                Label="Nome"
-                                Value="Person.Name"
-                                ReadOnly
-                                Variant="Variant.Outlined"
-                                Margin="Margin.Dense"
-                            />
-                        </MudItem>
-                        <MudItem lg="4" md="4" sm="12">
-                            <MudTextField
-                                T="string"
-                                Label="CPF"
-                                Value="Person.Cpf"
-                                ReadOnly
-                                Variant="Variant.Outlined"
-                                Margin="Margin.Dense"
-                            />
-                        </MudItem>
-                        <MudItem lg="4" md="4" sm="12">
-                            <MudTextField
-                                T="string"
-                                Label="Email"
-                                Value="Person.Email"
-                                ReadOnly
-                                Variant="Variant.Outlined"
-                                Margin="Margin.Dense"
-                            />
-                        </MudItem>
-                    </MudGrid>
-                </MudItem>
-            </MudGrid>
-        }
-    </DialogContent>
+<div>
+<MudDialog Class="h-[80%]">
+<DialogContent >
+@if (Person is not null)
+{
+    <div class="d-flex flex-md-row flex-sm-column flex-xs-column gap-4 pb-2 mt-2">
+    <div class="d-flex w-md-[30%] w-sm-[100%] w-xs-[100%]">
+        <MudGrid Spacing="0" Class="d-flex flex-grow-1 pa-3 mud-elevation-3" style="justify-content: space-around !important;">
+            <MudItem Class="d-flex mb-4">
+                <MudImage ObjectFit="ObjectFit.Cover" ObjectPosition="ObjectPosition.Center" Src="https://www.github.com/ellisonguimaraes.png" Fluid="true" Elevation="25" Class="rounded-lg"/>
+            </MudItem>
+            <MudItem xs="12">
+                <MudTable T="CourseResponseApi"
+                          Items="Person.Courses"
+                          Dense
+                          Striped>
+                    <HeaderContent>
+                        <MudTh>Curso</MudTh>
+                        <MudTh>Matrícula</MudTh>
+                        <MudTh>Início</MudTh>
+                        <MudTh>Término</MudTh>
+                        <MudTh>Grau</MudTh>
+                    </HeaderContent>
+                    <RowTemplate>
+                        <MudTd DataLabel="">@context.CourseName</MudTd>
+                        <MudTd DataLabel="">@context.Mat</MudTd>
+                        <MudTd DataLabel="">@context.BeginningSemester</MudTd>
+                        <MudTd DataLabel="">@context.FinalSemester</MudTd>
+                        <MudTd DataLabel="">@TranslateLevel(context.Level)</MudTd>
+                    </RowTemplate>
+                </MudTable>
+            </MudItem>
+        </MudGrid>
+    </div>
+    <div class="d-flex w-md-[70%] w-sm-[100%] w-xs-[100%] pa-3 mud-elevation-3">
+    <MudGrid Class="py-4">
+    <MudItem sm="12">
+        <MudPaper Elevation="0" Class="pt-0 mb-0 mb-4">
+            <MudText Typo="Typo.h6" Align="Align.Start" Class="mb-2 ml-2">Dados do Egresso</MudText>
+            <MudDivider Light/>
+        </MudPaper>
+        <MudGrid>
+            <MudItem lg="4" md="6" sm="12">
+                <MudTextField
+                    T="string"
+                    Label="Nome"
+                    Value="Person.Name"
+                    ReadOnly
+                    Adornment="Adornment.End"
+                    AdornmentIcon="@Icons.Material.Filled.PermIdentity"
+                    Variant="Variant.Outlined"
+                    Margin="Margin.Dense"/>
+            </MudItem>
+            <MudItem lg="4" md="6" sm="12">
+                <MudTextField
+                    Label="CPF"
+                    Value="Person.Cpf"
+                    ReadOnly
+                    Mask="@(new PatternMask("000.000.000-00"))"
+                    Adornment="Adornment.End"
+                    AdornmentIcon="@Icons.Material.Filled.Numbers"
+                    Variant="Variant.Outlined"
+                    Margin="Margin.Dense"/>
+            </MudItem>
+            <MudItem lg="4" md="6" sm="12">
+                <MudTextField
+                    Culture="@(CultureInfo.GetCultureInfo("pt-BR"))"
+                    Label="Data de Nasc."
+                    Value="Person.BirthDate"
+                    ReadOnly
+                    Adornment="Adornment.End"
+                    AdornmentIcon="@Icons.Material.Filled.Today"
+                    Variant="Variant.Outlined"
+                    Margin="Margin.Dense"/>
+            </MudItem>
+            <MudItem lg="4" md="6" sm="12">
+                <MudTextField
+                    Label="Email"
+                    Value="Person.Email"
+                    ReadOnly
+                    Adornment="Adornment.End"
+                    AdornmentIcon="@Icons.Material.Filled.Email"
+                    Variant="Variant.Outlined"
+                    Margin="Margin.Dense"/>
+            </MudItem>
+            <MudItem lg="4" md="6" sm="12">
+                <MudTextField
+                    Label="Telefone"
+                    Mask="@(new PatternMask("(00) 0 0000-0000"))"
+                    Value="Person.PhoneNumber"
+                    ReadOnly
+                    Adornment="Adornment.End"
+                    AdornmentIcon="@Icons.Material.Filled.Phone"
+                    Variant="Variant.Outlined"
+                    Margin="Margin.Dense"/>
+            </MudItem>
+            <MudItem lg="4" md="6" sm="12" Class="d-flex flex-grow-1 flex-lg-row flex-md-column">
+                <MudCheckBox
+                    CheckedIcon="@Icons.Material.Filled.Check"
+                    UncheckedIcon="@Icons.Material.Filled.Close"
+                    Value="Person.CanExposeData"
+                    Color="@(Person.CanExposeData ? Color.Success : Color.Error)"
+                    Label="Dados públicos?"
+                    ReadOnly
+                    Class="custom-checkbox"/>
+                <MudCheckBox
+                    CheckedIcon="@Icons.Material.Filled.Check"
+                    UncheckedIcon="@Icons.Material.Filled.Close"
+                    Value="Person.CanReceiveMessage"
+                    Color="@(Person.CanReceiveMessage ? Color.Success : Color.Error)"
+                    Label="Recebe mensagens?"
+                    ReadOnly/>
+            </MudItem>
+        </MudGrid>
+    </MudItem>
+    <MudItem sm="12">
+        <MudPaper Elevation="0" Class="pt-0 mb-0 mb-4">
+            <MudText Typo="Typo.h6" Align="Align.Start" Class="mb-2 ml-2">Endereço</MudText>
+            <MudDivider Light/>
+        </MudPaper>
+        <MudGrid>
+            <MudItem lg="4" md="4" sm="12">
+                <MudTextField
+                    T="string"
+                    Label="Estado"
+                    Value="Person.Address?.State"
+                    ReadOnly
+                    Adornment="Adornment.End"
+                    AdornmentIcon="@Icons.Material.Filled.Signpost"
+                    Variant="Variant.Outlined"
+                    Margin="Margin.Dense"/>
+            </MudItem>
+            <MudItem lg="4" md="4" sm="12">
+                <MudTextField
+                    Label="País"
+                    Value="Person.Address?.Country"
+                    ReadOnly
+                    Adornment="Adornment.End"
+                    AdornmentIcon="@Icons.Material.Filled.Map"
+                    Variant="Variant.Outlined"
+                    Margin="Margin.Dense"/>
+            </MudItem>
+        </MudGrid>
+    </MudItem>
+    <MudItem sm="12">
+        <MudPaper Elevation="0" Class="pt-0 mb-0 mb-4">
+            <MudText Typo="Typo.h6" Align="Align.Start" Class="mb-2 ml-2">Vida Profissional</MudText>
+            <MudDivider Light/>
+        </MudPaper>
+        <MudGrid>
+            <MudItem lg="4" md="6" sm="12">
+                <MudTextField
+                    T="string"
+                    Label="Empresa"
+                    Value="Person.Employment?.EnterpriseName"
+                    ReadOnly
+                    Adornment="Adornment.End"
+                    AdornmentIcon="@Icons.Material.Filled.LocationCity"
+                    Variant="Variant.Outlined"
+                    Margin="Margin.Dense"/>
+            </MudItem>
+            <MudItem lg="4" md="6" sm="12">
+                <MudTextField
+                    Label="Cargo"
+                    Value="Person.Employment?.Role"
+                    ReadOnly
+                    Adornment="Adornment.End"
+                    AdornmentIcon="@Icons.Material.Outlined.Cases"
+                    Variant="Variant.Outlined"
+                    Margin="Margin.Dense"/>
+            </MudItem>
+            <MudItem lg="4" md="6" sm="12">
+                <MudNumericField
+                    Culture="@(CultureInfo.GetCultureInfo("pt-BR"))"
+                    Label="Salário"
+                    Value="Person.Employment?.SalaryRange"
+                    Format="N2"
+                    ReadOnly
+                    Adornment="Adornment.End"
+                    AdornmentIcon="@Icons.Material.Filled.AttachMoney"
+                    Variant="Variant.Outlined"
+                    Margin="Margin.Dense"/>
+            </MudItem>
+            <MudItem lg="4" md="6" sm="12">
+                <MudTextField
+                    Label="Data de Início"
+                    Value="Person.Employment?.StartDate"
+                    ReadOnly
+                    Adornment="Adornment.End"
+                    AdornmentIcon="@Icons.Material.Filled.Today"
+                    Variant="Variant.Outlined"
+                    Margin="Margin.Dense"/>
+            </MudItem>
+            <MudItem lg="4" md="6" sm="12" Class="d-flex flex-grow-1 flex-lg-row flex-md-column">
+                <MudCheckBox
+                    CheckedIcon="@Icons.Material.Filled.Check"
+                    UncheckedIcon="@Icons.Material.Filled.Close"
+                    Value="Person.Employment?.IsEmploymentPublic"
+                    Color="@((Person.Employment?.IsEmploymentPublic ?? false) ? Color.Success : Color.Error)"
+                    Label="Dados públicos?"
+                    ReadOnly
+                    Class="custom-checkbox"/>
+                <MudCheckBox
+                    CheckedIcon="@Icons.Material.Filled.Check"
+                    UncheckedIcon="@Icons.Material.Filled.Close"
+                    Value="Person.Employment?.IsPublicInitiative"
+                    Color="@((Person.Employment?.IsPublicInitiative ?? false) ? Color.Success : Color.Error)"
+                    Label="Iniciativa pública?"
+                    ReadOnly/>
+            </MudItem>
+        </MudGrid>
+    </MudItem>
+    <MudItem sm="12">
+        <MudPaper Elevation="0" Class="pt-0 mb-0 mb-4">
+            <MudText Typo="Typo.h6" Align="Align.Start" Class="mb-2 ml-2">Educação</MudText>
+            <MudDivider Light/>
+        </MudPaper>
+        <MudGrid>
+            <MudItem lg="4" md="6" sm="12">
+                <MudCheckBox
+                    CheckedIcon="@Icons.Material.Filled.Check"
+                    UncheckedIcon="@Icons.Material.Filled.Close"
+                    Value="Person.ContinuingEducation?.HasCertification"
+                    Color="@((Person.ContinuingEducation?.HasCertification ?? false) ? Color.Success : Color.Error)"
+                    Label="Possui certificação?"
+                    ReadOnly/>
+            </MudItem>
+            <MudItem lg="4" md="6" sm="12">
+                <MudCheckBox
+                    CheckedIcon="@Icons.Material.Filled.Check"
+                    UncheckedIcon="@Icons.Material.Filled.Close"
+                    Value="Person.ContinuingEducation?.HasSpecialization"
+                    Color="@((Person.ContinuingEducation?.HasSpecialization ?? false) ? Color.Success : Color.Error)"
+                    Label="Possui especialização?"
+                    ReadOnly/>
+            </MudItem>
+            <MudItem lg="4" md="6" sm="12">
+                <MudCheckBox
+                    CheckedIcon="@Icons.Material.Filled.Check"
+                    UncheckedIcon="@Icons.Material.Filled.Close"
+                    Value="Person.ContinuingEducation?.HasMasterDegree"
+                    Color="@((Person.ContinuingEducation?.HasMasterDegree ?? false) ? Color.Success : Color.Error)"
+                    Label="Possui mestrado?"
+                    ReadOnly/>
+            </MudItem>
+            <MudItem lg="4" md="6" sm="12">
+                <MudCheckBox
+                    CheckedIcon="@Icons.Material.Filled.Check"
+                    UncheckedIcon="@Icons.Material.Filled.Close"
+                    Value="Person.ContinuingEducation?.HasDoctorateDegree"
+                    Color="@((Person.ContinuingEducation?.HasDoctorateDegree ?? false) ? Color.Success : Color.Error)"
+                    Label="Possui certificação?"
+                    ReadOnly/>
+            </MudItem>
+        </MudGrid>
+    </MudItem>
+    </MudGrid>
+    </div>
+    </div>
+}
+</DialogContent>
 </MudDialog>
+</div>
 
 @code{
-    [Parameter]
-    public PersonResponseApi? Person { get; set; }
-    
+    [Parameter] public PersonResponseApi? Person { get; set; }
+
     private static string TranslateLevel(Level level)
         => level switch
         {
@@ -88,4 +279,5 @@
             Level.DoctorateDegree => "Doutorado",
             _ => default!
         };
+
 }
