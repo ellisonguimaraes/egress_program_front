@@ -1,0 +1,8 @@
+::deep .border-r-1 {
+    border-right-width: 1px !important;
+    color: #d5d5d5;
+}
+
+::deep .custom-checkbox .mud-button-root.mud-icon-button.mud-success-text.mud-readonly span{
+    padding: 2px 2px;
+}

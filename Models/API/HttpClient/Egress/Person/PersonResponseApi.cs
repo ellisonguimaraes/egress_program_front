@@ -44,13 +44,13 @@ public class PersonResponseApi
     public PersonType PersonType { get; set; }
 
     [JsonPropertyName("address")]
-    public object Address { get; set; }
+    public AddressResponseApi Address { get; set; }
     
     [JsonPropertyName("employment")]
-    public object Employment { get; set; }
+    public EmploymentResponseApi Employment { get; set; }
         
     [JsonPropertyName("continuing_education")]
-    public object ContinuingEducation { get; set; }
+    public ContinuingEducationResponseApi ContinuingEducation { get; set; }
     
     [JsonPropertyName("courses")]
     public List<CourseResponseApi> Courses { get; set; }
