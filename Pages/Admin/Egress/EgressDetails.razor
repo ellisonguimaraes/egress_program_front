@@ -103,8 +103,8 @@
                 <MudCheckBox
                     CheckedIcon="@Icons.Material.Filled.Check"
                     UncheckedIcon="@Icons.Material.Filled.Close"
-                    Value="Person.CanExposeData"
-                    Color="@(Person.CanExposeData ? Color.Success : Color.Error)"
+                    Value="Person.ExposeData"
+                    Color="@((Person.ExposeData ?? false) ? Color.Success : Color.Error)"
                     Label="Dados públicos?"
                     ReadOnly
                     Class="custom-checkbox"/>
@@ -112,7 +112,7 @@
                     CheckedIcon="@Icons.Material.Filled.Check"
                     UncheckedIcon="@Icons.Material.Filled.Close"
                     Value="Person.CanReceiveMessage"
-                    Color="@(Person.CanReceiveMessage ? Color.Success : Color.Error)"
+                    Color="@((Person.CanReceiveMessage ?? false) ? Color.Success : Color.Error)"
                     Label="Recebe mensagens?"
                     ReadOnly/>
             </MudItem>
@@ -157,7 +157,7 @@
                 <MudTextField
                     T="string"
                     Label="Empresa"
-                    Value="Person.Employment?.EnterpriseName"
+                    Value="Person.Employment?.Enterprise"
                     ReadOnly
                     Adornment="Adornment.End"
                     AdornmentIcon="@Icons.Material.Filled.LocationCity"
@@ -200,8 +200,8 @@
                 <MudCheckBox
                     CheckedIcon="@Icons.Material.Filled.Check"
                     UncheckedIcon="@Icons.Material.Filled.Close"
-                    Value="Person.Employment?.IsEmploymentPublic"
-                    Color="@((Person.Employment?.IsEmploymentPublic ?? false) ? Color.Success : Color.Error)"
+                    Value="Person.Employment?.IsPublic"
+                    Color="@((Person.Employment?.IsPublic ?? false) ? Color.Success : Color.Error)"
                     Label="Dados públicos?"
                     ReadOnly
                     Class="custom-checkbox"/>
