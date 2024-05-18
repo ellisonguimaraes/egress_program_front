@@ -9,7 +9,7 @@
 @inject IDialogService Dialog
 @inject ILoginServices LoginServices
 @inject ISnackbar Snackbar
-<PageTitle>Página Inicial</PageTitle>
+<PageTitle>Egressos | Admin</PageTitle>
 
 <TitlePageComponent Title="Administrador" SubTitle=""/>
 <div class="d-flex flex-column align-items-center w-100 py-8 gap-8">
@@ -105,7 +105,6 @@
                         <MudTd DataLabel="Ano Conclusão">@egressContext.FinalSemester</MudTd>
                         <MudTd DataLabel="Ações" Class="gap-1">
                             <MudButton Variant="Variant.Outlined" Size="Size.Small" Color="Color.Success" OnClick="@(async () => await GetPersonAsync(egressContext.Id))">Visualizar</MudButton>
-                            <MudButton Variant="Variant.Outlined" Size="Size.Small" Color="Color.Warning" Disabled>Aprovado</MudButton>
                             <MudButton Variant="Variant.Outlined" Size="Size.Small" Color="Color.Error" OnClick="@(async () => await DeletePersonAsync(egressContext))">
                                 Excluir
                             </MudButton>
