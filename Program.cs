@@ -36,6 +36,7 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
 {
     services.AddScoped<IUserServices, UserServices>();
     services.AddScoped<IEgressServices, EgressServices>();
+    services.AddScoped<IAdminServices, AdminServices>();
     services.AddSingleton<ILocalStorageServices, LocalStorageServices>();
 
     services.AddSingleton<IAuthorizationHandler, PersonIdentifierAuthorizationHandler>();
@@ -63,7 +64,14 @@ static void ConfigureHttpClients(IServiceCollection services, IConfiguration con
         new RefitSettings {
             ContentSerializer = new SystemTextJsonContentSerializer(new JsonSerializerOptions())
         }).ConfigureHttpClient(cfg => cfg.BaseAddress = new Uri(egressApiConfiguration.Host!));
-    
+
+    var adminApiConfiguration = clientServiceConfigurations!.Single(c => c.ApplicationName!.Equals(EGRESS_API_CONFIGURATION));
+    services.AddRefitClient<IAdminApi>(
+        new RefitSettings
+        {
+            ContentSerializer = new SystemTextJsonContentSerializer(new JsonSerializerOptions())
+        }).ConfigureHttpClient(cfg => cfg.BaseAddress = new Uri(adminApiConfiguration.Host!));
+
     var handler = new HttpClientHandler();
     if (handler.SupportsAutomaticDecompression)
     {

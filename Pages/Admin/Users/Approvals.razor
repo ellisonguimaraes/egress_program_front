@@ -1,0 +1,168 @@
+﻿@page "/admin/approvals"
+
+@using EgressPortal.Models.API.HttpClient.Admin
+@using EgressPortal.Shared.Utils
+@using System.Net
+@using System.Net.Http.Headers
+
+@inject IAdminServices AdminServices
+@inject IDialogService Dialog
+@inject ILoginServices LoginServices
+@inject IEgressServices EgressServices
+@inject ISnackbar Snackbar
+
+<PageTitle>Pendente Aprovação</PageTitle>
+
+<TitlePageComponent Title="Administrador" SubTitle="" />
+<div class="d-flex flex-column align-items-center w-100 py-8 gap-6">
+    <div class="d-flex flex-grow-1 w-75">
+        <MudText Align="Align.Left" Typo="Typo.h5" Style="font-weight: bold">Pendente de Aprovação</MudText>
+    </div>
+    <div class="d-flex flex-column w-90%">
+        <PaginationComponent Items="_usersPendingApproval" TotalPages="_totalPages" ChangePageNumberCallback="GetUsersPaginateAsync" @ref="_paginationComponent">
+            <ViewAllItemsComponent Context="userContext">
+                <MudTable Items="userContext" Hover="true" Breakpoint="Breakpoint.Sm" Context="userApprovalContext" Class="mb-5">
+                    <HeaderContent>
+                        <MudTh>Nome</MudTh>
+                        <MudTh>Email</MudTh>
+                        <MudTh>Documentacao</MudTh>
+                        <MudTh>Número Documento</MudTh>
+                        <MudTh>Perfil</MudTh>
+                        <MudTh>Ações</MudTh>
+                    </HeaderContent>
+                    <RowTemplate>
+                        <MudTd DataLabel="Nome">@userApprovalContext.Name</MudTd>
+                        <MudTd DataLabel="Email">@userApprovalContext.Email</MudTd>
+                        <MudTd DataLabel="Tipo de Documento">@TranslateDocumentType(userApprovalContext.DocumentType)</MudTd>
+                        <MudTd DataLabel="Número Documento">@userApprovalContext.Document</MudTd>
+                        <MudTd DataLabel="Nível">@TranslateUserType(userApprovalContext.UserType)</MudTd>
+                        <MudTd DataLabel="Ações" Class="gap-1">
+                            <MudButton Variant="Variant.Outlined" Size="Size.Small" Color="Color.Warning" OnClick="@(async () => await ApproveUser(userApprovalContext))">Aprovar</MudButton>
+                        </MudTd>
+                    </RowTemplate>
+                </MudTable>
+            </ViewAllItemsComponent>
+        </PaginationComponent>
+    </div>
+</div>
+
+@code {
+    #region Constants
+
+    private const int PAGE_SIZE = 3;
+
+    #endregion
+
+    private int _totalPages = 1;
+
+    private List<UserResponseApi> _usersPendingApproval = new();
+
+    private PaginationComponent<UserResponseApi> _paginationComponent = null!;
+
+    private async Task OnValidSubmitAsync() => await _paginationComponent.ChangePageNumberAsync(1);
+
+    private async Task ApproveUser(UserResponseApi user)
+    {
+        var token = await LoginServices.GetTokenAsync();
+
+        var authorization = new AuthenticationHeaderValue(token!.TokenType, token.AccessToken);
+
+        if (!await WannaApproveUser(user.Name))
+        {
+            var result = await AdminServices.UnlockUserAsync(authorization, user.Id);
+
+            if (result.StatusCode.Equals((int)HttpStatusCode.NoContent))
+            {
+                Snackbar.Add("Usuário aprovado com sucesso!", Severity.Success);
+                await LoginServices.ForceExchangeRefreshTokenAsync();
+                await GetUsersPaginateAsync(1);
+            }
+            else
+            {
+                foreach (var error in result.Errors)
+                {
+                    Snackbar.Add(error, Severity.Error);
+                    Console.WriteLine(error);
+                }
+            }
+        }
+    }
+
+    private async Task GetUsersPaginateAsync(int pageNumber)
+    {
+        var token = await LoginServices.GetTokenAsync();
+
+        var authorization = new AuthenticationHeaderValue(token!.TokenType, token.AccessToken);
+
+        var result = await AdminServices.GetPaginateLockedUserAsync(authorization, pageNumber, PAGE_SIZE);
+
+        if (result.StatusCode.Equals((int)HttpStatusCode.OK))
+        {
+            _usersPendingApproval = result.Data!.Data!.ToList();
+            _totalPages = result.Data.TotalPages;
+            await LoginServices.ForceExchangeRefreshTokenAsync();
+        }
+        else
+        {
+            foreach (var error in result.Errors)
+            {
+                Snackbar.Add(error, Severity.Error);
+            }
+        }
+    }
+
+    private async Task GetPersonAsync(Guid id)
+    {
+        var token = await LoginServices.GetTokenAsync();
+
+        var authorization = new AuthenticationHeaderValue(token!.TokenType, token.AccessToken);
+
+        var result = await EgressServices.GetPersonAsync(authorization, id);
+
+        if (result.StatusCode.Equals((int)HttpStatusCode.OK))
+        {
+            await LoginServices.ForceExchangeRefreshTokenAsync();
+        }
+        else
+        {
+            foreach (var error in result.Errors)
+            {
+                Snackbar.Add(error, Severity.Error);
+                Console.WriteLine(error);
+            }
+        }
+    }
+
+    private async Task<bool> WannaApproveUser(string name)
+    {
+        var parameters = new DialogParameters<ConfirmationDialog>();
+        parameters.Add(x => x.ContentText, $"Tem certeza que deseja aprovar o usuário {name} ?");
+        parameters.Add(x => x.ButtonText, "Aprovar");
+        parameters.Add(x => x.Color, Color.Success);
+
+        var options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.ExtraSmall };
+
+        var dialog = Dialog.Show<ConfirmationDialog>("Aprovar", parameters, options);
+
+        var result = await dialog.Result;
+
+        return result.Canceled;
+    }
+
+    private static string TranslateUserType(UserType userType)
+    => userType switch
+    {
+        UserType.Student => "Estudante",
+        UserType.Egress => "Egresso",
+        UserType.Teacher => "Professor",
+        _ => default!
+    };
+
+    private static string TranslateDocumentType(DocumentType documentType)
+    => documentType switch
+    {
+        DocumentType.Cpf => "CPF",
+        DocumentType.Registration => "Matrícula",
+    _ => default!
+    };
+}
