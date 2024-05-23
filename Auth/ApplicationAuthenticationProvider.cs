@@ -154,12 +154,8 @@ public class ApplicationAuthenticationProvider : AuthenticationStateProvider, IL
     public async Task<AuthenticationResponseApi?> GetTokenAsync()
     {
         var tokenString = await _localStorageServices.GetAsync<string>(TOKEN_LOCAL_STORAGE_NAME);
-<<<<<<< HEAD
-        
-        if (string.IsNullOrEmpty(tokenString)) return default;
-=======
+
         if (string.IsNullOrWhiteSpace(tokenString)) return default;
->>>>>>> c40f099e9c76965b935889a81fd98d76c3ce20a1
         
         return await HandlerTokenAsync(JsonSerializer.Deserialize<AuthenticationResponseApi>(tokenString)!);
     }
