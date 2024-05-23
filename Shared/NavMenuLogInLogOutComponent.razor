@@ -50,7 +50,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        await UpdateHighlightsListAsync();
+        await GetPersonAsync();
     }
 
     private async Task LogoutAsync()
@@ -60,7 +60,7 @@
     }
     
     #region Api Requests
-    private async Task UpdateHighlightsListAsync()
+    private async Task GetPersonAsync()
     {
         var token = await LoginServices.GetTokenAsync();
 

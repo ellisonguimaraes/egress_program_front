@@ -2660,6 +2660,13 @@ C:/Users/ellis/source/repos/egress_program_front/obj/Debug/net7.0/EgressPortal.d
 C:/Users/ellis/source/repos/egress_program_front/obj/Debug/net7.0/refint/EgressPortal.dll
 C:/Users/ellis/source/repos/egress_program_front/obj/Debug/net7.0/EgressPortal.pdb
 C:/Users/ellis/source/repos/egress_program_front/obj/Debug/net7.0/ref/EgressPortal.dll
+/home/ellison/source/repos/egress_program_front/obj/Debug/net7.0/EgressPortal.csproj.AssemblyReference.cache
+/home/ellison/source/repos/egress_program_front/obj/Debug/net7.0/EgressPortal.GeneratedMSBuildEditorConfig.editorconfig
+/home/ellison/source/repos/egress_program_front/obj/Debug/net7.0/EgressPortal.AssemblyInfoInputs.cache
+/home/ellison/source/repos/egress_program_front/obj/Debug/net7.0/EgressPortal.AssemblyInfo.cs
+/home/ellison/source/repos/egress_program_front/obj/Debug/net7.0/EgressPortal.csproj.CoreCompileInputs.cache
+/home/ellison/source/repos/egress_program_front/obj/Debug/net7.0/EgressPortal.MvcApplicationPartsAssemblyInfo.cache
+/home/ellison/source/repos/egress_program_front/obj/Debug/net7.0/EgressPortal.sourcelink.json
 /home/ellison/source/repos/egress_program_front/bin/Debug/net7.0/wwwroot/_framework/blazor.boot.json
 /home/ellison/source/repos/egress_program_front/bin/Debug/net7.0/wwwroot/_framework/blazor.webassembly.js
 /home/ellison/source/repos/egress_program_front/bin/Debug/net7.0/wwwroot/_framework/dotnet.7.0.18.63v5fi2upv.js
@@ -3301,13 +3308,6 @@ C:/Users/ellis/source/repos/egress_program_front/obj/Debug/net7.0/ref/EgressPort
 /home/ellison/source/repos/egress_program_front/bin/Debug/net7.0/icudt_CJK.dat
 /home/ellison/source/repos/egress_program_front/bin/Debug/net7.0/icudt_EFIGS.dat
 /home/ellison/source/repos/egress_program_front/bin/Debug/net7.0/icudt_no_CJK.dat
-/home/ellison/source/repos/egress_program_front/obj/Debug/net7.0/EgressPortal.csproj.AssemblyReference.cache
-/home/ellison/source/repos/egress_program_front/obj/Debug/net7.0/EgressPortal.GeneratedMSBuildEditorConfig.editorconfig
-/home/ellison/source/repos/egress_program_front/obj/Debug/net7.0/EgressPortal.AssemblyInfoInputs.cache
-/home/ellison/source/repos/egress_program_front/obj/Debug/net7.0/EgressPortal.AssemblyInfo.cs
-/home/ellison/source/repos/egress_program_front/obj/Debug/net7.0/EgressPortal.csproj.CoreCompileInputs.cache
-/home/ellison/source/repos/egress_program_front/obj/Debug/net7.0/EgressPortal.MvcApplicationPartsAssemblyInfo.cache
-/home/ellison/source/repos/egress_program_front/obj/Debug/net7.0/EgressPortal.sourcelink.json
 /home/ellison/source/repos/egress_program_front/obj/Debug/net7.0/blazor.build.boot-extension.json
 /home/ellison/source/repos/egress_program_front/obj/Debug/net7.0/blazor.boot.json
 /home/ellison/source/repos/egress_program_front/obj/Debug/net7.0/staticwebassets.build.json
@@ -3317,6 +3317,7 @@ C:/Users/ellis/source/repos/egress_program_front/obj/Debug/net7.0/ref/EgressPort
 /home/ellison/source/repos/egress_program_front/obj/Debug/net7.0/staticwebassets/msbuild.buildMultiTargeting.EgressPortal.props
 /home/ellison/source/repos/egress_program_front/obj/Debug/net7.0/staticwebassets/msbuild.buildTransitive.EgressPortal.props
 /home/ellison/source/repos/egress_program_front/obj/Debug/net7.0/staticwebassets.pack.json
+/home/ellison/source/repos/egress_program_front/obj/Debug/net7.0/scopedcss/Pages/Admin/Egress/EgressDetails.razor.rz.scp.css
 /home/ellison/source/repos/egress_program_front/obj/Debug/net7.0/scopedcss/Pages/Index.razor.rz.scp.css
 /home/ellison/source/repos/egress_program_front/obj/Debug/net7.0/scopedcss/Shared/FooterComponent.razor.rz.scp.css
 /home/ellison/source/repos/egress_program_front/obj/Debug/net7.0/scopedcss/Shared/Index/EgressChartComponent.razor.rz.scp.css
