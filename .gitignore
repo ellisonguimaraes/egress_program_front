@@ -171,6 +171,9 @@ AutoTest.Net/
 
 # Installshield output folder
 [Ee]xpress/
+[Oo]bj/
+obj/
+Obj/
 
 # DocProject is a documentation generator add-in
 DocProject/buildhelp/
@@ -403,6 +406,8 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 .idea
+.cache
+.targets
 
 ##
 ## Visual studio for Mac
