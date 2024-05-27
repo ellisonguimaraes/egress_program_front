@@ -5,8 +5,14 @@
         <a class="d-flex flex-column gap-3 mt-4">
             <MudText Align="Align.Justify" Typo="Typo.h6">@Highlight.Title</MudText>
             <MudText Typo="Typo.subtitle2">Solicitado em @FormatDate(Highlight.CreatedAt)</MudText>
+            <MudImage Src="@Highlight.AdvertisingImageSrc" ObjectFit="ObjectFit.Cover" Class="rounded-lg mb-4 mt-2"></MudImage>
             <MudText Align="Align.Justify" Typo="Typo.body1">@Highlight.Description</MudText>
             <MudText Typo="Typo.button">Link: <MudLink Href="@Highlight.Link">@Highlight.Link</MudLink></MudText>
+            <MudText Typo="Typo.button">Arquivos: </MudText>
+            @foreach (var link in Highlight.VeracityFilesSrc)
+            {
+                <MudLink Typo="Typo.subtitle2" Href="@link">@link</MudLink>
+            }
         </a>
     </DialogContent>
     <DialogActions>
