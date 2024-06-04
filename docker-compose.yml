@@ -5,5 +5,4 @@
       context: .
       dockerfile: Dockerfile
     ports:
-      - "9970:80"
-      - "9971:443"
+      - "8080:80"

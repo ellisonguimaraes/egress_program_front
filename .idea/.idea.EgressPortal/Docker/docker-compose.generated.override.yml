@@ -2,34 +2,34 @@
 services:
   egressportal:
     build:
-      context: "C:\\Users\\ellis\\source\\repos\\egress_program_front"
+      context: "/home/ellison/source/repos/egress_program_front"
       dockerfile: "Dockerfile"
       target: "base"
+      args:
+        BUILD_CONFIGURATION: "Debug"
     command: []
     entrypoint:
-    - "/riderDebugger/linux-x64/dotnet/dotnet"
-    - "/riderDebugger/JetBrains.Debugger.Worker.exe"
+    - "/opt/rider-debugger/linux-x64/JetBrains.Debugger.Worker"
+    - "--runtimeconfig"
+    - "/opt/rider-debugger/JetBrains.Debugger.Worker.runtimeconfig.json"
     - "--mode=server"
     - "--frontend-port=57100"
     - "--backend-port=57300"
+    - "--timeout=60"
     environment:
       ASPNETCORE_ENVIRONMENT: "Development"
       DOTNET_USE_POLLING_FILE_WATCHER: "true"
-      NUGET_PACKAGES: "C:\\Users\\ellis\\.nuget\\packages"
-      NUGET_FALLBACK_PACKAGES: "C:\\Users\\ellis\\.nuget\\packages"
-      RIDER_DEBUGGER_LOG_DIR: "/riderLogs"
-      RESHARPER_LOG_CONF: "/riderLogsConf/backend-log.xml"
+      RIDER_DEBUGGER_LOG_DIR: "/var/opt/rider-debugger"
+      RESHARPER_LOG_CONF: "/etc/opt/rider-debugger/backend-log.xml"
     image: "egressportal:dev"
     ports:
     - "127.0.0.1:57000:57100"
     - "127.0.0.1:57200:57300"
     volumes:
-    - "C:\\Users\\ellis\\.nuget\\packages:/root/.nuget/fallbackpackages"
-    - "C:\\Users\\ellis\\source\\repos\\egress_program_front:/app:rw"
-    - "C:\\Users\\ellis\\source\\repos\\egress_program_front:/src:rw"
-    - "C:\\Users\\ellis\\AppData\\Local\\JetBrains\\RiderRemoteDebugger\\2023.2.2\\\
-      Linux64:/riderDebugger"
-    - "C:\\Users\\ellis\\AppData\\Local\\JetBrains\\Toolbox\\apps\\Rider\\ch-0\\232.9921.83/bin:/riderLogsConf"
-    - "C:\\Users\\ellis\\AppData\\Local\\JetBrains\\Rider2023.2\\log\\DebuggerWorker\\\
-      JetBrains.Debugger.Worker.2023_10_19_02_09_01:/riderLogs:rw"
+    - "/home/ellison/.nuget/packages:/root/.nuget/packages"
+    - "/home/ellison/source/repos/egress_program_front:/app:rw"
+    - "/home/ellison/source/repos/egress_program_front:/src:rw"
+    - "/home/ellison/.local/share/JetBrains/RiderRemoteDebugger/2024.1.2/Linux64:/opt/rider-debugger"
+    - "/snap/rider/460/bin:/etc/opt/rider-debugger/backend-log.xml"
+    - "/home/ellison/.cache/JetBrains/Rider2024.1/log/DebuggerWorker/JetBrains.Debugger.Worker.2024_6_03_23_49_14:/var/opt/rider-debugger:rw"
     working_dir: "/app"
