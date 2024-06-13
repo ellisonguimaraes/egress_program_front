@@ -71,6 +71,13 @@ static void ConfigureHttpClients(IServiceCollection services, IConfiguration con
         {
             ContentSerializer = new SystemTextJsonContentSerializer(new JsonSerializerOptions())
         }).ConfigureHttpClient(cfg => cfg.BaseAddress = new Uri(adminApiConfiguration.Host!));
+    
+    var courseApiConfiguration = clientServiceConfigurations!.Single(c => c.ApplicationName!.Equals(EGRESS_API_CONFIGURATION));
+    services.AddRefitClient<ICourseApi>(
+        new RefitSettings
+        {
+            ContentSerializer = new SystemTextJsonContentSerializer(new JsonSerializerOptions())
+        }).ConfigureHttpClient(cfg => cfg.BaseAddress = new Uri(courseApiConfiguration.Host!));
 
     var handler = new HttpClientHandler();
     if (handler.SupportsAutomaticDecompression)

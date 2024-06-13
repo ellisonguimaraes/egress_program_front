@@ -9,6 +9,7 @@ using EgressPortal.Models.Form;
 using EgressPortal.Services.Extensions;
 using EgressPortal.Services.HttpClients;
 using EgressPortal.Services.Interfaces;
+using CourseResponseApi = EgressPortal.Models.API.HttpClient.Courses.CourseResponseApi;
 using HighlightResponseApi = EgressPortal.Models.API.HttpClient.Egress.Highlights.HighlightResponseApi;
 using TestimonyResponseApi = EgressPortal.Models.API.HttpClient.Egress.Testimony.TestimonyResponseApi;
 
@@ -21,12 +22,14 @@ public class EgressServices : IEgressServices
     #endregion
 
     private readonly IEgressApi _egressApi;
+    private readonly ICourseApi _courseApi;
     private readonly IHttpClientEgressApi _httpClientEgressApi;
 
-    public EgressServices(IEgressApi egressApi, IHttpClientEgressApi httpClientEgressApi)
+    public EgressServices(IEgressApi egressApi, IHttpClientEgressApi httpClientEgressApi, ICourseApi courseApi)
     {
         _egressApi = egressApi;
         _httpClientEgressApi = httpClientEgressApi;
+        _courseApi = courseApi;
     }
 
     public async Task<GenericHttpResponse<List<HighlightResponseApi>>> GetRandomHighlightsAsync(int quantity)
@@ -302,5 +305,11 @@ public class EgressServices : IEgressServices
     {
         var response = await _httpClientEgressApi.RequestHighlightsAsync(authorization, request);
         return await HandleResponseAsync<object>(response);
+    }
+
+    public async Task<GenericHttpResponse<List<CourseResponseApi>>> GetCourses(AuthenticationHeaderValue authorization)
+    {
+        var response = await _courseApi.GetAllCoursesAsync(authorization);
+        return await HandleResponseAsync<List<CourseResponseApi>>(response);
     }
 }

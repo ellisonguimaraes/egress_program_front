@@ -2,6 +2,7 @@
 @using EgressPortal.Models.Form
 @using System.Net
 @using System.Net.Http.Headers
+@using EgressPortal.Models
 @using EgressPortal.Models.API.HttpClient.Egress
 @using EgressPortal.Models.API.HttpClient.Egress.Person
 @using EgressPortal.Shared.Utils
@@ -9,6 +10,7 @@
 @inject IDialogService Dialog
 @inject ILoginServices LoginServices
 @inject ISnackbar Snackbar
+@inject NavigationManager NavigationManager
 <PageTitle>Egressos | Admin</PageTitle>
 
 <TitlePageComponent Title="Administrador" SubTitle=""/>
@@ -16,7 +18,7 @@
     <div class="d-flex justify-space-around flex-grow-1 w-100">
         <MudText Align="Align.Left" Typo="Typo.h5" Style="font-weight: bold">Egressos</MudText>
         <div class="d-flex justify-space-between gap-4">
-            <MudButton Variant="Variant.Filled" Color="Color.Primary">ADICIONAR EGRESSO</MudButton>
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="( () => NavigationManager.NavigateTo(RouteSettings.AdminAddEgressRoute))">ADICIONAR EGRESSO</MudButton>
             <MudButton Variant="Variant.Filled" Color="Color.Primary">ADICIONAR EM LOTE (CSV)</MudButton>
         </div>
     </div>
@@ -120,7 +122,7 @@
 
     #region Constants
 
-    private const int PAGE_SIZE = 3;
+    private const int PAGE_SIZE = 10;
 
     #endregion
 

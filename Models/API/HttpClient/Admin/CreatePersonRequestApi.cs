@@ -1,8 +1,8 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 
-namespace EgressPortal.Models.Form;
+namespace EgressPortal.Models.API.HttpClient.Admin;
 
-public class CreateEgressForm
+public class CreatePersonRequestApi
 {
     [JsonPropertyName("cpf")]
     public string Cpf { get; set; }
@@ -11,7 +11,7 @@ public class CreateEgressForm
     public string Name { get; set; }
 
     [JsonPropertyName("birth_date")]
-    public DateTime? BirthDate { get; set; }
+    public DateTime BirthDate { get; set; }
 
     [JsonPropertyName("email")]
     public string Email { get; set; }
@@ -29,7 +29,7 @@ public class CreateEgressForm
     public int PersonType { get; set; }
 
     [JsonPropertyName("course")]
-    public Course Course { get; set; } = new();
+    public Course Course { get; set; }
 }
 
 public class Course
@@ -49,5 +49,6 @@ public class Course
     [JsonPropertyName("level")]
     public int Level { get; set; }
 
-    [JsonPropertyName("modality")] public int Modality { get; set; } = 1;
+    [JsonPropertyName("modality")]
+    public int Modality { get; set; }
 }

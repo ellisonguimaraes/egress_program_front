@@ -1,4 +1,5 @@
-﻿using EgressPortal.Models;
+﻿using System.Globalization;
+using EgressPortal.Models;
 using EgressPortal.Models.API;
 using EgressPortal.Models.API.HttpClient.Admin;
 using EgressPortal.Services.Extensions;
@@ -6,6 +7,8 @@ using EgressPortal.Services.HttpClients;
 using EgressPortal.Services.Interfaces;
 using System.Net.Http.Headers;
 using System.Text.Json;
+using EgressPortal.Models.Form;
+using Course = EgressPortal.Models.API.HttpClient.Admin.Course;
 
 namespace EgressPortal.Services;
 
@@ -56,6 +59,45 @@ public class AdminServices : IAdminServices
             StatusCode = unlockedUser.StatusCode,
             Data = unlockedUser.Data,
             Errors = unlockedUser.Errors,
+        };
+
+        return genericHttpResponse;
+    }
+
+    public async Task<GenericHttpResponse<object>> CreatePersonAsync(AuthenticationHeaderValue authorization, CreateEgressForm egress)
+    {
+        var request = new CreatePersonRequestApi()
+        {
+            Cpf = egress.Cpf,
+            Name = egress.Name,
+            BirthDate = egress.BirthDate!.Value,
+            Email = egress.Email,
+            PhoneNumber = egress.PhoneNumber,
+            CanExposeData = egress.CanExposeData,
+            CanReceiveMessage = egress.CanReceiveMessage,
+            PersonType = egress.PersonType,
+            
+            Course = new Course()
+            {
+                BeginningSemester = egress.Course.BeginningSemester,
+                FinalSemester = egress.Course.FinalSemester,
+                CourseId = egress.Course.CourseId,
+                Level = egress.Course.Level,
+                Mat = egress.Course.Mat,
+                Modality = egress.Course.Modality,
+            }
+        };
+
+        var response = await _adminApi.CreateNewPerson(authorization, request);
+
+        var newPerson = await HandleResponseAsync<object>(response);
+        
+        var genericHttpResponse = new GenericHttpResponse<object>
+        {
+            TraceId = newPerson.TraceId,
+            StatusCode = newPerson.StatusCode,
+            Data = newPerson.Data,
+            Errors = newPerson.Errors,
         };
 
         return genericHttpResponse;

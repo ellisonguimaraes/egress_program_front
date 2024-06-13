@@ -6,6 +6,7 @@ using EgressPortal.Models.API.HttpClient.Egress.Highlights;
 using EgressPortal.Models.API.HttpClient.Egress.Person;
 using EgressPortal.Models.API.HttpClient.Egress.Testimony;
 using EgressPortal.Models.Form;
+using CourseResponseApi = EgressPortal.Models.API.HttpClient.Courses.CourseResponseApi;
 using HighlightResponseApi = EgressPortal.Models.API.HttpClient.Egress.Highlights.HighlightResponseApi;
 using TestimonyResponseApi = EgressPortal.Models.API.HttpClient.Egress.Testimony.TestimonyResponseApi;
 
@@ -123,4 +124,10 @@ public interface IEgressServices
     /// <param name="authorization">Authorization header</param>
     /// <param name="request">Highlight content</param>
     Task<GenericHttpResponse<object>> RequestHighlightAsync(AuthenticationHeaderValue authorization, RequestHighlightForm request);
+
+    /// <summary>
+    /// Courses list
+    /// </summary>
+    /// <param name="authorization">Authorization header</param>
+    Task<GenericHttpResponse<List<CourseResponseApi>>> GetCourses(AuthenticationHeaderValue authorization);
 }
