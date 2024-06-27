@@ -1,0 +1,244 @@
+﻿@using System.ComponentModel.DataAnnotations
+@using System.Globalization
+@using EgressPortal.Models.API.HttpClient.Courses
+@using EgressPortal.Models.Form
+
+<div class="d-flex justify-space-around flex-grow-1 flex-column">
+    <EditForm Model="EgressForm" OnValidSubmit="OnValidSubmitAsync">
+        <DataAnnotationsValidator/>
+        <MudGrid>
+            <MudItem sm="12">
+                <MudPaper Elevation="0" Class="pt-0 mb-0 mb-4">
+                    <MudText Typo="Typo.h6" Align="Align.Start" Class="mb-2 ml-2">Dados do Egresso</MudText>
+                    <MudDivider Light/>
+                </MudPaper>
+                <MudGrid>
+                    <MudItem xs="12" sm="12" md="4" lg="3" Class="m-0">
+                        <MudTextField Variant="Variant.Outlined"
+                                      Margin="Margin.Dense"
+                                      Class=""
+                                      Placeholder="John Doe"
+                                      Label="Nome"
+                                      @bind-Value="EgressForm.Name"
+                                      For="@(() => EgressForm.Name)"/>
+                    </MudItem>
+                    <MudItem xs="12" sm="12" md="4" lg="3" Class="m-0">
+                        <MudTextField Label="CPF"
+                                      @bind-Value="EgressForm.Cpf"
+                                      Placeholder="000.000.000-00"
+                                      Mask="@(new PatternMask("000.000.000-00"))"
+                                      Variant="Variant.Outlined"
+                                      Margin="Margin.Dense"
+                                      For="@(() => EgressForm.Cpf)"/>
+                    </MudItem>
+                    <MudItem xs="12" sm="12" md="4" lg="3" Class="m-0">
+                        <MudDatePicker Variant="Variant.Outlined"
+                                       Margin="Margin.Dense"
+                                       Placeholder="01/01/2023"
+                                       Class=""
+                                       Editable
+                                       Rounded
+                                       Label="Data de Nasc."
+                                       @bind-Date="EgressForm.BirthDate"
+                                       For="@(() => EgressForm.BirthDate)"
+                                       DateFormat="dd/MM/yyyy"
+                                       Culture=@(new CultureInfo("pt-BR", false))/>
+                    </MudItem>
+                    <MudItem xs="12" sm="12" md="4" lg="3" Class="m-0">
+                        <MudTextField Variant="Variant.Outlined"
+                                      Margin="Margin.Dense"
+                                      Class=""
+                                      Placeholder="John@doe.com"
+                                      Label="Email"
+                                      @bind-Value="EgressForm.Email"
+                                      For="@(() => EgressForm.Email)"
+                                      InputType="InputType.Email"
+                                      Validation="@(new EmailAddressAttribute() { ErrorMessage = "Email inválido" })"/>
+                    </MudItem>
+                    <MudItem xs="12" sm="12" md="4" lg="3" Class="m-0">
+                        <MudTextField Variant="Variant.Outlined"
+                                      Margin="Margin.Dense"
+                                      Class=""
+                                      Mask="@(new PatternMask("(00) 0 0000-0000"))"
+                                      Placeholder="(99)9 9999-9999"
+                                      Label="Telefone"
+                                      @bind-Value="EgressForm.PhoneNumber"
+                                      For="@(() => EgressForm.PhoneNumber)"
+                                      InputType="InputType.Telephone"
+                                      Validation="@(new EmailAddressAttribute() { ErrorMessage = "Email inválido" })"/>
+                    </MudItem>
+                    <MudItem xs="12" sm="12" md="4" lg="3" Class="m-0">
+                        <MudSelect @bind-Value="EgressForm.PersonType" Variant="Variant.Outlined" Margin="Margin.Dense"
+                                   Label="Perfil" Placeholder="Selecione perfil" AnchorOrigin="Origin.BottomCenter">
+                            @foreach (var item in _personTypes)
+                            {
+                                <MudSelectItem Value=item.Key>@item.Value</MudSelectItem>
+                            }
+                        </MudSelect>
+                    </MudItem>
+                    <MudItem xs="12" sm="12" md="4" lg="3" Class="m-0">
+                        <MudPaper Elevation="0" Class="border-r-1">
+                            <MudCheckBox
+                                Class=""
+                                Label="Pode expor os dados?"
+                                Color="@(EgressForm.CanExposeData ? Color.Success : Color.Error)"
+                                CheckedIcon="@Icons.Material.Filled.Check"
+                                UncheckedIcon="@Icons.Material.Filled.Close"
+                                @bind-Value="EgressForm.CanExposeData"
+                                For="@(() => EgressForm.CanExposeData)"/>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="12" sm="12" md="4" lg="3" Class="m-0">
+                        <MudPaper Elevation="0" Class="border-r-1">
+                            <MudCheckBox
+                                Class=""
+                                Label="Aceita receber mensagens?"
+                                Color="@(EgressForm.CanReceiveMessage ? Color.Success : Color.Error)"
+                                CheckedIcon="@Icons.Material.Filled.Check"
+                                UncheckedIcon="@Icons.Material.Filled.Close"
+                                @bind-Value="EgressForm.CanReceiveMessage"
+                                For="@(() => EgressForm.CanReceiveMessage)"/>
+                        </MudPaper>
+                    </MudItem>
+                </MudGrid>
+            </MudItem>
+            <MudItem sm="12">
+                <MudPaper Elevation="0" Class="pt-0 mb-0 mb-4">
+                    <MudText Typo="Typo.h6" Align="Align.Start" Class="mb-2 ml-2">Dados Acadêmicos</MudText>
+                    <MudDivider Light/>
+                </MudPaper>
+
+                <MudGrid>
+                    <MudItem xs="12" sm="12" md="4" lg="3" Class="m-0">
+                        <MudSelect @bind-Value="EgressForm.Course.CourseId" Variant="Variant.Outlined" Margin="Margin.Dense"
+                                   Label="Curso" Placeholder="Selecione curso" AnchorOrigin="Origin.BottomCenter">
+                            @foreach (var item in Courses)
+                            {
+                                <MudSelectItem Value=item.Id.ToString()>@item.CourseName</MudSelectItem>
+                            }
+                        </MudSelect>
+                    </MudItem>
+                    <MudItem xs="12" sm="12" md="4" lg="3" Class="m-0">
+                        <MudTextField Variant="Variant.Outlined"
+                                      Margin="Margin.Dense"
+                                      Class=""
+                                      Placeholder="202423123"
+                                      Label="Matrícula"
+                                      @bind-Value="EgressForm.Course.Mat"
+                                      For="@(() => EgressForm.Course.Mat)"/>
+                    </MudItem>
+                    <MudItem xs="12" sm="12" md="4" lg="3" Class="m-0">
+                        <MudSelect T="string" Label="Ano de Ingresso"
+                                   Placeholder="2023.1"
+                                   Variant="Variant.Outlined"
+                                   AnchorOrigin="Origin.BottomCenter"
+                                   Margin="Margin.Dense"
+                                   Class="p-0 m-0"
+                                   @bind-Value="EgressForm.Course.BeginningSemester"
+                                   For="@(() => EgressForm.Course.BeginningSemester)">
+                            @foreach (var s in GenerateFinalSemestersToSelect())
+                            {
+                                <MudSelectItem T="string" Value="@s"/>
+                            }
+                        </MudSelect>
+                    </MudItem>
+                    <MudItem xs="12" sm="12" md="4" lg="3" Class="m-0">
+                        <MudSelect T="string" Label="Ano de Conclusão"
+                                   Placeholder="2023.1"
+                                   Variant="Variant.Outlined"
+                                   AnchorOrigin="Origin.BottomCenter"
+                                   Margin="Margin.Dense"
+                                   Class="p-0 m-0"
+                                   @bind-Value="EgressForm.Course.FinalSemester"
+                                   For="@(() => EgressForm.Course.FinalSemester)">
+                            @foreach (var s in GenerateFinalSemestersToSelect())
+                            {
+                                <MudSelectItem T="string" Value="@s"/>
+                            }
+                        </MudSelect>
+                    </MudItem>
+                    <MudItem xs="12" sm="12" md="4" lg="3" Class="m-0">
+                        <MudSelect @bind-Value="EgressForm.Course.Level" Variant="Variant.Outlined" Margin="Margin.Dense"
+                                   Label="Grau" Placeholder="Selecione um grau" AnchorOrigin="Origin.BottomCenter">
+                            @foreach (var item in _levels)
+                            {
+                                <MudSelectItem Value=item.Key>@item.Value</MudSelectItem>
+                            }
+                        </MudSelect>
+                    </MudItem>
+                    <MudItem xs="12" sm="12" md="4" lg="3" Class="m-0">
+                        <MudSelect @bind-Value="EgressForm.Course.Modality" Variant="Variant.Outlined" Margin="Margin.Dense"
+                                   Label="Modalidade" Placeholder="Selecione uma modalidade" AnchorOrigin="Origin.BottomCenter">
+                            @foreach (var item in _modalities)
+                            {
+                                <MudSelectItem Value=item.Key>@item.Value</MudSelectItem>
+                            }
+                        </MudSelect>
+                    </MudItem>
+                </MudGrid>
+            </MudItem>
+        </MudGrid>
+        <div class="d-flex flex-grow-1 align-items-end pt-4">
+            <div class="d-flex justify-end flex-grow-1 gap-4">
+                <MudButton Variant="Variant.Outlined" Color="Color.Error">Cancelar</MudButton>
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" ButtonType="ButtonType.Submit">Salvar</MudButton>
+            </div>
+        </div>
+    </EditForm>
+</div>
+
+@code {
+    [Parameter] [EditorRequired] public CreateEgressForm EgressForm { get; set; } = null!;
+
+    [Parameter] [EditorRequired] public List<CourseResponseApi> Courses { get; set; } = null!;
+
+    [Parameter] [EditorRequired] public EventCallback EventCallbackOnValidSubmit { get; set; }
+
+    Dictionary<int, string> _personTypes = new Dictionary<int, string>()
+    {
+        { (int)UserType.Egress, "Egresso" },
+        { (int)UserType.Teacher, "Professor" },
+        { (int)UserType.Student, "Estudante" },
+    };
+
+    Dictionary<int, string> _levels = new Dictionary<int, string>()
+    {
+        { (int)Level.Graduation, "Graduação" },
+        { (int)Level.Postgraduate, "Pós-graduação" },
+        { (int)Level.MasterDegree, "Mestrado" },
+        { (int)Level.DoctorateDegree, "Doutorado" },
+    };
+
+    Dictionary<int, string> _modalities = new Dictionary<int, string>()
+    {
+        { (int)Modality.Presential, "Presencial" },
+        { (int)Modality.Hybrid, "Hibrido" },
+        { (int)Modality.Remote, "Remoto" },
+    };
+
+    private bool _buttonSubmitDisabled = false;
+
+    private async Task OnValidSubmitAsync()
+    {
+        _buttonSubmitDisabled = true;
+        
+        EgressForm.Cpf = EgressForm.Cpf.Replace(".", string.Empty ).Replace("-", string.Empty);
+        await EventCallbackOnValidSubmit.InvokeAsync();
+        
+        _buttonSubmitDisabled = false;
+    }
+
+    private static IEnumerable<string> GenerateFinalSemestersToSelect()
+    {
+        var semesters = new List<string>();
+
+        for (var i = DateTime.UtcNow.Year; i >= 1960; i--)
+        {
+            semesters.Add($"{i}.2");
+            semesters.Add($"{i}.1");
+        }
+
+        return semesters.OrderDescending();
+    }
+
+}

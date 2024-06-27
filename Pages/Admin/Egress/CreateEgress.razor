@@ -1,0 +1,88 @@
+@page "/admin/adicionar-egresso"
+@using System.Net
+@using System.Net.Http.Headers
+@using EgressPortal.Models
+@using EgressPortal.Models.Form
+@using EgressPortal.Shared.Admin
+@using CourseResponseApi = EgressPortal.Models.API.HttpClient.Courses.CourseResponseApi
+@inject ISnackbar Snackbar
+@inject ILoginServices LoginServices
+@inject IAdminServices AdminServices
+@inject IEgressServices EgressServices
+@inject NavigationManager NavigationManager
+
+<PageTitle>Adicionar Egresso | Admin</PageTitle>
+
+<TitlePageComponent Title="Egresso" SubTitle="Cadastre um novo egresso."/>
+
+<div class="d-flex flex-column align-items-center w-100">
+    <div class="d-flex flex-column align-items-center ma-0 pa-5">
+        @if (_loading)
+        {
+            <MudProgressCircular Color="Color.Warning" Size="Size.Large" Indeterminate="true"/>
+            <MudText Align="Align.Center" Typo="Typo.subtitle1">Aguarde um momento...</MudText>
+        }
+        else
+        {
+            <CreateEgressFormComponent EgressForm="_newEgress" Courses="_courses" EventCallbackOnValidSubmit="OnValidSubmitAsync"/>
+        }
+    </div>
+</div>
+
+@code {
+    private CreateEgressForm _newEgress = new();
+    private List<CourseResponseApi> _courses = new();
+    private bool _loading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _loading = true;
+        StateHasChanged();
+        var token = await LoginServices.GetTokenAsync();
+
+        var authorization = new AuthenticationHeaderValue(token!.TokenType, token.AccessToken);
+
+        var courses = await EgressServices.GetCourses(authorization);
+
+        if (courses.StatusCode.Equals((int)HttpStatusCode.BadRequest))
+        {
+            Snackbar.Add("Nenhum curso cadastrado!", Severity.Error);
+            NavigationManager.NavigateTo(RouteSettings.AdminEgressRoute);
+        }
+
+        _courses = courses.Data!;
+
+        _loading = false;
+        StateHasChanged();
+        await base.OnInitializedAsync();
+    }
+
+    private async Task OnValidSubmitAsync()
+    {
+        _loading = true;
+        StateHasChanged();
+
+        await CreateAsync();
+
+        _loading = false;
+        StateHasChanged();
+    }
+
+    private async Task CreateAsync()
+    {
+        var token = await LoginServices.GetTokenAsync();
+
+        var authorization = new AuthenticationHeaderValue(token!.TokenType, token.AccessToken);
+
+        var result = await AdminServices.CreatePersonAsync(authorization, _newEgress);
+
+        if (result.StatusCode.Equals((int)HttpStatusCode.OK))
+        {
+            Snackbar.Add("Egresso criado com sucesso!", Severity.Success);
+            NavigationManager.NavigateTo(RouteSettings.AdminEgressRoute);
+        }
+
+        Snackbar.Add("Erro ao criar egresso!", Severity.Error);
+    }
+
+}
