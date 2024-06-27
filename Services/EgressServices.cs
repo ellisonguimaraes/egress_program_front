@@ -115,7 +115,7 @@ public class EgressServices : IEgressServices
 
             return JsonSerializer.Deserialize<PagedList<T>>(paginationInfoString!);
         }
-        catch (Exception)
+        catch (Exception ex)
         {
             return default;
         }
