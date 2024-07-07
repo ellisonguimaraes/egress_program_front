@@ -1,0 +1,202 @@
+@page "/admin/destaques"
+@using System.Net
+@using System.Net.Http.Headers
+@using EgressPortal.Models.API.HttpClient.Egress.Testimony
+@using EgressPortal.Shared.Utils
+
+@inject ILoginServices LoginServices
+@inject IAdminServices AdminServices
+@inject ISnackbar Snackbar
+@inject IDialogService Dialog
+
+<PageTitle>Destaques | Admin</PageTitle>
+
+<TitlePageComponent Title="Administrador" SubTitle=""/>
+
+<div class="d-flex flex-column align-items-center w-100 py-8 gap-8">
+    <div class="d-flex justify-start flex-grow-1 w-75">
+        <MudText Align="Align.Center" Typo="Typo.h5" Style="font-weight: bold">Destaques</MudText>
+    </div>
+
+    <div class="d-flex flex-column w-70">
+        <PaginationComponent Items="_highlights" TotalPages="_totalPages"
+                             ChangePageNumberCallback="GetHighlightsAsync" @ref="_paginationComponent">
+            <ViewAllItemsComponent Context="highlightListContext">
+                <MudTable Items="highlightListContext" Hover="true" Breakpoint="Breakpoint.Sm"
+                          Context="highlightContext" Class="mb-5">
+                    <HeaderContent>
+                        <MudTh>Id</MudTh>
+                        <MudTh>Título</MudTh>
+                        <MudTh>Conteúdo</MudTh>
+                        <MudTh>Criado</MudTh>
+                        <MudTh>Ações</MudTh>
+                    </HeaderContent>
+                    <RowTemplate>
+                        <MudTd DataLabel="Id">@highlightContext.Id.ToString().Substring(0, 7)</MudTd>
+                        <MudTd DataLabel="Nome">@highlightContext.Title</MudTd>
+                        <MudTd DataLabel="Conteúdo">
+                            <MudText Style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis;max-width: 600px;">
+                                @highlightContext.Description
+                            </MudText>
+                        </MudTd>
+                        <MudTd DataLabel="Criado">@highlightContext.CreatedAt.ToString("dd/MM/yyyy")</MudTd>
+                        <MudTd DataLabel="Ações" Class="gap-1">
+                            <MudButton Variant="Variant.Outlined" Size="Size.Small" Color="Color.Success"
+                                       OnClick="() => ShowHighlightDetails(highlightContext)">
+                                Visualizar
+                            </MudButton>
+                            <MudButton Variant="Variant.Outlined" Size="Size.Small" Color="Color.Error" OnClick="(() => DeleteHighlightAsync(highlightContext))">
+                                Excluir
+                            </MudButton>
+                            @if (!highlightContext.WasAccepted)
+                            {
+                                <MudButton Class="ml-1" Variant="Variant.Outlined" Size="Size.Small" Color="Color.Warning" OnClick="() => ApproveHighlightAsync(highlightContext)">
+                                    Aprovar
+                                </MudButton>
+                            }
+                        </MudTd>
+                    </RowTemplate>
+                </MudTable>
+            </ViewAllItemsComponent>
+        </PaginationComponent>
+    </div>
+</div>
+
+
+@code {
+
+
+    #region Constants
+
+    private const int PAGE_SIZE = 10;
+
+    #endregion
+
+    private int _totalPages = 1;
+
+    private List<HighlightResponseApi> _highlights = new();
+
+    private PaginationComponent<HighlightResponseApi> _paginationComponent = null!;
+
+    private async Task OnValidSubmitAsync() => await _paginationComponent.ChangePageNumberAsync(1);
+
+    private async Task GetHighlightsAsync(int pageNumber)
+    {
+        var token = await LoginServices.GetTokenAsync();
+
+        var authorization = new AuthenticationHeaderValue(token!.TokenType, token.AccessToken);
+
+        var result = await AdminServices.GetPaginateHighlightsAsync(authorization, pageNumber, PAGE_SIZE);
+
+        if (result.StatusCode.Equals((int)HttpStatusCode.OK))
+        {
+            _highlights = result.Data!.Data!.ToList();
+            _totalPages = result.Data.TotalPages;
+        }
+        else
+        {
+            foreach (var error in result.Errors)
+            {
+                Snackbar.Add(error, Severity.Error);
+            }
+        }
+    }
+
+    private void ShowHighlightDetails(HighlightResponseApi highlight)
+    {
+        var parameters = new DialogParameters<HighlightDetails>();
+        parameters.Add(x => x.Highlight, highlight);
+
+        var options = new DialogOptions() { CloseButton = true, CloseOnEscapeKey = true, MaxWidth = MaxWidth.ExtraLarge, FullWidth = true };
+
+        Dialog.Show<HighlightDetails>(string.Empty, parameters, options);
+    }
+
+    private async Task ApproveHighlightAsync(HighlightResponseApi highlight)
+    {
+        var token = await LoginServices.GetTokenAsync();
+
+        var authorization = new AuthenticationHeaderValue(token!.TokenType, token.AccessToken);
+
+        if (!await ApproveHighlightAsync(highlight.Title))
+        {
+            var result = await AdminServices.ApproveHighlightAsync(authorization, highlight.Id.ToString());
+
+            if (result.StatusCode.Equals((int)HttpStatusCode.OK))
+            {
+                Snackbar.Add("Destaque aprovado com sucesso!", Severity.Success);
+                await LoginServices.ForceExchangeRefreshTokenAsync();
+                await GetHighlightsAsync(1);
+            }
+            else
+            {
+                foreach (var error in result.Errors)
+                {
+                    Snackbar.Add(error, Severity.Error);
+                    Console.WriteLine(error);
+                }
+            }
+        }
+    }
+
+    private async Task<bool> ApproveHighlightAsync(string title)
+    {
+        var parameters = new DialogParameters<ConfirmationDialog>();
+        parameters.Add(x => x.ContentText, $"Tem certeza que deseja aprovar o destaque de {title} ?");
+        parameters.Add(x => x.ButtonText, "Aprovar");
+        parameters.Add(x => x.Color, Color.Success);
+
+        var options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.ExtraSmall };
+
+        var dialog = Dialog.Show<ConfirmationDialog>("Aprovar destaque", parameters, options);
+
+        var result = await dialog.Result;
+
+        return result.Canceled;
+    }
+
+    private async Task DeleteHighlightAsync(HighlightResponseApi highlight)
+    {
+        var token = await LoginServices.GetTokenAsync();
+
+        var authorization = new AuthenticationHeaderValue(token!.TokenType, token.AccessToken);
+
+        if (!await DeleteTestimony(highlight.Title))
+        {
+            var result = await AdminServices.DeleteHighlightAsync(authorization, highlight.Id.ToString());
+
+            if (result.StatusCode.Equals((int)HttpStatusCode.NoContent))
+            {
+                Snackbar.Add("Destaque removido com sucesso!", Severity.Success);
+                await LoginServices.ForceExchangeRefreshTokenAsync();
+                await GetHighlightsAsync(1);
+            }
+            else
+            {
+                foreach (var error in result.Errors)
+                {
+                    Snackbar.Add(error, Severity.Error);
+                    Console.WriteLine(error);
+                }
+            }
+        }
+    }
+
+
+    private async Task<bool> DeleteTestimony(string title)
+    {
+        var parameters = new DialogParameters<ConfirmationDialog>();
+        parameters.Add(x => x.ContentText, $"Tem certeza que deseja remover o destaque de {title} ?");
+        parameters.Add(x => x.ButtonText, "Deletar");
+        parameters.Add(x => x.Color, Color.Error);
+
+        var options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.ExtraSmall };
+
+        var dialog = Dialog.Show<ConfirmationDialog>("Deletar destaque", parameters, options);
+
+        var result = await dialog.Result;
+
+        return result.Canceled;
+    }
+
+}

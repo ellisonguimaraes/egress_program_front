@@ -21,7 +21,7 @@
     <div class="d-flex justify-space-around flex-grow-1 w-100">
         <MudText Align="Align.Left" Typo="Typo.h5" Style="font-weight: bold">Egressos</MudText>
         <div class="d-flex justify-center gap-4">
-            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="( () => NavigationManager.NavigateTo(RouteSettings.AdminAddEgressRoute))">ADICIONAR EGRESSO</MudButton>
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="(() => NavigationManager.NavigateTo(RouteSettings.AdminAddEgressRoute))">ADICIONAR EGRESSO</MudButton>
             <MudButton Variant="Variant.Filled" Color="Color.Primary">ADICIONAR EM LOTE (CSV)</MudButton>
             <MudButton Variant="Variant.Outlined" Color="Color.Secondary" OnClick="() => NavigationManager.NavigateTo(RouteSettings.AdminApprovalEgressRoute)">APROVAR EGRESSOS</MudButton>
         </div>
@@ -223,11 +223,11 @@
                     Snackbar.Add(error, Severity.Error);
                     Console.WriteLine(error);
                 }
-            }  
+            }
         }
     }
 
-    private async Task<bool> DeleteEgress( string name)
+    private async Task<bool> DeleteEgress(string name)
     {
         var parameters = new DialogParameters<ConfirmationDialog>();
         parameters.Add(x => x.ContentText, $"Tem certeza que deseja remover {name} ?");
@@ -261,4 +261,5 @@
             Level.DoctorateDegree => "Doutorado",
             _ => default!
         };
+
 }

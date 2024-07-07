@@ -1,0 +1,202 @@
+@page "/admin/depoimentos"
+@using System.Net
+@using System.Net.Http.Headers
+@using EgressPortal.Models.API.HttpClient.Egress.Testimony
+@using EgressPortal.Shared.Utils
+
+@inject ILoginServices LoginServices
+@inject IAdminServices AdminServices
+@inject ISnackbar Snackbar
+@inject IDialogService Dialog
+
+<PageTitle>Depoimentos | Admin</PageTitle>
+
+<TitlePageComponent Title="Administrador" SubTitle=""/>
+
+<div class="d-flex flex-column align-items-center w-100 py-8 gap-8">
+    <div class="d-flex justify-start flex-grow-1 w-75">
+        <MudText Align="Align.Center" Typo="Typo.h5" Style="font-weight: bold">Depoimentos</MudText>
+    </div>
+
+    <div class="d-flex flex-column w-70">
+        <PaginationComponent Items="_testimonies" TotalPages="_totalPages"
+                             ChangePageNumberCallback="GetTestimoniesAsync" @ref="_paginationComponent">
+            <ViewAllItemsComponent Context="testimoniesListContext">
+                <MudTable Items="testimoniesListContext" Hover="true" Breakpoint="Breakpoint.Sm"
+                          Context="testimoniesContext" Class="mb-5">
+                    <HeaderContent>
+                        <MudTh>Id</MudTh>
+                        <MudTh>Nome</MudTh>
+                        <MudTh>Conteúdo</MudTh>
+                        <MudTh>Criado</MudTh>
+                        <MudTh>Ações</MudTh>
+                    </HeaderContent>
+                    <RowTemplate>
+                        <MudTd DataLabel="Id">@testimoniesContext.Id.ToString().Substring(0, 7)</MudTd>
+                        <MudTd DataLabel="Nome">@testimoniesContext.Name</MudTd>
+                        <MudTd DataLabel="Conteúdo">
+                            <MudText Style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis;max-width: 600px;">
+                                @testimoniesContext.Content
+                            </MudText>
+                        </MudTd>
+                        <MudTd DataLabel="Criado">@testimoniesContext.CreatedAt.ToString("dd/MM/yyyy")</MudTd>
+                        <MudTd DataLabel="Ações" Class="gap-1">
+                            <MudButton Variant="Variant.Outlined" Size="Size.Small" Color="Color.Success"
+                                       OnClick="() => ShowTestimonyDetails(testimoniesContext)">
+                                Visualizar
+                            </MudButton>
+                            <MudButton Variant="Variant.Outlined" Size="Size.Small" Color="Color.Error" OnClick="(() => DeleteTestimonyAsync(testimoniesContext))">
+                                Excluir
+                            </MudButton>
+                            @if (!testimoniesContext.WasAccepted)
+                            {
+                                <MudButton Class="ml-1" Variant="Variant.Outlined" Size="Size.Small" Color="Color.Warning" OnClick="() => ApproveTestimonyAsync(testimoniesContext)">
+                                    Aprovar
+                                </MudButton>
+                            }
+                        </MudTd>
+                    </RowTemplate>
+                </MudTable>
+            </ViewAllItemsComponent>
+        </PaginationComponent>
+    </div>
+</div>
+
+
+@code {
+
+
+    #region Constants
+
+    private const int PAGE_SIZE = 10;
+
+    #endregion
+
+    private int _totalPages = 1;
+
+    private List<TestimonyResponseApi> _testimonies = new();
+
+    private PaginationComponent<TestimonyResponseApi> _paginationComponent = null!;
+
+    private async Task OnValidSubmitAsync() => await _paginationComponent.ChangePageNumberAsync(1);
+
+    private async Task GetTestimoniesAsync(int pageNumber)
+    {
+        var token = await LoginServices.GetTokenAsync();
+
+        var authorization = new AuthenticationHeaderValue(token!.TokenType, token.AccessToken);
+
+        var result = await AdminServices.GetPaginateTestimoniesAsync(authorization, pageNumber, PAGE_SIZE);
+
+        if (result.StatusCode.Equals((int)HttpStatusCode.OK))
+        {
+            _testimonies = result.Data!.Data!.ToList();
+            _totalPages = result.Data.TotalPages;
+        }
+        else
+        {
+            foreach (var error in result.Errors)
+            {
+                Snackbar.Add(error, Severity.Error);
+            }
+        }
+    }
+
+    private void ShowTestimonyDetails(TestimonyResponseApi testimony)
+    {
+        var parameters = new DialogParameters<TestimonyDetails>();
+        parameters.Add(x => x.Testimony, testimony);
+
+        var options = new DialogOptions() { CloseButton = true, CloseOnEscapeKey = true, MaxWidth = MaxWidth.ExtraLarge, FullWidth = true };
+
+        Dialog.Show<TestimonyDetails>(string.Empty, parameters, options);
+    }
+
+    private async Task ApproveTestimonyAsync(TestimonyResponseApi testimony)
+    {
+        var token = await LoginServices.GetTokenAsync();
+
+        var authorization = new AuthenticationHeaderValue(token!.TokenType, token.AccessToken);
+
+        if (!await ApproveTestimonyAsync(testimony.Name))
+        {
+            var result = await AdminServices.ApproveTestimonyAsync(authorization, testimony.Id.ToString());
+
+            if (result.StatusCode.Equals((int)HttpStatusCode.OK))
+            {
+                Snackbar.Add("Depoimento aprovado com sucesso!", Severity.Success);
+                await LoginServices.ForceExchangeRefreshTokenAsync();
+                await GetTestimoniesAsync(1);
+            }
+            else
+            {
+                foreach (var error in result.Errors)
+                {
+                    Snackbar.Add(error, Severity.Error);
+                    Console.WriteLine(error);
+                }
+            }
+        }
+    }
+
+    private async Task<bool> ApproveTestimonyAsync(string name)
+    {
+        var parameters = new DialogParameters<ConfirmationDialog>();
+        parameters.Add(x => x.ContentText, $"Tem certeza que deseja aprovar o depoimento de {name} ?");
+        parameters.Add(x => x.ButtonText, "Aprovar");
+        parameters.Add(x => x.Color, Color.Success);
+
+        var options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.ExtraSmall };
+
+        var dialog = Dialog.Show<ConfirmationDialog>("Aprovar depooimento", parameters, options);
+
+        var result = await dialog.Result;
+
+        return result.Canceled;
+    }
+
+    private async Task DeleteTestimonyAsync(TestimonyResponseApi testimony)
+    {
+        var token = await LoginServices.GetTokenAsync();
+
+        var authorization = new AuthenticationHeaderValue(token!.TokenType, token.AccessToken);
+
+        if (!await DeleteTestimony(testimony.Name))
+        {
+            var result = await AdminServices.DeleteTestimonyAsync(authorization, testimony.Id.ToString());
+            
+            if (result.StatusCode.Equals((int)HttpStatusCode.NoContent))
+            {
+                Snackbar.Add("Depoimento removido com sucesso!", Severity.Success);
+                await LoginServices.ForceExchangeRefreshTokenAsync();
+                await GetTestimoniesAsync(1);
+            }
+            else
+            {
+                foreach (var error in result.Errors)
+                {
+                    Snackbar.Add(error, Severity.Error);
+                    Console.WriteLine(error);
+                }
+            }
+        }
+    }
+
+
+    private async Task<bool> DeleteTestimony(string name)
+    {
+        var parameters = new DialogParameters<ConfirmationDialog>();
+        parameters.Add(x => x.ContentText, $"Tem certeza que deseja remover o depoimento de {name} ?");
+        parameters.Add(x => x.ButtonText, "Deletar");
+        parameters.Add(x => x.Color, Color.Error);
+
+        var options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.ExtraSmall };
+
+        var dialog = Dialog.Show<ConfirmationDialog>("Deletar depoimento", parameters, options);
+
+        var result = await dialog.Result;
+
+        return result.Canceled;
+    }
+
+}
