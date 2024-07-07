@@ -3549,3 +3549,8 @@ C:/Users/ellis/source/repos/egress_program_front/obj/Debug/net7.0/ref/EgressPort
 /home/ellison/source/repos/egress_program_front/obj/Debug/net7.0/refint/EgressPortal.dll
 /home/ellison/source/repos/egress_program_front/obj/Debug/net7.0/EgressPortal.pdb
 /home/ellison/source/repos/egress_program_front/obj/Debug/net7.0/ref/EgressPortal.dll
+/home/ellison/source/repos/egress_program_front/bin/Debug/net7.0/wwwroot/_framework/AutoMapper.dll
+/home/ellison/source/repos/egress_program_front/bin/Debug/net7.0/wwwroot/_framework/AutoMapper.dll.gz
+/home/ellison/source/repos/egress_program_front/bin/Debug/net7.0/AutoMapper.dll
+/home/ellison/source/repos/egress_program_front/obj/Debug/net7.0/compressed/irmvi6dizl.gz
+/home/ellison/source/repos/egress_program_front/obj/Debug/net7.0/scopedcss/Shared/TitlePageLoggedAdminComponent.razor.rz.scp.css

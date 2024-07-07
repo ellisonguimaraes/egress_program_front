@@ -143,6 +143,13 @@ public class EgressServices : IEgressServices
             Errors = egressGenericHttpResponse.Errors
         };
 
+        var countHeader = response.Headers.Count();
+
+        foreach (var p in response.Headers)
+        {
+            Console.WriteLine($"{p.Key}:{p.Value}");
+        }
+
         var paginationInfo = GetPaginationInfo<GetEgressPaginateResponseApi>(response);
 
         if (paginationInfo is not null)
@@ -251,6 +258,44 @@ public class EgressServices : IEgressServices
         };
 
         var response = await _egressApi.RegisterPersonAsync(authorization, request);
+        
+        return await HandleResponseAsync<object>(response);
+    }
+    
+    public async Task<GenericHttpResponse<object>> UpdatePersonAsync(AuthenticationHeaderValue authorization, CompleteRegisterForm completeRegisterForm)
+    {
+        var request = new RegisterPersonRequestApi
+        {
+            BirthDate = (DateTime)completeRegisterForm.BirthDate!,
+            PhoneNumber = completeRegisterForm.PhoneNumber,
+            CanExposeData = completeRegisterForm.CanExposeData,
+            CanReceiveMessage = completeRegisterForm.CanReceivedMessage,
+            Address = new RegisterPersonAddressRequestApi 
+            {
+                State = completeRegisterForm.State,
+                Country = completeRegisterForm.Country,
+                IsPublic = completeRegisterForm.IsAddressPublic
+            },
+            Employment = new RegisterPersonEmploymentRequestApi
+            {
+                Enterprise = completeRegisterForm.EnterpriseName,
+                Role = completeRegisterForm.Role,
+                SalaryRange = (decimal?)completeRegisterForm.SalaryRange,
+                IsPublicInitiative = completeRegisterForm.IsPublicInitiative,
+                StartDate = (DateTime)completeRegisterForm.StartDate!,
+                IsPublic = completeRegisterForm.IsEmploymentPublic
+            },
+            ContinuingEducation = new RegisterPersonContinuingEducationRequestApi
+            {
+                HasCertification = completeRegisterForm.HasCertification,
+                HasSpecialization = completeRegisterForm.HasSpecialization,
+                HasMasterDegree = completeRegisterForm.HasMasterDegree,
+                HasDoctorateDegree = completeRegisterForm.HasDoctorateDegree,
+                IsPublic = completeRegisterForm.IsContinuingEducationPublic
+            }
+        };
+
+        var response = await _egressApi.UpdatePersonAsync(authorization, request);
         
         return await HandleResponseAsync<object>(response);
     }

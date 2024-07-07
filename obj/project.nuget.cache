@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "r3AnsBjCgdD7TYIe6ShkUAydTWZYMXO8GQPDhcned81LNxyNVHvCBcDNBjj9iI3ShuUYHj2eiwqax/gSmkQqiA==",
+  "dgSpecHash": "bsGqUkcek7k2v60g/396X3Jbk/O/COiqSD4PaJctqE09EsDMR7WjVCMf4AJqwq8D0/k9dsI38xv9ecwLA+j1ow==",
   "success": true,
   "projectFilePath": "/home/ellison/source/repos/egress_program_front/EgressPortal.csproj",
   "expectedPackageFiles": [
+    "/home/ellison/.nuget/packages/automapper/13.0.1/automapper.13.0.1.nupkg.sha512",
     "/home/ellison/.nuget/packages/microsoft.aspnetcore.authorization/7.0.17/microsoft.aspnetcore.authorization.7.0.17.nupkg.sha512",
     "/home/ellison/.nuget/packages/microsoft.aspnetcore.components/7.0.17/microsoft.aspnetcore.components.7.0.17.nupkg.sha512",
     "/home/ellison/.nuget/packages/microsoft.aspnetcore.components.analyzers/7.0.17/microsoft.aspnetcore.components.analyzers.7.0.17.nupkg.sha512",

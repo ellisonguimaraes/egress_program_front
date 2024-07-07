@@ -55,8 +55,8 @@
 
     private async Task LogoutAsync()
     {
-        await LoginServices.LogoutAsync();
         NavigationManager.NavigateTo(RouteSettings.HomeRoute);
+        await LoginServices.LogoutAsync();
     }
     
     #region Api Requests
@@ -66,9 +66,7 @@
 
         if (token is null)
         {
-            Snackbar.Add(USER_NOT_AUTHENTICATED_SNACKBAR_MESSAGE);
             await LoginServices.LogoutAsync();
-            NavigationManager.NavigateTo(RouteSettings.LoginRoute);
             return;
         }
 

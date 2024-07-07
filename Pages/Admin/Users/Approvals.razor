@@ -1,4 +1,4 @@
-﻿@page "/admin/approvals"
+﻿@page "/admin/pessoas"
 
 @using EgressPortal.Models.API.HttpClient.Admin
 @using EgressPortal.Shared.Utils
@@ -13,7 +13,8 @@
 
 <PageTitle>Pendente Aprovação</PageTitle>
 
-<TitlePageComponent Title="Administrador" SubTitle="" />
+<TitlePageLoggedAdminComponent/>
+
 <div class="d-flex flex-column align-items-center w-100 py-8 gap-6">
     <div class="d-flex flex-grow-1 w-75">
         <MudText Align="Align.Left" Typo="Typo.h5" Style="font-weight: bold">Pendente de Aprovação</MudText>

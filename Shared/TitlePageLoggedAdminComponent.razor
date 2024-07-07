@@ -1,45 +1,42 @@
-﻿@using EgressPortal.Models
+@using EgressPortal.Models
 
 <div class="d-flex flex-column w-100 justify-content-center align-content-center align-items-center background_color_darkgreen p-3 title_page">
     <MudGrid Class="d-flex flex-row w-100 align-items-center title_page_center">
         <MudItem xs="6" sm="6" md="3" lg="3" Class="d-flex flex-row align-items-center justify-content-center gap-2">
-            <MudAvatar Color="Color.Primary" Size="Size.Large">
-                <b>@Name[0]</b>
-            </MudAvatar>
-            <MudText Typo="Typo.h5" Class="text_color_white fw-bold">Olá @Name.</MudText>
+            <MudText Typo="Typo.h5" Class="text_color_white fw-bold">ADMINISTRADOR</MudText>
         </MudItem>
         <MudItem xs="2" sm="2" md="1" lg="1" Class="text-center">
             <MudText Typo="Typo.h2" Class="nav_hidden_link text_color_white">|</MudText>
         </MudItem>
         <MudItem xs="5" sm="5" md="8" lg="8" Class="nav_hidden_link">
             <div class="d-flex flex-row justify-content-around align-items-center">
-                <NavLink  class="nav-fill text_color_white" href="@RouteSettings.AuthStartPage" ActiveClass="nav_link_active_class" Match="NavLinkMatch.All" >
-                    PÁGINA INICIAL
+                <NavLink  class="nav-fill text_color_white" href="@RouteSettings.AdminEgressRoute" ActiveClass="nav_link_active_class" Match="NavLinkMatch.All" >
+                    EGRESSOS
                 </NavLink>
-                <NavLink  class="nav-fill text_color_white" href="@RouteSettings.AuthMyTestimony" ActiveClass="nav_link_active_class" Match="NavLinkMatch.All">
+                <NavLink  class="nav-fill text_color_white" href="@RouteSettings.AdminApprovalPersonRoute" ActiveClass="nav_link_active_class" Match="NavLinkMatch.All" >
+                    PESSOAS
+                </NavLink>
+                <NavLink  class="nav-fill text_color_white" href="@RouteSettings.AdminApprovalTestimonyRoute" ActiveClass="nav_link_active_class" Match="NavLinkMatch.All" >
                     DEPOIMENTOS
                 </NavLink>
-                <NavLink class="nav-fill text_color_white" href="@RouteSettings.AuthMyHighlights" ActiveClass="nav_link_active_class" Match="NavLinkMatch.All">
+                <NavLink  class="nav-fill text_color_white" href="@RouteSettings.AdminApprovalHighlightsRoute" ActiveClass="nav_link_active_class" Match="NavLinkMatch.All" >
                     DESTAQUES
-                </NavLink>
-                <NavLink class="nav-fill text_color_white" href="@RouteSettings.AuthUpdate" ActiveClass="nav_link_active_class" Match="NavLinkMatch.All">
-                    ATUALIZAR DADOS
                 </NavLink>
             </div>
         </MudItem>
         <MudItem xs="4" sm="4" md="8" lg="8" Class="nav_hidden_button">
             <div NavLink="d-flex w-100 justify-content-end">
                 <MudMenu Icon="@Icons.Material.Filled.Menu" Size="Size.Large" Color="Color.Surface" Variant="Variant.Text" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopRight">
-                    <MudMenuItem Href="@RouteSettings.AuthStartPage">Página inicial</MudMenuItem>
+                    <MudMenuItem Href="@RouteSettings.AdminEgressRoute">Egressos</MudMenuItem>
                 </MudMenu>
                 <MudMenu Icon="@Icons.Material.Filled.Menu" Size="Size.Large" Color="Color.Surface" Variant="Variant.Text" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopRight">
-                    <MudMenuItem Href="@RouteSettings.AuthMyTestimony">Meus depoimentos</MudMenuItem>
+                    <MudMenuItem Href="@RouteSettings.AdminApprovalPersonRoute">Pessoas</MudMenuItem>
                 </MudMenu>
                 <MudMenu Icon="@Icons.Material.Filled.Menu" Size="Size.Large" Color="Color.Surface" Variant="Variant.Text" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopRight">
-                    <MudMenuItem Href="@RouteSettings.AuthMyHighlights">Meus destaques</MudMenuItem>
+                    <MudMenuItem Href="@RouteSettings.AdminApprovalTestimonyRoute">Depoimentos</MudMenuItem>
                 </MudMenu>
                 <MudMenu Icon="@Icons.Material.Filled.Menu" Size="Size.Large" Color="Color.Surface" Variant="Variant.Text" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopRight">
-                    <MudMenuItem Href="@RouteSettings.AuthUpdate">Atualizar dados</MudMenuItem>
+                    <MudMenuItem Href="@RouteSettings.AdminApprovalHighlightsRoute">Destaques</MudMenuItem>
                 </MudMenu>
             </div>
         </MudItem>
@@ -47,7 +44,4 @@
 </div>
 
 @code {
-    [Parameter]
-    [EditorRequired]
-    public string Name { get; set; } = null!;
 }

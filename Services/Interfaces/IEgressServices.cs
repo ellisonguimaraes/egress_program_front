@@ -96,6 +96,14 @@ public interface IEgressServices
     /// <param name="authorization">Authorization header</param>
     /// <returns>Person Object</returns>
     Task<GenericHttpResponse<PersonResponseApi>> GetPersonInfoAsync(AuthenticationHeaderValue authorization);
+    
+    /// <summary>
+    /// Update person info's
+    /// </summary>
+    /// <param name="authorization">Authorization header</param>
+    /// <param name="completeRegisterForm">Complete register form</param>
+    /// <returns>Person id (GUID)</returns>
+    Task<GenericHttpResponse<object>> UpdatePersonAsync(AuthenticationHeaderValue authorization, CompleteRegisterForm completeRegisterForm);
 
     /// <summary>
     /// Remove Testimony from the application

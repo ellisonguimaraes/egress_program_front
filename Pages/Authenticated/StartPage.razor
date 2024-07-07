@@ -1,10 +1,12 @@
 ﻿@page "/me"
 @using Microsoft.AspNetCore.Authorization
-@* @attribute [Authorize(policy: "PersonIdentifierPolicy")] *@
+@attribute [Authorize(policy: "PersonIdentifierPolicy")]
 
 <PageTitle>Página Inicial</PageTitle>
 
-<TitlePageLoggedComponent Name="Name"/>
+<AuthorizeView>
+    <TitlePageLoggedComponent Name="@GetFirstName(context.User.Identity?.Name!)"/>
+</AuthorizeView>
 
 Egressos da minha turma
 Egressos formados no mesmo semestre
@@ -12,7 +14,13 @@ Total de destaques
 total de depoimentos
 Mural de notícias
 
-
 @code {
+    #region Constants
+    private const string WHITESPACE = " ";
+    #endregion
     
+    #region Static methods
+    private static string GetFirstName(string name)
+        => name.Split(WHITESPACE).First();
+    #endregion
 }

@@ -9,6 +9,7 @@ using EgressPortal.Services;
 using EgressPortal.Services.HttpClients;
 using EgressPortal.Services.HttpClients.Implementation;
 using EgressPortal.Services.Interfaces;
+using EgressPortal.Services.Mappers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
@@ -47,6 +48,9 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
         provider.GetRequiredService<ApplicationAuthenticationProvider>());
     services.AddScoped<ILoginServices, ApplicationAuthenticationProvider>(provider =>
         provider.GetRequiredService<ApplicationAuthenticationProvider>());
+    
+    // Mapper Profile
+    services.AddAutoMapper(typeof(PersonProfile));
 }
 
 static void ConfigureHttpClients(IServiceCollection services, IConfiguration configuration)
@@ -99,15 +103,10 @@ static void ConfigureMudServices(IServiceCollection services, IConfiguration con
         config.SnackbarConfiguration.PreventDuplicates = false;
         config.SnackbarConfiguration.NewestOnTop = false;
         config.SnackbarConfiguration.ShowCloseIcon = true;
-        config.SnackbarConfiguration.VisibleStateDuration = 20000;
+        config.SnackbarConfiguration.VisibleStateDuration = 4000;
         config.SnackbarConfiguration.HideTransitionDuration = 500;
         config.SnackbarConfiguration.ShowTransitionDuration = 500;
         config.SnackbarConfiguration.SnackbarVariant = Variant.Filled;
     });
-}
-
-static void RegisterHttpClients(IServiceCollection services, IConfiguration configuration)
-{
-    
 }
 #endregion

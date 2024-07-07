@@ -23,5 +23,7 @@ public static class RouteSettings
     public static string AdminStartPage = "admin";
     public static string AdminEgressRoute = $"{AdminStartPage}/egressos";
     public static string AdminAddEgressRoute = $"{AdminStartPage}/adicionar-egresso";
-    public static string AdminApprovalEgressRoute = $"{AdminStartPage}/approvals";
+    public static string AdminApprovalPersonRoute = $"{AdminStartPage}/pessoas";
+    public static string AdminApprovalTestimonyRoute = $"{AdminStartPage}/depoimentos";
+    public static string AdminApprovalHighlightsRoute = $"{AdminStartPage}/destaques";
 }

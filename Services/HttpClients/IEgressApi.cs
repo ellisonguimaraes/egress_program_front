@@ -43,6 +43,9 @@ public interface IEgressApi
     
     [Post("/api/v1/person/register")]
     Task<HttpResponseMessage> RegisterPersonAsync([Header(AUTHORIZATION_HEADER)] AuthenticationHeaderValue authorization, [Body] RegisterPersonRequestApi request);
+    
+    [Put("/api/v1/person")]
+    Task<HttpResponseMessage> UpdatePersonAsync([Header(AUTHORIZATION_HEADER)] AuthenticationHeaderValue authorization, [Body] RegisterPersonRequestApi request);
 
     [Get("/api/v1/person")]
     Task<HttpResponseMessage> GetPersonInfoAsync([Header(AUTHORIZATION_HEADER)] AuthenticationHeaderValue authorization);

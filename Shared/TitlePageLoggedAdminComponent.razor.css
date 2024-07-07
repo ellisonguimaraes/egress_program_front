@@ -1,0 +1,38 @@
+::deep .text_color_white {
+    color: var(--egress-color-white);
+}
+
+.background_color_darkgreen {
+    background-color: var(--egress-color-darkgreen);
+}
+
+.title_page {
+    min-height:115px;
+}
+
+::deep .title_page_center {
+    max-width: 1000px;
+}
+
+::deep .nav_link_active_class {
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+::deep .nav_hidden_link {
+    display: block;
+}
+
+::deep .nav_hidden_button {
+    display: none;
+}
+
+@media (max-width: 960px) {
+    ::deep .nav_hidden_link {
+        display: none;
+    }
+
+    ::deep .nav_hidden_button{
+        display: block;
+    }
+}

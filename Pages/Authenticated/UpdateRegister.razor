@@ -1,9 +1,263 @@
 ﻿@page "/me/meus-dados"
+@using System.Globalization
+@using System.Net
+@using System.Net.Http.Headers
+@using Microsoft.AspNetCore.Authorization
+@using AutoMapper
+@inject ISnackbar Snackbar
+@inject IEgressServices EgressServices
+@inject ILoginServices LoginServices
+@inject IMapper Mapper
+@attribute [Authorize(Policy = "PersonIdentifierPolicy")]
 
 <PageTitle>Atualizar dados</PageTitle>
 
 <TitlePageLoggedComponent Name="Name"/>
 
+<div class="d-flex flex-column align-items-center w-100">
+    <div class="d-flex flex-column m-0 p-5" style="width:100%;max-width: 1300px;">
+
+        <EditForm OnValidSubmit="OnValidSubmitAsync" Model="@_completeRegisterForm" Class="d-flex flex-column gap-3">
+            <DataAnnotationsValidator/>
+
+            @*=======================================================*@
+            @*==================== GENERAL INFOS ====================*@
+            @*=======================================================*@
+            <div class="d-flex w-100 flex-column">
+                <div Class="d-flex w-100 m-0 px-2 py-3">
+                    <MudText Typo="Typo.h6" Class="fw-bold" Color="Color.Dark">Informações Gerais</MudText>
+                </div>
+
+                <MudGrid Class="d-flex w-100 m-0 p-0">
+                    <MudItem xs="12" sm="12" md="4" lg="4" Class="m-0">
+                        <MudDatePicker DateFormat="dd/MM/yyyy" Mask="@(new DateMask("dd/MM/yyyy"))" Variant="Variant.Outlined" Label="Data de Nascimento" Editable="true" @bind-Date="_completeRegisterForm.BirthDate" For="@(() => _completeRegisterForm.BirthDate)" Placeholder="dd/MM/aaaa"/>
+                    </MudItem>
+
+                    <MudItem xs="12" sm="12" md="4" lg="4" Class="m-0">
+                        <MudTextField Variant="Variant.Outlined" Mask="@(new PatternMask("(00) 0 0000-0000"))" Placeholder="Celular" Label="Celular" @bind-Value="_completeRegisterForm.PhoneNumber" For="@(() => _completeRegisterForm.PhoneNumber)"></MudTextField>
+                    </MudItem>
+
+                    <MudItem xs="12" sm="12" md="4" lg="4" Class="d-flex flex-row w-100">
+                        <MudField Label="Foto de perfil" Variant="Variant.Outlined" Class="d-flex w-100 m-1">
+                            <div class="d-flex flex-row justify-content-center">
+                                <MudFileUpload T="IBrowserFile" FilesChanged="BrowserFileToBase64ImageAsync!" Accept=".png, .jpg" Class="d-flex m-0 p-0">
+                                    <ButtonTemplate Context="perfilImageButtonContext">
+                                        <MudFab HtmlTag="label"
+                                                Color="Color.Info"
+                                                Variant="Variant.Filled"
+                                                Icon="@Icons.Material.Filled.PhotoCamera"
+                                                for="@perfilImageButtonContext">
+                                        </MudFab>
+                                    </ButtonTemplate>
+                                </MudFileUpload>
+                            </div>
+                            <div class="d-flex flex-column align-items-center w-100 p-3">
+                                @if (_completeRegisterForm.PerfilImage is null)
+                                {
+                                <MudText Typo="Typo.body2" Color="Color.Dark">Nenhuma imagem foi selecionada</MudText>
+                                }
+                                else
+                                {
+                                <div class="d-flex w-100 flex-column align-items-center">
+                                    <img src="@_perfilImage" alt="Imagem perfil" class="w-50 rounded-lg"/>
+                                    <MudText Typo="Typo.body2" Color="Color.Dark">@_completeRegisterForm.PerfilImage.Name</MudText>
+                                </div>
+                                }
+                            </div>
+                        </MudField>
+                    </MudItem>
+                </MudGrid>
+            </div>
+
+            @*=================================================*@
+            @*==================== ADDRESS ====================*@
+            @*=================================================*@
+            <div class="d-flex w-100 flex-column">
+                <div Class="d-flex w-100 m-0 px-2 py-3">
+                    <MudText Typo="Typo.h6" Class="fw-bold" Color="Color.Dark">Endereço</MudText>
+                </div>
+                <MudGrid Class="d-flex w-100 m-0 p-0">
+                    <MudItem xs="12" sm="12" md="6" lg="6" Class="d-flex w-100 m-0 p-2">
+                        <MudTextField Variant="Variant.Outlined" Placeholder="Estado" Label="Estado" @bind-Value="_completeRegisterForm.State" For="@(() => _completeRegisterForm.State)"></MudTextField>
+                    </MudItem>
+
+                    <MudItem xs="12" sm="12" md="6" lg="6" Class="d-flex w-100 m-0 p-2">
+                        <MudTextField Variant="Variant.Outlined" Placeholder="País" Label="País" @bind-Value="_completeRegisterForm.Country" For="@(() => _completeRegisterForm.Country)"></MudTextField>
+                    </MudItem>
+                </MudGrid>
+            </div>
+
+
+            @*==============================================================*@
+            @*==================== CONTINUING EDUCATION ====================*@
+            @*==============================================================*@
+            <div class="d-flex w-100 flex-column">
+                <div Class="d-flex w-100 m-0 px-2 py-3">
+                    <MudText Typo="Typo.h6" Class="fw-bold" Color="Color.Dark">Educação Continuada</MudText>
+                </div>
+
+                <MudGrid Class="d-flex w-100 m-0 p-0">
+                    <MudItem xs="12" sm="12" md="3" lg="3" Class="d-flex w-100 m-0 p-0 px-5">
+                        <MudField Label="Você tem Certificação?" Variant="Variant.Outlined" InnerPadding="false">
+                            <MudRadioGroup T="bool?" @bind-SelectedOption="_completeRegisterForm.HasCertification" For="@(() => _completeRegisterForm.HasCertification)">
+                                <MudRadio T="bool?" Option="@true">Sim</MudRadio>
+                                <MudRadio T="bool?" Option="@false">Não</MudRadio>
+                            </MudRadioGroup>
+                        </MudField>
+                    </MudItem>
+
+                    <MudItem xs="12" sm="12" md="3" lg="3" Class="d-flex w-100 m-0 p-0 px-5">
+                        <MudField Label="Você tem Especialização?" Variant="Variant.Outlined" InnerPadding="false">
+                            <MudRadioGroup T="bool?" @bind-SelectedOption="_completeRegisterForm.HasSpecialization" For="@(() => _completeRegisterForm.HasSpecialization)">
+                                <MudRadio T="bool?" Option="@true">Sim</MudRadio>
+                                <MudRadio T="bool?" Option="@false">Não</MudRadio>
+                            </MudRadioGroup>
+                        </MudField>
+                    </MudItem>
+
+                    <MudItem xs="12" sm="12" md="3" lg="3" Class="d-flex w-100 m-0 p-0 px-5">
+                        <MudField Label="Você tem Mestrado?" Variant="Variant.Outlined" InnerPadding="false">
+                            <MudRadioGroup T="bool?" @bind-SelectedOption="_completeRegisterForm.HasMasterDegree" For="@(() => _completeRegisterForm.HasMasterDegree)">
+                                <MudRadio T="bool?" Option="@true">Sim</MudRadio>
+                                <MudRadio T="bool?" Option="@false">Não</MudRadio>
+                            </MudRadioGroup>
+                        </MudField>
+                    </MudItem>
+
+                    <MudItem xs="12" sm="12" md="3" lg="3" Class="d-flex w-100 m-0 p-0 px-5">
+                        <MudField Label="Você tem Doutorado?" Variant="Variant.Outlined" InnerPadding="false">
+                            <MudRadioGroup T="bool?" @bind-SelectedOption="_completeRegisterForm.HasDoctorateDegree" For="@(() => _completeRegisterForm.HasDoctorateDegree)">
+                                <MudRadio T="bool?" Option="@true">Sim</MudRadio>
+                                <MudRadio T="bool?" Option="@false">Não</MudRadio>
+                            </MudRadioGroup>
+                        </MudField>
+                    </MudItem>
+                </MudGrid>
+            </div>
+
+            @*====================================================*@
+            @*==================== EMPLOYMENT ====================*@
+            @*====================================================*@
+            <div class="d-flex w-100 flex-column">
+                <div Class="d-flex w-100 m-0 px-2 py-3">
+                    <MudText Typo="Typo.h6" Class="fw-bold" Color="Color.Dark">Informações Profissinais</MudText>
+                </div>
+
+                <MudGrid Class="d-flex w-100 m-0 p-0">
+                    <MudItem xs="12" sm="12" md="6" lg="6">
+                        <MudTextField Variant="Variant.Outlined" Placeholder="Empresa" Label="Empresa" @bind-Value="_completeRegisterForm.EnterpriseName" For="@(() => _completeRegisterForm.EnterpriseName)"></MudTextField>
+                    </MudItem>
+                    <MudItem xs="12" sm="12" md="6" lg="6">
+                        <MudTextField Variant="Variant.Outlined" Placeholder="Cargo" Label="Cargo" @bind-Value="_completeRegisterForm.Role" For="@(() => _completeRegisterForm.Role)"></MudTextField>
+                    </MudItem>
+                    <MudItem xs="12" sm="12" md="6" lg="6">
+                        <MudNumericField Variant="Variant.Outlined" Immediate="false" Placeholder="Faixa salarial" Label="Faixa salarial" HelperText="Formato: NNNNN,NN" Format="N2" Culture="@(CultureInfo.GetCultureInfo("pt-BR"))" @bind-Value="_completeRegisterForm.SalaryRange" For="@(() => _completeRegisterForm.SalaryRange)" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.AttachMoney"/>
+                    </MudItem>
+                    <MudItem xs="12" sm="12" md="6" lg="6">
+                        <MudDatePicker DateFormat="dd/MM/yyyy" Mask="@(new DateMask("dd/MM/yyyy"))" Variant="Variant.Outlined" Label="Data de Início" Editable="true" @bind-Date="_completeRegisterForm.StartDate" For="@(() => _completeRegisterForm.StartDate)" Placeholder="dd/MM/aaaa"/>
+                    </MudItem>
+                    <MudItem xs="12" sm="12" md="12" lg="12">
+                        <MudCheckBox @bind-Checked="_completeRegisterForm.IsPublicInitiative" Label="É iniciativa pública?" Color="Color.Success"></MudCheckBox>
+                    </MudItem>
+                </MudGrid>
+            </div>
+
+            @*=====================================================*@
+            @*==================== PERMISSIONS ====================*@
+            @*=====================================================*@
+            <div class="d-flex w-100 flex-column align-items-center">
+                <div class="d-flex w-75 flex-column gap-1">
+                    <MudDivider DividerType="DividerType.Middle" Light="true" Class="my-4"/>
+                    <MudCheckBox @bind-Value="_completeRegisterForm.CanExposeData" Color="Color.Success" Label="Permito que minhas informações (nome e email) sejam públicas."></MudCheckBox>
+                    <MudCheckBox @bind-Value="_completeRegisterForm.IsAddressPublic" Color="Color.Success" Label="Permito que minhas informações de localidade sejam públicas."></MudCheckBox>
+                    <MudCheckBox @bind-Value="_completeRegisterForm.IsContinuingEducationPublic" Color="Color.Success" Label="Permito que minhas informações de Educação Continuada sejam públicas."></MudCheckBox>
+                    <MudCheckBox @bind-Checked="_completeRegisterForm.IsEmploymentPublic" Color="Color.Success" Label="Permito que minhas informações de Profissionais (somente empresa/cargo) sejam públicas."></MudCheckBox>
+                    <MudCheckBox @bind-Value="_completeRegisterForm.CanReceivedMessage" Color="Color.Success" Label="Desejo receber mensagens no meu email"></MudCheckBox>
+                    <MudDivider DividerType="DividerType.Middle" Light="true" Class="my-4"/>
+                </div>
+            </div>
+
+            <div class="d-flex w-100 p-5 justify-content-center">
+                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Size="Size.Large"  Color="Color.Success">Finalizar Cadastro</MudButton>
+            </div>
+            
+        </EditForm>
+    </div>
+</div>
+
 @code {
+    #region Constants
+    private const long MAX_ALLOWED_SIZE_IMAGE = 2000000;
+    #endregion
     
+    private string _perfilImage = string.Empty;
+    private CompleteRegisterForm _completeRegisterForm = new ();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var token = await LoginServices.GetTokenAsync();
+        
+        var authorization = new AuthenticationHeaderValue(token!.TokenType, token.AccessToken);
+        
+        var result = await EgressServices.GetPersonInfoAsync(authorization);
+        
+        if (!result.StatusCode.Equals((int)HttpStatusCode.OK))
+        {
+            foreach (var error in result.Errors)
+            {
+                Snackbar.Add(error, Severity.Error);
+                Console.WriteLine(error);
+            }
+        }
+
+        _completeRegisterForm = Mapper.Map<CompleteRegisterForm>(result.Data);
+    }
+
+    private async Task OnValidSubmitAsync()
+    {
+        var token = await LoginServices.GetTokenAsync();
+        
+        var authorization = new AuthenticationHeaderValue(token!.TokenType, token.AccessToken);
+        
+        var result = await EgressServices.UpdatePersonAsync(authorization, _completeRegisterForm);
+        
+        if (result.StatusCode.Equals((int)HttpStatusCode.OK))
+        {
+            Snackbar.Add("Atualizado com sucesso!", Severity.Success);
+        }
+        else
+        {
+            foreach (var error in result.Errors)
+            {
+                Snackbar.Add(error, Severity.Error);
+                Console.WriteLine(error);
+            }
+        }
+    }
+    
+    #region File Image
+    private async Task BrowserFileToBase64ImageAsync(IBrowserFile image)
+    {
+        if (image.Size > MAX_ALLOWED_SIZE_IMAGE)
+        {
+            Snackbar.Add("Imagem deve ter no máximo 2mb", Severity.Warning);
+        }
+        else
+        {
+            _completeRegisterForm.PerfilImage = image;
+            var stream = image.OpenReadStream(MAX_ALLOWED_SIZE_IMAGE);
+            _perfilImage = await StreamToBase64ImageAsync(stream);
+            StateHasChanged();
+        }
+    }
+
+    private static async Task<string> StreamToBase64ImageAsync(Stream stream)
+    {
+        var ms = new MemoryStream();
+        await stream.CopyToAsync(ms);
+        var byteArray = ms.ToArray();
+        var base64String = Convert.ToBase64String(byteArray);
+        return "data:image/png;base64, " + base64String;
+    }
+    #endregion
 }
