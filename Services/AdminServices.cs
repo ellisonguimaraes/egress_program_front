@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using System.Net;
 using EgressPortal.Models;
 using EgressPortal.Models.API;
 using EgressPortal.Models.API.HttpClient.Admin;
@@ -7,6 +8,8 @@ using EgressPortal.Services.HttpClients;
 using EgressPortal.Services.Interfaces;
 using System.Net.Http.Headers;
 using System.Text.Json;
+using EgressPortal.Models.API.HttpClient.Egress.Highlights;
+using EgressPortal.Models.API.HttpClient.Egress.Testimony;
 using EgressPortal.Models.Form;
 using Course = EgressPortal.Models.API.HttpClient.Admin.Course;
 
@@ -98,6 +101,118 @@ public class AdminServices : IAdminServices
             StatusCode = newPerson.StatusCode,
             Data = newPerson.Data,
             Errors = newPerson.Errors,
+        };
+
+        return genericHttpResponse;
+    }
+
+    public async Task<GenericHttpResponse<PagedList<TestimonyResponseApi>>> GetPaginateTestimoniesAsync(AuthenticationHeaderValue authorization, int pageNumber, int pageSize)
+    {
+        var response = await _adminApi.GetPaginateTestimoniesAsync(authorization, pageNumber, pageSize);
+        var testimoniesGenericHttpResponse = await HandleResponseAsync<List<TestimonyResponseApi>>(response);
+
+        var genericHttpResponse = new GenericHttpResponse<PagedList<TestimonyResponseApi>>
+        {
+            TraceId = testimoniesGenericHttpResponse.TraceId,
+            StatusCode = testimoniesGenericHttpResponse.StatusCode,
+            Data = default,
+            Errors = testimoniesGenericHttpResponse.Errors,
+        };
+
+        var paginationInfo = GetPaginationInfo<TestimonyResponseApi>(response);
+        if (paginationInfo is not null)
+            paginationInfo!.Data = testimoniesGenericHttpResponse.Data;
+
+        genericHttpResponse.Data = paginationInfo;
+
+        return genericHttpResponse;
+    }
+
+    public async Task<GenericHttpResponse<object>> ApproveTestimonyAsync(AuthenticationHeaderValue authorization, string id)
+    {
+        var response = await _adminApi.ApproveTestimonyAsync(authorization, id);
+
+        var approvedTestimony = await HandleResponseAsync<object>(response);
+
+        var genericHttpResponse = new GenericHttpResponse<object>
+        {
+            TraceId = approvedTestimony.TraceId,
+            StatusCode = approvedTestimony.StatusCode,
+            Data = approvedTestimony.Data,
+            Errors = approvedTestimony.Errors,
+        };
+
+        return genericHttpResponse;
+    }
+
+    public async Task<GenericHttpResponse<object>> DeleteTestimonyAsync(AuthenticationHeaderValue authorization, string id)
+    {
+        var response = await _adminApi.DeleteTestimonyAsync(authorization, id);
+
+        var deletedTestimony = await HandleResponseAsync<object>(response);
+
+        var genericHttpResponse = new GenericHttpResponse<object>
+        {
+            TraceId = deletedTestimony.TraceId,
+            StatusCode = deletedTestimony.StatusCode,
+            Data = deletedTestimony.Data,
+            Errors = deletedTestimony.Errors,
+        };
+
+        return genericHttpResponse;
+    }
+
+    public async Task<GenericHttpResponse<PagedList<HighlightResponseApi>>> GetPaginateHighlightsAsync(AuthenticationHeaderValue authorization, int pageNumber, int pageSize)
+    {
+        var response = await _adminApi.GetPaginateHighlightAsync(authorization, pageNumber, pageSize);
+        var highlightsGenericHttpResponse = await HandleResponseAsync<List<HighlightResponseApi>>(response);
+
+        var genericHttpResponse = new GenericHttpResponse<PagedList<HighlightResponseApi>>
+        {
+            TraceId = highlightsGenericHttpResponse.TraceId,
+            StatusCode = highlightsGenericHttpResponse.StatusCode,
+            Data = default,
+            Errors = highlightsGenericHttpResponse.Errors,
+        };
+
+        var paginationInfo = GetPaginationInfo<HighlightResponseApi>(response);
+        if (paginationInfo is not null)
+            paginationInfo!.Data = highlightsGenericHttpResponse.Data;
+
+        genericHttpResponse.Data = paginationInfo;
+
+        return genericHttpResponse;
+    }
+
+    public async Task<GenericHttpResponse<object>> ApproveHighlightAsync(AuthenticationHeaderValue authorization, string id)
+    {
+        var response = await _adminApi.ApproveHighlightsync(authorization, id);
+
+        var approvedTestimony = await HandleResponseAsync<object>(response);
+
+        var genericHttpResponse = new GenericHttpResponse<object>
+        {
+            TraceId = approvedTestimony.TraceId,
+            StatusCode = approvedTestimony.StatusCode,
+            Data = approvedTestimony.Data,
+            Errors = approvedTestimony.Errors,
+        };
+
+        return genericHttpResponse;
+    }
+
+    public async Task<GenericHttpResponse<object>> DeleteHighlightAsync(AuthenticationHeaderValue authorization, string id)
+    {
+        var response = await _adminApi.DeleteHighlightAsync(authorization, id);
+
+        var deletedHighlight = await HandleResponseAsync<object>(response);
+
+        var genericHttpResponse = new GenericHttpResponse<object>
+        {
+            TraceId = deletedHighlight.TraceId,
+            StatusCode = deletedHighlight.StatusCode,
+            Data = deletedHighlight.Data,
+            Errors = deletedHighlight.Errors,
         };
 
         return genericHttpResponse;

@@ -29,10 +29,10 @@ public class HighlightResponseApi
     public string? AdvertisingImageSrc { get; set; }
 
     [JsonPropertyName("veracity_files_src")]
-    public IEnumerable<string> VeracityFilesSrc { get; set; }
+    public IEnumerable<string>? VeracityFilesSrc { get; set; }
 
     [JsonPropertyName("courses")]
-    public IEnumerable<string> Courses { get; set; }
+    public IEnumerable<string>? Courses { get; set; }
 
     [JsonPropertyName("created_at")]
     public DateTime CreatedAt { get; set; }

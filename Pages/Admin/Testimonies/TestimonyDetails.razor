@@ -1,0 +1,46 @@
+@using System.Globalization
+@using TestimonyResponseApi = EgressPortal.Models.API.HttpClient.Egress.Testimony.TestimonyResponseApi
+
+<div>
+    <MudDialog Class="h-[80%] w-[80%]">
+        <DialogContent>
+            @if (Testimony is not null)
+            {
+                <MudGrid Class="pb-4" Spacing="0">
+                    <MudItem sm="12">
+                        <MudPaper Elevation="0" Class="pt-0 mb-0 mb-4">
+                            <MudText Typo="Typo.h6" Align="Align.Start" Class="mb-2 ml-2">Depoimento</MudText>
+                            <MudDivider Light/>
+                        </MudPaper>
+                        <MudGrid>
+                            <MudItem sm="12">
+                                <MudTextField Label="Nome"
+                                              Value="Testimony.Name"
+                                              ReadOnly
+                                              Variant="Variant.Text"
+                                              Margin="Margin.Dense"
+                                              AutoGrow
+                                              />
+                            </MudItem>
+                            <MudItem sm="12">
+                                <MudTextField Culture="@(CultureInfo.GetCultureInfo("pt-BR"))"
+                                              Label="Conteúdo"
+                                              Value="Testimony.Content"
+                                              ReadOnly
+                                              Variant="Variant.Outlined"
+                                              Margin="Margin.Dense"
+                                              AutoGrow
+                                              Lines="8"
+                                              />
+                            </MudItem>
+                        </MudGrid>
+                    </MudItem>
+                </MudGrid>
+            }
+        </DialogContent>
+    </MudDialog>
+</div>
+
+@code {
+    [Parameter] public TestimonyResponseApi? Testimony { get; set; }
+}

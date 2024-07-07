@@ -1,0 +1,93 @@
+@using System.Globalization
+
+<div>
+    <MudDialog Class="h-[80%] w-[80%]">
+        <DialogContent>
+            @if (Highlight is not null)
+            {
+                <MudGrid Class="pb-4" Spacing="0">
+                    <MudItem sm="12">
+                        <MudPaper Elevation="0" Class="pt-0 mb-0 mb-4">
+                            <MudText Typo="Typo.h6" Align="Align.Start" Class="mb-2 ml-2">Destaque</MudText>
+                            <MudDivider Light/>
+                        </MudPaper>
+                        <MudGrid>
+                            <MudItem sm="6">
+                                <MudTextField Label="Título"
+                                              Value="Highlight.Title"
+                                              ReadOnly
+                                              Variant="Variant.Text"
+                                              Margin="Margin.Dense"
+                                              AutoGrow/>
+                            </MudItem>
+                            <MudItem sm="6">
+                                <MudTextField Label="Criado por"
+                                              Value="Highlight.Name"
+                                              ReadOnly
+                                              Variant="Variant.Text"
+                                              Margin="Margin.Dense"
+                                              AutoGrow/>
+                            </MudItem>
+                            <MudItem sm="6">
+                                <MudTextField Label="Solicitado em:"
+                                              Value="FormatDate(Highlight.CreatedAt)"
+                                              ReadOnly
+                                              Variant="Variant.Text"
+                                              Margin="Margin.Dense"
+                                              AutoGrow/>
+                            </MudItem>
+                            <MudItem sm="6">
+                                <MudTextField Label="Atualizado em:"
+                                              Value="FormatDate(Highlight.UpdatedAt)"
+                                              ReadOnly
+                                              Variant="Variant.Text"
+                                              Margin="Margin.Dense"
+                                              AutoGrow/>
+                            </MudItem>
+                            <MudItem sm="12">
+                                <MudTextField Culture="@(CultureInfo.GetCultureInfo("pt-BR"))"
+                                              Label="Conteúdo"
+                                              Value="Highlight.Description"
+                                              ReadOnly
+                                              Variant="Variant.Outlined"
+                                              Margin="Margin.Dense"
+                                              AutoGrow
+                                              Lines="6"/>
+                            </MudItem>
+                            @if (Highlight.VeracityFilesSrc is not null && Highlight.VeracityFilesSrc.Any())
+                            {
+                                <MudItem sm="6">
+                                    <div class="d-flex flex-row flex-grow-1">
+                                        <MudList>
+                                            @foreach (var link in Highlight.VeracityFilesSrc)
+                                            {
+                                                <MudListItem>
+                                                    <MudLink Typo="Typo.subtitle2" Href="@link">@link</MudLink>
+                                                </MudListItem>
+                                            }
+                                        </MudList>
+                                    </div>
+                                </MudItem>
+                            }
+                            @if (!string.IsNullOrWhiteSpace(Highlight.AdvertisingImageSrc))
+                            {
+                                <MudItem sm="6">
+                                    <MudImage Src="@Highlight.AdvertisingImageSrc" ObjectFit="ObjectFit.Cover" Class="rounded-lg mb-4 mt-2"></MudImage>
+                                </MudItem>
+                            }
+                        </MudGrid>
+                    </MudItem>
+                </MudGrid>
+            }
+        </DialogContent>
+    </MudDialog>
+</div>
+
+@code {
+    [Parameter] public HighlightResponseApi? Highlight { get; set; }
+
+
+    private static string FormatDate(DateTime date)
+        => $"{date.Day:D2}/{date.Month:D2}/{date.Year}";
+
+}
