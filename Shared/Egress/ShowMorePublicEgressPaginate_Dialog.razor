@@ -1,0 +1,95 @@
+@using EgressPortal.Models.API.HttpClient.Egress
+<MudDialog>
+    <DialogContent>
+        <MudTabs Elevation="2" Rounded="true" Centered="true" Color="Color.Primary">
+            <MudTabPanel Icon="@Icons.Material.Filled.Work" Text="Profissão">
+                <div class="d-flex w-100 p-4 justify-content-center flex-column gap-3">
+                    @if (Egress.Employment is not null)
+                    {
+                        <div class="d-flex w-100 align-content-center justify-content-start gap-3">
+                            <MudIcon Icon="@Icons.Material.Filled.Business" Title="Empresa" />
+                            <MudText Color="Color.Dark" Typo="Typo.body1">@Egress.Employment.Enterprise</MudText>
+                        </div>
+                        <div class="d-flex w-100 align-content-center justify-content-start gap-3">
+                            <MudIcon Icon="@Icons.Material.Filled.Work" Title="Cargo" />
+                            <MudText Color="Color.Dark" Typo="Typo.body1">@Egress.Employment.Role</MudText>
+                        </div>
+                        <div class="d-flex w-100 align-content-center justify-content-start gap-3">
+                            <MudIcon Icon="@Icons.Material.Filled.DateRange" Title="Data de início" />
+                            <MudText Color="Color.Dark" Typo="Typo.body1">@FormatDate(Egress.Employment.StartDate)</MudText>
+                        </div>
+                        <div class="d-flex w-100 align-content-center justify-content-start gap-3">
+                            @if (Egress.Employment.IsPublicInitiative)
+                            {
+                                <MudIcon Icon="@Icons.Material.Filled.Public" Title="Iniciativa pública"/>
+                                <MudText Color="Color.Dark" Typo="Typo.body1">Iniciativa pública</MudText>
+                            }
+                            else
+                            {
+                                <MudIcon Icon="@Icons.Material.Filled.PrivateConnectivity" Title="Iniciativa privada"/>
+                                <MudText Color="Color.Dark" Typo="Typo.body1">Iniciativa privada</MudText>
+                            }
+                        </div>
+                        
+                        <MudText Typo="Typo.body2" Class="pt-4" Align="Align.End">Atualizado em @FormatDate(Egress.Employment.UpdatedAt).</MudText>
+                    }
+                    else
+                    {
+                        <MudText Color="Color.Dark" Typo="Typo.subtitle2" Align="Align.Center">Não contém dados de profissão.</MudText>
+                    }
+                </div>
+            </MudTabPanel>
+            <MudTabPanel Icon="@Icons.Material.Filled.School" Text="Educação">
+                <div class="d-flex w-100 p-3 flex-column justify-content-center">
+                    @if (Egress.ContinuingEducation is not null)
+                    {
+                        <MudCheckBox ReadOnly="true" UnCheckedColor="Color.Dark" Color="Color.Success" @bind-Value="@Egress.ContinuingEducation.HasSpecialization" Label="Especialização"></MudCheckBox>
+                        <MudCheckBox ReadOnly="true" UnCheckedColor="Color.Dark" Color="Color.Success" @bind-Value="@Egress.ContinuingEducation.HasCertification" Label="Certificação"></MudCheckBox>
+                        <MudCheckBox ReadOnly="true" UnCheckedColor="Color.Dark" Color="Color.Success" @bind-Value="@Egress.ContinuingEducation.HasMasterDegree" Label="Mestrado"></MudCheckBox>
+                        <MudCheckBox ReadOnly="true" UnCheckedColor="Color.Dark" Color="Color.Success" @bind-Value="@Egress.ContinuingEducation.HasDoctorateDegree" Label="Doutorado"></MudCheckBox>
+                        
+                        <MudText Typo="Typo.body2" Class="pt-4" Align="Align.End">Atualizado em @FormatDate(Egress.ContinuingEducation.UpdatedAt).</MudText>
+                    }
+                    else
+                    {
+                        <MudText Color="Color.Dark" Typo="Typo.subtitle2" Align="Align.Center">Não contém dados educacionais.</MudText>
+                    }
+                </div>
+            </MudTabPanel>
+            <MudTabPanel Icon="@Icons.Material.Filled.LocationOn" Text="Localização">
+                <div class="d-flex w-100 p-4 justify-content-center flex-column gap-3">
+                    @if (Egress.Address is not null)
+                    {
+                        <div class="d-flex w-100 align-content-center justify-content-start gap-3">
+                            <MudIcon Icon="@Icons.Material.Filled.LocationCity" Title="Cargo"/>
+                            <MudText Color="Color.Dark" Typo="Typo.body1">@Egress.Address.State/@Egress.Address.Country</MudText>
+                        </div>
+                        
+                        <MudText Typo="Typo.body2" Class="pt-4" Align="Align.End">Atualizado em @FormatDate(Egress.Address.UpdatedAt).</MudText>
+                    }
+                    else
+                    {
+                        <MudText Color="Color.Dark" Typo="Typo.subtitle2" Align="Align.Center">Não contém dados de localização.</MudText>
+                    }
+                </div>
+            </MudTabPanel>
+        </MudTabs>
+    </DialogContent>
+    <DialogActions>
+        <MudButton Color="Color.Primary" OnClick="Submit">Ok</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter]
+    private MudDialogInstance MudDialog { get; set; }
+    
+    [Parameter]
+    [EditorRequired]
+    public GetEgressPaginateResponseApi Egress { get; set; }
+
+    private void Submit() => MudDialog.Close(DialogResult.Ok(true));
+    
+    private string FormatDate(string date) => DateTime.Parse(date).ToString("dd/MM/yyyy");
+    private string FormatDate(DateTime date) => date.ToString("dd/MM/yyyy");
+}

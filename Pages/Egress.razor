@@ -2,10 +2,11 @@
 @using EgressPortal.Models.Form
 @using System.Net
 @using EgressPortal.Models.API.HttpClient.Egress
-@using EgressPortal.Models.Form.Enums
+@using EgressPortal.Shared.Egress
 @using EgressPortal.Shared.Utils
 @inject IEgressServices EgressServices
 @inject ISnackbar Snackbar
+@inject IDialogService DialogService
 
 <PageTitle>Egressos | Visualize nossos egressos.</PageTitle>
 
@@ -16,42 +17,24 @@
         <EditForm Model="_egressFilter" OnValidSubmit="OnValidSubmitAsync">
             <DataAnnotationsValidator/>
 
-            <div class="d-flex flex-row w-100 align-items-center justify-content-between mb-5">
-                <div class="d-flex mb-5">
+            <MudGrid Class="d-flex">
+                <MudItem xs="12" sm="12" md="6" lg="6">
                     <MudText Typo="Typo.h6">Filtros</MudText>
-                </div>
-                <div class="d-flex flex-row gap-3 mb-5">
-                    <MudButton OnClick="CleanEgressFilterAsync" Variant="Variant.Filled" Color="Color.Warning" Class="">Limpar</MudButton>
-                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="">Filtrar</MudButton>
-                </div>
-            </div>
+                </MudItem>
 
-            <MudGrid>
-                <MudItem xs="12" sm="12" md="4" lg="4" Class="d-flex flex-column m-0 p-3 gap-4 h-100">
-                    <MudTextField Variant="Variant.Outlined" Class="p-0 m-0" Placeholder="Ciência da Computação" Label="Curso" @bind-Value="_egressFilter.CourseName" For="@(() => _egressFilter.CourseName)"/>
+                <MudItem xs="12" sm="12" md="6" lg="6" Class="d-flex flex-column gap-3">
                     <MudSelect T="string" Label="Ano de Conclusão" Placeholder="2023.1" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" Class="p-0 m-0" @bind-Value="_egressFilter.FinalSemester" For="@(() => _egressFilter.FinalSemester)">
                         <MudSelectItem T="string" Value="@("Todos os semestres")">Todos os semestres</MudSelectItem>
                         @foreach (var s in GenerateFinalSemestersToSelect())
                         {
-                            <MudSelectItem T="string" Value="@s" />
+                            <MudSelectItem T="string" Value="@s"/>
                         }
                     </MudSelect>
-                </MudItem>
-                <MudItem xs="12" sm="12" md="4" lg="4" Class="d-flex flex-column m-0 p-3 gap-4 h-100">
-                    <MudField Label="Nível" Variant="Variant.Outlined" InnerPadding="false" Class="p-0 m-0 h-100">
-                        <MudCheckBox @bind-Checked="@_egressFilter.CheckLevelGraduation" Size="Size.Small"><MudText Typo="Typo.body2">Graduação</MudText></MudCheckBox>
-                        <MudCheckBox @bind-Checked="@_egressFilter.CheckLevelPostgraduate" Size="Size.Small"><MudText Typo="Typo.body2">Pós-Graduação</MudText></MudCheckBox>
-                        <MudCheckBox @bind-Checked="@_egressFilter.CheckLevelMasterDegree" Size="Size.Small"><MudText Typo="Typo.body2">Mestrado</MudText></MudCheckBox>
-                        <MudCheckBox @bind-Checked="@_egressFilter.CheckLevelDoctorateDegree" Size="Size.Small"><MudText Typo="Typo.body2">Doutorado</MudText></MudCheckBox>
-                    </MudField>
-                </MudItem>
-
-                <MudItem xs="12" sm="12" md="4" lg="4" Class="d-flex flex-column m-0 p-3 gap-4 h-100 justify-content-around align-content-around">
-                    <MudField Label="Modalidade" Variant="Variant.Outlined" Class="p-0 m-0 justify-content-end">
-                        <MudCheckBox @bind-Checked="@_egressFilter.CheckModalityClassroom" Size="Size.Small"><MudText Typo="Typo.body2">Presencial</MudText></MudCheckBox>
-                        <MudCheckBox @bind-Checked="@_egressFilter.CheckModalityHybrid" Size="Size.Small"><MudText Typo="Typo.body2">Híbrido</MudText></MudCheckBox>
-                        <MudCheckBox @bind-Checked="@_egressFilter.CheckModalityVirtualClass" Size="Size.Small"><MudText Typo="Typo.body2">EAD</MudText></MudCheckBox>
-                    </MudField>
+                    
+                    <div class="d-flex w-100 justify-content-end gap-3">
+                        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Large" Class="">Filtrar</MudButton>
+                        <MudButton OnClick="CleanEgressFilterAsync" Variant="Variant.Filled" Color="Color.Warning" Size="Size.Large" Class="">Limpar</MudButton>
+                    </div>
                 </MudItem>
             </MudGrid>
         </EditForm>
@@ -66,18 +49,18 @@
                             <MudTh>Email</MudTh>
                             <MudTh>Matrícula</MudTh>
                             <MudTh>Curso</MudTh>
-                            <MudTh>Nível</MudTh>
-                            <MudTh>Modalidade</MudTh>
                             <MudTh>Ano Conclusão</MudTh>
+                            <MudTh>*</MudTh>
                         </HeaderContent>
                         <RowTemplate>
-                            <MudTd DataLabel="Nome">@egressContext.Name</MudTd>
-                            <MudTd DataLabel="Email">@egressContext.Email</MudTd>
+                            <MudTd DataLabel="Nome">@(string.IsNullOrWhiteSpace(egressContext.Name)? "***" : egressContext.Name)</MudTd>
+                            <MudTd DataLabel="Email">@(string.IsNullOrWhiteSpace(egressContext.Email)? "***" : egressContext.Email)</MudTd>
                             <MudTd DataLabel="Matrícula">@egressContext.Mat</MudTd>
                             <MudTd DataLabel="Curso">@egressContext.Course</MudTd>
-                            <MudTd DataLabel="Nível">@TranslateLevel(egressContext.Level)</MudTd>
-                            <MudTd DataLabel="Modalidade">@TranslateModality(egressContext.Modality)</MudTd>
                             <MudTd DataLabel="Ano Conclusão">@egressContext.FinalSemester</MudTd>
+                            <MudTd DataLabel="*">
+                                <MudButton Variant="Variant.Filled" Size="Size.Small" Color="Color.Tertiary" OnClick="() => OpenDialogAsync(egressContext)">Ver mais</MudButton>
+                            </MudTd>
                         </RowTemplate>
                     </MudTable>
                 </ViewAllItemsComponent>
@@ -125,25 +108,6 @@
         await OnValidSubmitAsync();
     }
 
-    private static string TranslateModality(Modality modality)
-        => modality switch
-        {
-            Modality.Presential => "Presencial",
-            Modality.Hybrid => "Híbrido",
-            Modality.Remote => "EAD",
-            _ => default!
-            };
-
-    private static string TranslateLevel(Level level)
-        => level switch
-        {
-            Level.Graduation => "Graduação",
-            Level.Postgraduate => "Pós Graduação",
-            Level.MasterDegree => "Mestrado",
-            Level.DoctorateDegree => "Doutorado",
-            _ => default!
-            };
-
     private static IEnumerable<string> GenerateFinalSemestersToSelect()
     {
         var semesters = new List<string>();
@@ -155,5 +119,21 @@
         }
 
         return semesters.OrderDescending();
+    }
+    
+    private Task OpenDialogAsync(GetEgressPaginateResponseApi egress)
+    {
+        var parameters = new DialogParameters<ShowMorePublicEgressPaginate_Dialog>();
+
+        parameters.Add(x => x.Egress, egress);
+
+        var options = new DialogOptions
+        {
+            CloseButton = true, 
+            MaxWidth = MaxWidth.Small,
+            FullWidth = true
+        };
+
+        return DialogService.ShowAsync<ShowMorePublicEgressPaginate_Dialog>("Dados", parameters, options);
     }
 }

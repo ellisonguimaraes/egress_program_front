@@ -143,17 +143,10 @@ public class EgressServices : IEgressServices
             Errors = egressGenericHttpResponse.Errors
         };
 
-        var countHeader = response.Headers.Count();
-
-        foreach (var p in response.Headers)
-        {
-            Console.WriteLine($"{p.Key}:{p.Value}");
-        }
-
         var paginationInfo = GetPaginationInfo<GetEgressPaginateResponseApi>(response);
 
         if (paginationInfo is not null)
-            paginationInfo!.Data = egressGenericHttpResponse.Data;
+            paginationInfo.Data = egressGenericHttpResponse.Data;
 
         genericHttpResponse.Data = paginationInfo;
 
