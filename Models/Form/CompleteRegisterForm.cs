@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using EgressPortal.Services.Attributes;
 using Microsoft.AspNetCore.Components.Forms;
 
 namespace EgressPortal;
@@ -48,22 +49,23 @@ public class CompleteRegisterForm
     #endregion
     
     #region Employment Properties
-    [Required(ErrorMessage = "Campo requerido")]
-    [MaxLength(80, ErrorMessage = "Máximo de 80 caracteres")]
+    public bool HaveJob { get; set; }
+    
+    [CustomRequiredEmployment]
     public string EnterpriseName { get; set; }
 
-    [Required(ErrorMessage = "Campo requerido")]
-    [MaxLength(150, ErrorMessage = "Máximo de 150 caracteres")]
+    [CustomRequiredEmployment]
     public string Role { get; set; }
 
-    [Required(ErrorMessage = "Campo requerido")]
+    [CustomRequiredEmployment]
     public bool IsPublicInitiative { get; set; } = false;
 
-    [Required(ErrorMessage = "Campo requerido")]
+    [CustomRequiredEmployment]
     public DateTime? StartDate { get; set; }
     
     public double? SalaryRange { get; set; }
     
+    [CustomRequiredEmployment]
     public bool IsEmploymentPublic { get; set; } = false;
     #endregion
 }

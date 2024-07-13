@@ -24,7 +24,7 @@ public class RegisterPersonRequestApi
     public RegisterPersonAddressRequestApi Address { get; set; }
 
     [JsonPropertyName("employment")]
-    public RegisterPersonEmploymentRequestApi Employment { get; set; }
+    public RegisterPersonEmploymentRequestApi? Employment { get; set; }
 
     [JsonPropertyName("continuing_education")]
     public RegisterPersonContinuingEducationRequestApi ContinuingEducation { get; set; }
