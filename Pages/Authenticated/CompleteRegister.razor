@@ -87,7 +87,6 @@
                 </MudGrid>
             </div>
             
-            
             @*==============================================================*@
             @*==================== CONTINUING EDUCATION ====================*@
             @*==============================================================*@
@@ -138,28 +137,34 @@
             @*====================================================*@
             @*==================== EMPLOYMENT ====================*@
             @*====================================================*@
+            
             <div class="d-flex w-100 flex-column">
                 <div Class="d-flex w-100 m-0 px-2 py-3">
                     <MudText Typo="Typo.h6" Class="fw-bold" Color="Color.Dark">Informações Profissinais</MudText>
                 </div>
                 
-                <MudGrid Class="d-flex w-100 m-0 p-0">
-                    <MudItem xs="12" sm="12" md="6" lg="6">
-                        <MudTextField Variant="Variant.Outlined" Placeholder="Empresa" Label="Empresa" @bind-Value="_completeRegisterForm.EnterpriseName" For="@(() => _completeRegisterForm.EnterpriseName)"></MudTextField>
-                    </MudItem>
-                    <MudItem xs="12" sm="12" md="6" lg="6">
-                        <MudTextField Variant="Variant.Outlined" Placeholder="Cargo" Label="Cargo" @bind-Value="_completeRegisterForm.Role" For="@(() => _completeRegisterForm.Role)"></MudTextField>
-                    </MudItem>
-                    <MudItem xs="12" sm="12" md="6" lg="6">
-                        <MudNumericField Variant="Variant.Outlined" Immediate="false" Placeholder="Faixa salarial" Label="Faixa salarial" HelperText="Formato: NNNNN,NN" Format="N2" Culture="@(CultureInfo.GetCultureInfo("pt-BR"))" @bind-Value="_completeRegisterForm.SalaryRange" For="@(() => _completeRegisterForm.SalaryRange)" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.AttachMoney"/>
-                    </MudItem>
-                    <MudItem xs="12" sm="12" md="6" lg="6">
-                        <MudDatePicker DateFormat="dd/MM/yyyy" Mask="@(new DateMask("dd/MM/yyyy"))" Variant="Variant.Outlined" Label="Data de Início" Editable="true" @bind-Date="_completeRegisterForm.StartDate" For="@(() => _completeRegisterForm.StartDate)" Placeholder="dd/MM/aaaa"/>
-                    </MudItem>
-                    <MudItem xs="12" sm="12" md="12" lg="12">
-                        <MudCheckBox @bind-Checked="_completeRegisterForm.IsPublicInitiative" Label="É iniciativa pública?" Color="Color.Success"></MudCheckBox>
-                    </MudItem>
-                </MudGrid>
+                <MudCheckBox @bind-Value="_completeRegisterForm.HaveJob" Label="Estou trabalhando" Color="Color.Success" UnCheckedColor="Color.Dark" Class="py-3"></MudCheckBox>
+                
+                @if (_completeRegisterForm.HaveJob)
+                {
+                    <MudGrid Class="d-flex w-100 m-0 p-0">
+                        <MudItem xs="12" sm="12" md="6" lg="6">
+                            <MudTextField Variant="Variant.Outlined" Placeholder="Empresa" Label="Empresa" @bind-Value="_completeRegisterForm.EnterpriseName" For="@(() => _completeRegisterForm.EnterpriseName)"></MudTextField>
+                        </MudItem>
+                        <MudItem xs="12" sm="12" md="6" lg="6">
+                            <MudTextField Variant="Variant.Outlined" Placeholder="Cargo" Label="Cargo" @bind-Value="_completeRegisterForm.Role" For="@(() => _completeRegisterForm.Role)"></MudTextField>
+                        </MudItem>
+                        <MudItem xs="12" sm="12" md="6" lg="6">
+                            <MudNumericField Variant="Variant.Outlined" Immediate="false" Placeholder="Faixa salarial" Label="Faixa salarial" HelperText="Formato: NNNNN,NN" Format="N2" Culture="@(CultureInfo.GetCultureInfo("pt-BR"))" @bind-Value="_completeRegisterForm.SalaryRange" For="@(() => _completeRegisterForm.SalaryRange)" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.AttachMoney"/>
+                        </MudItem>
+                        <MudItem xs="12" sm="12" md="6" lg="6">
+                            <MudDatePicker DateFormat="dd/MM/yyyy" Mask="@(new DateMask("dd/MM/yyyy"))" Variant="Variant.Outlined" Label="Data de Início" Editable="true" @bind-Date="_completeRegisterForm.StartDate" For="@(() => _completeRegisterForm.StartDate)" Placeholder="dd/MM/aaaa"/>
+                        </MudItem>
+                        <MudItem xs="12" sm="12" md="12" lg="12">
+                            <MudCheckBox @bind-Checked="_completeRegisterForm.IsPublicInitiative" Label="É iniciativa pública?" Color="Color.Success"></MudCheckBox>
+                        </MudItem>
+                    </MudGrid>
+                }
             </div>
             
             @*=====================================================*@
@@ -180,6 +185,7 @@
             <div class="d-flex w-100 p-5 justify-content-center">
                 <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Size="Size.Large"  Color="Color.Success">Finalizar Cadastro</MudButton>
             </div>
+            
         </EditForm>
     </div>
 </div>

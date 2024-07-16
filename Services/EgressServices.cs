@@ -231,15 +231,6 @@ public class EgressServices : IEgressServices
                 Country = completeRegisterForm.Country,
                 IsPublic = completeRegisterForm.IsAddressPublic
             },
-            Employment = new RegisterPersonEmploymentRequestApi
-            {
-                Enterprise = completeRegisterForm.EnterpriseName,
-                Role = completeRegisterForm.Role,
-                SalaryRange = (decimal?)completeRegisterForm.SalaryRange,
-                IsPublicInitiative = completeRegisterForm.IsPublicInitiative,
-                StartDate = (DateTime)completeRegisterForm.StartDate!,
-                IsPublic = completeRegisterForm.IsEmploymentPublic
-            },
             ContinuingEducation = new RegisterPersonContinuingEducationRequestApi
             {
                 HasCertification = completeRegisterForm.HasCertification,
@@ -249,6 +240,19 @@ public class EgressServices : IEgressServices
                 IsPublic = completeRegisterForm.IsContinuingEducationPublic
             }
         };
+
+        if (completeRegisterForm.HaveJob)
+        {
+            request.Employment = new RegisterPersonEmploymentRequestApi
+            {
+                Enterprise = completeRegisterForm.EnterpriseName,
+                Role = completeRegisterForm.Role,
+                SalaryRange = (decimal?)completeRegisterForm.SalaryRange,
+                IsPublicInitiative = completeRegisterForm.IsPublicInitiative,
+                StartDate = (DateTime)completeRegisterForm.StartDate!,
+                IsPublic = completeRegisterForm.IsEmploymentPublic
+            };
+        }
 
         var response = await _egressApi.RegisterPersonAsync(authorization, request);
         
@@ -269,15 +273,6 @@ public class EgressServices : IEgressServices
                 Country = completeRegisterForm.Country,
                 IsPublic = completeRegisterForm.IsAddressPublic
             },
-            Employment = new RegisterPersonEmploymentRequestApi
-            {
-                Enterprise = completeRegisterForm.EnterpriseName,
-                Role = completeRegisterForm.Role,
-                SalaryRange = (decimal?)completeRegisterForm.SalaryRange,
-                IsPublicInitiative = completeRegisterForm.IsPublicInitiative,
-                StartDate = (DateTime)completeRegisterForm.StartDate!,
-                IsPublic = completeRegisterForm.IsEmploymentPublic
-            },
             ContinuingEducation = new RegisterPersonContinuingEducationRequestApi
             {
                 HasCertification = completeRegisterForm.HasCertification,
@@ -287,6 +282,19 @@ public class EgressServices : IEgressServices
                 IsPublic = completeRegisterForm.IsContinuingEducationPublic
             }
         };
+        
+        if (completeRegisterForm.HaveJob)
+        {
+            request.Employment = new RegisterPersonEmploymentRequestApi
+            {
+                Enterprise = completeRegisterForm.EnterpriseName,
+                Role = completeRegisterForm.Role,
+                SalaryRange = (decimal?)completeRegisterForm.SalaryRange,
+                IsPublicInitiative = completeRegisterForm.IsPublicInitiative,
+                StartDate = (DateTime)completeRegisterForm.StartDate!,
+                IsPublic = completeRegisterForm.IsEmploymentPublic
+            };
+        }
 
         var response = await _egressApi.UpdatePersonAsync(authorization, request);
         

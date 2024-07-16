@@ -3554,3 +3554,7 @@ C:/Users/ellis/source/repos/egress_program_front/obj/Debug/net7.0/ref/EgressPort
 /home/ellison/source/repos/egress_program_front/bin/Debug/net7.0/AutoMapper.dll
 /home/ellison/source/repos/egress_program_front/obj/Debug/net7.0/compressed/irmvi6dizl.gz
 /home/ellison/source/repos/egress_program_front/obj/Debug/net7.0/scopedcss/Shared/TitlePageLoggedAdminComponent.razor.rz.scp.css
+/home/ellison/source/repos/egress_program_front/bin/Debug/net7.0/wwwroot/_framework/FluentValidation.dll
+/home/ellison/source/repos/egress_program_front/bin/Debug/net7.0/wwwroot/_framework/FluentValidation.dll.gz
+/home/ellison/source/repos/egress_program_front/bin/Debug/net7.0/FluentValidation.dll
+/home/ellison/source/repos/egress_program_front/obj/Debug/net7.0/compressed/87hgoi88yt.gz
