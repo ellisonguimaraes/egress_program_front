@@ -41,7 +41,12 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
     services.AddSingleton<ILocalStorageServices, LocalStorageServices>();
 
     services.AddSingleton<IAuthorizationHandler, PersonIdentifierAuthorizationHandler>();
-    services.AddAuthorizationCore(opt => opt.AddPolicy("PersonIdentifierPolicy", policy => policy.Requirements.Add(new PersonIdentifierAuthorizationRequirement())));
+    services.AddSingleton<IAuthorizationHandler, AdminAuthorizationHandler>();
+    services.AddAuthorizationCore(opt =>
+    {
+        opt.AddPolicy("PersonIdentifierPolicy", policy => policy.Requirements.Add(new PersonIdentifierAuthorizationRequirement()));
+        opt.AddPolicy("AdminPolicy", policy => policy.Requirements.Add(new AdminAuthorizationRequirement()));
+    });
 
     services.AddScoped<ApplicationAuthenticationProvider>();
     services.AddScoped<AuthenticationStateProvider, ApplicationAuthenticationProvider>(provider =>

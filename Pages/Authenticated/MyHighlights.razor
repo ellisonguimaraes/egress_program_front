@@ -26,55 +26,64 @@
             <MudText Align="Align.Start" Typo="Typo.h6">Meus Destaques</MudText>
             <MudButton Variant="Variant.Filled" Color="Color.Success" Class="m-0 p-0" OnClick="ShowRequestFormDialog">Solicitar</MudButton>
         </div>
-        @if (_highlights is not null && _highlights.Any())
+        @if (_loadingChangePage)
         {
-            <MudGrid Class="w-100 m-0 p-0">
-                @foreach (var t in _highlights)
-                {
-                    <MudItem xs="12" sm="12" md="6" lg="6">
-                        <MudCard Outlined="true">
-                            <MudCardHeader>
-                                <CardHeaderContent>
-                                    <MudText Typo="Typo.body1" Class="fw-bold">@t.Title</MudText>
-                                </CardHeaderContent>
-                                <CardHeaderActions>
-                                    @if (t.WasAccepted)
-                                    {
-                                        <MudChip Variant="Variant.Filled" Color="Color.Success">Aprovado</MudChip>
-                                    }
-                                    else
-                                    {
-                                        <MudChip Variant="Variant.Filled" Color="Color.Warning">Pendente</MudChip>
-                                    }
-                                </CardHeaderActions>
-                            </MudCardHeader>
-                            <MudCardContent>
-                                @if (t.Description.Length > 200)
-                                {
-                                    <MudText Typo="Typo.body2" Align="Align.Justify">@t.Description.Substring(0, 200)...</MudText>
-                                }
-                                else
-                                {
-                                    <MudText Typo="Typo.body2" Align="Align.Justify">@t.Description</MudText>
-                                }
-                                <MudText Typo="Typo.subtitle2" Class="pt-4">Solicitado em @FormatDate(t.CreatedAt)</MudText>
-                            </MudCardContent>
-                            <MudCardActions Class="text-right">
-                                <a class="d-flex gap-2 w-100 justify-content-end pe-2 pb-2">
-                                    <MudButton Variant="Variant.Filled" Color="Color.Info" Size="Size.Small" OnClick="() => ShowMoreContentDialog(t)">Ver mais</MudButton>
-                                    <MudButton Variant="Variant.Filled" Color="Color.Error" Size="Size.Small" OnClick="() => ShowGenericConfirmDeleteDialog(t)">Excluir</MudButton>
-                                </a>
-                            </MudCardActions>
-                        </MudCard>
-                    </MudItem>
-                }
-            </MudGrid>
+            <div class="d-flex w-100 justify-content-center align-items-center align-content-center p-5">
+                <MudProgressCircular Color="Color.Primary" Size="Size.Medium" Indeterminate="true" />
+            </div>
         }
         else
         {
-            <div class="d-flex justify-content-center p-5">
-                <MudText Typo="Typo.body1">Nenhum depoimento cadastrado.</MudText>
-            </div>
+            @if (_highlights is not null && _highlights.Any())
+            {
+                <MudGrid Class="w-100 m-0 p-0">
+                    @foreach (var t in _highlights)
+                    {
+                        <MudItem xs="12" sm="12" md="6" lg="6">
+                            <MudCard Outlined="true">
+                                <MudCardHeader>
+                                    <CardHeaderContent>
+                                        <MudText Typo="Typo.body1" Class="fw-bold">@t.Title</MudText>
+                                    </CardHeaderContent>
+                                    <CardHeaderActions>
+                                        @if (t.WasAccepted)
+                                        {
+                                            <MudChip Variant="Variant.Filled" Color="Color.Success">Aprovado</MudChip>
+                                        }
+                                        else
+                                        {
+                                            <MudChip Variant="Variant.Filled" Color="Color.Warning">Pendente</MudChip>
+                                        }
+                                    </CardHeaderActions>
+                                </MudCardHeader>
+                                <MudCardContent>
+                                    @if (t.Description.Length > 200)
+                                    {
+                                        <MudText Typo="Typo.body2" Align="Align.Justify">@t.Description.Substring(0, 200)...</MudText>
+                                    }
+                                    else
+                                    {
+                                        <MudText Typo="Typo.body2" Align="Align.Justify">@t.Description</MudText>
+                                    }
+                                    <MudText Typo="Typo.subtitle2" Class="pt-4">Solicitado em @FormatDate(t.CreatedAt)</MudText>
+                                </MudCardContent>
+                                <MudCardActions Class="text-right">
+                                    <a class="d-flex gap-2 w-100 justify-content-end pe-2 pb-2">
+                                        <MudButton Variant="Variant.Filled" Color="Color.Info" Size="Size.Small" OnClick="() => ShowMoreContentDialog(t)">Ver mais</MudButton>
+                                        <MudButton Variant="Variant.Filled" Color="Color.Error" Size="Size.Small" OnClick="() => ShowGenericConfirmDeleteDialog(t)">Excluir</MudButton>
+                                    </a>
+                                </MudCardActions>
+                            </MudCard>
+                        </MudItem>
+                    }
+                </MudGrid>
+            }
+            else
+            {
+                <div class="d-flex justify-content-center p-5">
+                    <MudText Typo="Typo.body1">Nenhum destaque cadastrado.</MudText>
+                </div>
+            }
         }
     </div>
 </div>
@@ -91,10 +100,18 @@
     #endregion
     
     private IList<HighlightResponseApi>? _highlights;
+    
+    private bool _loadingChangePage = false;
 
     protected override async Task OnInitializedAsync()
     {
+        _loadingChangePage = true;
+        StateHasChanged();
+
         await UpdateHighlightsListAsync();
+        
+        _loadingChangePage = false;
+        StateHasChanged();
     }
     
     private void ShowGenericConfirmDeleteDialog(BaseResponseApi highlight)
