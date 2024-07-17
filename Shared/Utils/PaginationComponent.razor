@@ -10,16 +10,23 @@
         }
         else
         {
-            if (ViewItemComponent is not null)
+            if (Items.Any())
             {
-                @foreach (var item in Items)
+                if (ViewItemComponent is not null)
                 {
-                    @ViewItemComponent(item)
+                    @foreach (var item in Items)
+                    {
+                        @ViewItemComponent(item)
+                    }
+                }
+                else if (ViewAllItemsComponent is not null)
+                {
+                    @ViewAllItemsComponent(Items)
                 }
             }
-            else if (ViewAllItemsComponent is not null)
+            else
             {
-                @ViewAllItemsComponent(Items)
+                <MudText Align="Align.Center" Typo="Typo.subtitle2" Class="m-5">Não há itens cadastrados</MudText>
             }
         }
     </div>
