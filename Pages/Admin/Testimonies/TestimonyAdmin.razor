@@ -3,6 +3,9 @@
 @using System.Net.Http.Headers
 @using EgressPortal.Models.API.HttpClient.Egress.Testimony
 @using EgressPortal.Shared.Utils
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Policy = "AdminPolicy")]
+
 
 @inject ILoginServices LoginServices
 @inject IAdminServices AdminServices

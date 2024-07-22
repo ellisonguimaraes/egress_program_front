@@ -11,6 +11,8 @@ public interface IAdminApi
     private const string ID = "id";
     private const string PAGE_NUMBER = "page_number";
     private const string PAGE_SIZE = "page_size";
+    private const string QUERY = "query";
+    private const string ORDER_BY = "order_by";
     private const string AUTHORIZATION_HEADER = "Authorization";
 
     #endregion
@@ -54,4 +56,10 @@ public interface IAdminApi
     [Delete("/api/v1/admin/highlights/{id}")]
     Task<HttpResponseMessage> DeleteHighlightAsync([Header(AUTHORIZATION_HEADER)] AuthenticationHeaderValue authorization,
         [AliasAs(ID)] string id);
+
+
+    [Get("/api/v1/admin/person")]
+    Task<HttpResponseMessage> GetPaginatePersonAsync(
+        [Header(AUTHORIZATION_HEADER)] AuthenticationHeaderValue authorization, [AliasAs(PAGE_NUMBER)] int pageNumber,
+        [AliasAs(PAGE_SIZE)] int pageSize, [AliasAs(QUERY)] string query, [AliasAs(ORDER_BY)] string orderByProperty);
 }

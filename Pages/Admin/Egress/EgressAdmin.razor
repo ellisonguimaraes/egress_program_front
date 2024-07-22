@@ -7,6 +7,7 @@
 @using EgressPortal.Models.API.HttpClient.Egress.Person
 @using EgressPortal.Shared.Utils
 @using Microsoft.AspNetCore.Authorization
+@inject IAdminServices AdminServices
 @inject IEgressServices EgressServices
 @inject IDialogService Dialog
 @inject ILoginServices LoginServices
@@ -16,7 +17,7 @@
 
 <PageTitle>Egressos | Admin</PageTitle>
 
-<TitlePageLoggedAdminComponent/>
+<TitlePageLoggedAdminComponent />
 
 <div class="d-flex flex-column align-items-center w-100 py-8 gap-8">
     <div class="d-flex justify-space-around flex-grow-1 w-100">
@@ -24,7 +25,6 @@
         <div class="d-flex justify-center gap-4">
             <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="(() => NavigationManager.NavigateTo(RouteSettings.AdminAddEgressRoute))">ADICIONAR EGRESSO</MudButton>
             <MudButton Variant="Variant.Filled" Color="Color.Primary">ADICIONAR EM LOTE (CSV)</MudButton>
-            <MudButton Variant="Variant.Outlined" Color="Color.Secondary" OnClick="() => NavigationManager.NavigateTo(RouteSettings.AdminApprovalPersonRoute)">APROVAR EGRESSOS</MudButton>
         </div>
     </div>
 
@@ -38,7 +38,7 @@
                                   Placeholder="John Doe"
                                   Label="Nome"
                                   @bind-Value="_egressAdminFilter.EgressName"
-                                  For="@(() => _egressAdminFilter.EgressName)"/>
+                                  For="@(() => _egressAdminFilter.EgressName)" />
                 </MudItem>
                 <MudItem xs="12" sm="12" md="4" lg="3" Class="m-0">
                     <MudTextField Variant="Variant.Outlined"
@@ -47,7 +47,7 @@
                                   Placeholder="205009347"
                                   Label="Matrícula"
                                   @bind-Value="_egressAdminFilter.Subscription"
-                                  For="@(() => _egressAdminFilter.Subscription)"/>
+                                  For="@(() => _egressAdminFilter.Subscription)" />
                 </MudItem>
                 <MudItem xs="12" sm="12" md="4" lg="3" Class="m-0">
                     <MudSelect T="string" Label="Ano de Ingresso"
@@ -61,7 +61,7 @@
                         <MudSelectItem T="string" Value="@("Todos os semestres")">Todos os semestres</MudSelectItem>
                         @foreach (var s in GenerateFinalSemestersToSelect())
                         {
-                            <MudSelectItem T="string" Value="@s"/>
+                            <MudSelectItem T="string" Value="@s" />
                         }
                     </MudSelect>
                 </MudItem>
@@ -77,7 +77,7 @@
                         <MudSelectItem T="string" Value="@("Todos os semestres")">Todos os semestres</MudSelectItem>
                         @foreach (var s in GenerateFinalSemestersToSelect())
                         {
-                            <MudSelectItem T="string" Value="@s"/>
+                            <MudSelectItem T="string" Value="@s" />
                         }
                     </MudSelect>
                 </MudItem>
@@ -89,23 +89,27 @@
     </div>
 
     <div class="d-flex flex-column w-70">
-        <PaginationComponent Items="_egresses" TotalPages="_totalPages" ChangePageNumberCallback="GetEgressPaginateAsync" @ref="_paginationComponent">
+        <PaginationComponent Items="_people" TotalPages="_totalPages" ChangePageNumberCallback="GetEgressPaginateAsync" @ref="_paginationComponent">
             <ViewAllItemsComponent Context="egressListContext">
                 <MudTable Items="egressListContext" Hover="true" Breakpoint="Breakpoint.Sm" Context="egressContext" Class="mb-5">
                     <HeaderContent>
+                        <MudTh>Nome</MudTh>
+                        <MudTh>CPF</MudTh>
                         <MudTh>Matrícula</MudTh>
-                        <MudTh>Curso</MudTh>
-                        <MudTh>Nível</MudTh>
-                        <MudTh>Modalidade</MudTh>
+                        <MudTh>Tipo</MudTh>
+                        <MudTh>Ano de Início</MudTh>
                         <MudTh>Ano Conclusão</MudTh>
                         <MudTh>Ações</MudTh>
                     </HeaderContent>
                     <RowTemplate>
-                        <MudTd DataLabel="Matrícula">@egressContext.Mat</MudTd>
-                        <MudTd DataLabel="Curso">@egressContext.Course</MudTd>
-                        <MudTd DataLabel="Nível">@TranslateLevel(egressContext.Level)</MudTd>
-                        <MudTd DataLabel="Modalidade">@TranslateModality(egressContext.Modality)</MudTd>
-                        <MudTd DataLabel="Ano Conclusão">@egressContext.FinalSemester</MudTd>
+                        <MudTd DataLabel="Nome">@egressContext.Name</MudTd>
+                        <MudTd DataLabel="CPF">@egressContext.Cpf</MudTd>
+                        <MudTd DataLabel="Matrícula">
+                            @(egressContext.Courses == null || egressContext.Courses.Count == 0 ? "-" : egressContext.Courses?[0]?.Mat)
+                        </MudTd>
+                        <MudTd DataLabel="Tipo">@TranslateType(egressContext.PersonType)</MudTd>
+                        <MudTd DataLabel="Ano de Início">@(egressContext.Courses == null || egressContext.Courses.Count == 0 ? "-" : egressContext.Courses?[0]?.BeginningSemester)</MudTd>
+                        <MudTd DataLabel="Ano Conclusão">@(egressContext.Courses == null || egressContext.Courses.Count == 0 ? "-" : egressContext.Courses?[0]?.FinalSemester ?? "-")</MudTd>
                         <MudTd DataLabel="Ações" Class="gap-1">
                             <MudButton Variant="Variant.Outlined" Size="Size.Small" Color="Color.Success" OnClick="@(async () => await GetPersonAsync(egressContext.Id))">Visualizar</MudButton>
                             <MudButton Variant="Variant.Outlined" Size="Size.Small" Color="Color.Error" OnClick="@(async () => await DeletePersonAsync(egressContext))">
@@ -132,8 +136,9 @@
     private EgressFilterForm _egressAdminFilter = new() { BeginningSemester = "Todos os semestres", FinalSemester = "Todos os semestres" };
 
     private List<GetEgressPaginateResponseApi> _egresses = new();
+    private List<PersonResponseApi> _people = new();
 
-    private PaginationComponent<GetEgressPaginateResponseApi> _paginationComponent = null!;
+    private PaginationComponent<PersonResponseApi> _paginationComponent = null!;
 
     private async Task OnValidSubmitAsync() => await _paginationComponent.ChangePageNumberAsync(1);
 
@@ -152,11 +157,15 @@
 
     private async Task GetEgressPaginateAsync(int pageNumber)
     {
-        var result = await EgressServices.GetPaginateEgressAsync(pageNumber, PAGE_SIZE, _egressAdminFilter);
+        var token = await LoginServices.GetTokenAsync();
+
+        var authorization = new AuthenticationHeaderValue(token!.TokenType, token.AccessToken);
+
+        var result = await AdminServices.GetPaginatePersonAsync(authorization, pageNumber, PAGE_SIZE, _egressAdminFilter);
 
         if (result.StatusCode.Equals((int)HttpStatusCode.OK))
         {
-            _egresses = result.Data!.Data!.ToList();
+            _people = result.Data!.Data!.ToList();
             _totalPages = result.Data.TotalPages;
         }
         else
@@ -201,7 +210,7 @@
         Dialog.Show<EgressDetails>(string.Empty, parameters, options);
     }
 
-    private async Task DeletePersonAsync(GetEgressPaginateResponseApi egress)
+    private async Task DeletePersonAsync(PersonResponseApi egress)
     {
         var token = await LoginServices.GetTokenAsync();
 
@@ -244,23 +253,13 @@
         return result.Canceled;
     }
 
-    private static string TranslateModality(Modality modality)
-        => modality switch
-        {
-            Modality.Presential => "Presencial",
-            Modality.Hybrid => "Híbrido",
-            Modality.Remote => "EAD",
-            _ => default!
-        };
-
-    private static string TranslateLevel(Level level)
-        => level switch
-        {
-            Level.Graduation => "Graduação",
-            Level.Postgraduate => "Pós Graduação",
-            Level.MasterDegree => "Mestrado",
-            Level.DoctorateDegree => "Doutorado",
-            _ => default!
-        };
+    private static string TranslateType(PersonType? personType)
+    => personType switch
+    {
+        PersonType.Egress => "Egresso",
+        PersonType.Student => "Estudante",
+        PersonType.Teacher => "Professor",
+        _ => default!
+    };
 
 }

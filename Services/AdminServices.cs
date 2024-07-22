@@ -12,6 +12,7 @@ using EgressPortal.Models.API.HttpClient.Egress.Highlights;
 using EgressPortal.Models.API.HttpClient.Egress.Testimony;
 using EgressPortal.Models.Form;
 using Course = EgressPortal.Models.API.HttpClient.Admin.Course;
+using PersonResponseApi = EgressPortal.Models.API.HttpClient.Egress.Person.PersonResponseApi;
 
 namespace EgressPortal.Services;
 
@@ -245,4 +246,48 @@ public class AdminServices : IAdminServices
         response.StatusCode = (int)httpResponseMessage.StatusCode;
         return response;
     }
+
+    public async Task<GenericHttpResponse<PagedList<PersonResponseApi>>> GetPaginatePersonAsync(AuthenticationHeaderValue authorization, int pageNumber, int pageSize, EgressFilterForm egressFilterForm)
+    {
+        var query = BuildQueryString(egressFilterForm);
+
+        var response = await _adminApi.GetPaginatePersonAsync(authorization, pageNumber, pageSize, query, "PersonCourses.First().FinalSemester desc");
+        var personGenericHttpResponse = await HandleResponseAsync<List<PersonResponseApi>>(response);
+
+        var genericHttpResponse = new GenericHttpResponse<PagedList<PersonResponseApi>>
+        {
+            TraceId = personGenericHttpResponse.TraceId,
+            StatusCode = personGenericHttpResponse.StatusCode,
+            Data = default,
+            Errors = personGenericHttpResponse.Errors,
+        };
+
+        var paginationInfo = GetPaginationInfo<PersonResponseApi>(response);
+        if (paginationInfo is not null)
+            paginationInfo!.Data = personGenericHttpResponse.Data;
+
+        genericHttpResponse.Data = paginationInfo;
+
+        return genericHttpResponse;
+    }
+
+    private string BuildQueryString(EgressFilterForm egressFilterForm)
+    {
+        var query = new List<string>();
+
+        if (!string.IsNullOrWhiteSpace(egressFilterForm.BeginningSemester) && !egressFilterForm.BeginningSemester.Equals("Todos os semestres"))
+            query.Add($"PersonCourses.First().BeginningSemester = \"{egressFilterForm.BeginningSemester}\"");
+
+        if (!string.IsNullOrWhiteSpace(egressFilterForm.FinalSemester) && !egressFilterForm.FinalSemester.Equals("Todos os semestres"))
+            query.Add($"PersonCourses.First().FinalSemester = \"{egressFilterForm.FinalSemester}\"");
+
+        if (!string.IsNullOrWhiteSpace(egressFilterForm.EgressName))
+            query.Add($"Name.Contains(\"{egressFilterForm.EgressName}\")");
+
+        if (!string.IsNullOrWhiteSpace(egressFilterForm.Subscription))
+            query.Add($"PersonCourses.First().Mat = \"{egressFilterForm.Subscription}\"");
+
+        return string.Join(" and ", query);
+    }
+
 }

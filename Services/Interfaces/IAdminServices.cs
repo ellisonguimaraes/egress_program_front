@@ -5,6 +5,7 @@ using System.Net.Http.Headers;
 using EgressPortal.Models.API.HttpClient.Egress.Highlights;
 using EgressPortal.Models.API.HttpClient.Egress.Testimony;
 using EgressPortal.Models.Form;
+using PersonResponseApi =  EgressPortal.Models.API.HttpClient.Egress.Person.PersonResponseApi;
 
 namespace EgressPortal.Services.Interfaces;
 
@@ -31,4 +32,7 @@ public interface IAdminServices
     Task<GenericHttpResponse<object>> ApproveHighlightAsync(AuthenticationHeaderValue authorization, string id);
     
     Task<GenericHttpResponse<object>> DeleteHighlightAsync(AuthenticationHeaderValue authorization, string id);
+
+    Task<GenericHttpResponse<PagedList<PersonResponseApi>>> GetPaginatePersonAsync(
+    AuthenticationHeaderValue authorization, int pageNumber, int pageSize, EgressFilterForm egressFilterForm);
 }

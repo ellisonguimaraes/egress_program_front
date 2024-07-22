@@ -4,6 +4,8 @@
 @using EgressPortal.Shared.Utils
 @using System.Net
 @using System.Net.Http.Headers
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Policy = "AdminPolicy")]
 
 @inject IAdminServices AdminServices
 @inject IDialogService Dialog

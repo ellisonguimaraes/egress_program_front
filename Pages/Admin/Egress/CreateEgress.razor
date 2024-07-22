@@ -5,11 +5,14 @@
 @using EgressPortal.Models.Form
 @using EgressPortal.Shared.Admin
 @using CourseResponseApi = EgressPortal.Models.API.HttpClient.Courses.CourseResponseApi
+@using Microsoft.AspNetCore.Authorization
 @inject ISnackbar Snackbar
 @inject ILoginServices LoginServices
 @inject IAdminServices AdminServices
 @inject IEgressServices EgressServices
 @inject NavigationManager NavigationManager
+@attribute [Authorize(Policy = "AdminPolicy")]
+
 
 <PageTitle>Adicionar Egresso | Admin</PageTitle>
 
