@@ -13,6 +13,8 @@ using EgressPortal.Models.API.HttpClient.Egress.Testimony;
 using EgressPortal.Models.Form;
 using Course = EgressPortal.Models.API.HttpClient.Admin.Course;
 using PersonResponseApi = EgressPortal.Models.API.HttpClient.Egress.Person.PersonResponseApi;
+using Microsoft.AspNetCore.Components.Forms;
+using Refit;
 
 namespace EgressPortal.Services;
 
@@ -97,6 +99,24 @@ public class AdminServices : IAdminServices
         var newPerson = await HandleResponseAsync<object>(response);
         
         var genericHttpResponse = new GenericHttpResponse<object>
+        {
+            TraceId = newPerson.TraceId,
+            StatusCode = newPerson.StatusCode,
+            Data = newPerson.Data,
+            Errors = newPerson.Errors,
+        };
+
+        return genericHttpResponse;
+    }
+
+
+    public async Task<GenericHttpResponse<List<CreatePersonBatchResponseApi>>> CreatePersonBatchAsync(AuthenticationHeaderValue authorization, StreamPart egress)
+    {
+        var response = await _adminApi.CreateNewPersonBatch(authorization, egress);
+
+        var newPerson = await HandleResponseAsync<List<CreatePersonBatchResponseApi>>(response);
+
+        var genericHttpResponse = new GenericHttpResponse<List<CreatePersonBatchResponseApi>>
         {
             TraceId = newPerson.TraceId,
             StatusCode = newPerson.StatusCode,
@@ -289,5 +309,4 @@ public class AdminServices : IAdminServices
 
         return string.Join(" and ", query);
     }
-
 }

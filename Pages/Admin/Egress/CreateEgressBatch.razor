@@ -1,0 +1,124 @@
+﻿@using System.Net.Http.Headers
+@using EgressPortal.Models.API.HttpClient.Admin
+@using Refit
+@using System.Net
+@inject IAdminServices AdminServices
+@inject IEgressServices EgressServices
+@inject ILoginServices LoginServices
+@inject ISnackbar Snackbar
+
+<MudDialog Class="d-flex w-50">
+    <TitleContent>
+        <MudText Typo="Typo.h5"> Adicionar egressos em lote </MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-6">
+            <MudTabPanel Text="Anexar Arquivo">
+                <MudField Label="Lista de Egressos" Variant="Variant.Outlined" Class="d-flex w-100 p-0 m-0">
+                    <div class="d-flex flex-column w-100 justify-content-around align-content-center align-items-center gap-2">
+                        <MudFileUpload T="IBrowserFile" FilesChanged="HandleSelected" Accept=".csv" Class="d-flex m-0 p-0">
+                            <ButtonTemplate Context="perfilImageButtonContext">
+                                <MudButton HtmlTag="label"
+                                           Variant="Variant.Filled"
+                                           Color="Color.Primary"
+                                           StartIcon="@Icons.Material.Filled.CloudUpload"
+                                           for="@perfilImageButtonContext">
+                                    ADICIONAR EM LOTE (CSV)
+                                </MudButton>
+                            </ButtonTemplate>
+                        </MudFileUpload>
+
+                        @if (_selectedFile != null)
+                        {
+                            <MudList T="string">
+                                <MudListItem Icon="@Icons.Material.Filled.AttachFile" @key="@_selectedFile">
+                                    @_selectedFile.Name <code>@_selectedFile.Size bytes</code>
+                                    </MudListItem>
+                            </MudList>
+                        }
+                    </div>
+                </MudField>
+            </MudTabPanel>
+            <MudTabPanel Text="Logs" Class="d-flex justify-center align-center" Disabled="@(Errors.Count == 0)">
+                <MudPaper Width="100%">
+                    <MudList T="string" Clickable="false">
+                        @foreach (var error in Errors)
+                        {
+                            <MudListItem Text="@error" Icon="@Icons.Material.Filled.ReportGmailerrorred" IconColor="Color.Error"/>
+                        }
+                    </MudList>
+                </MudPaper>
+            </MudTabPanel>
+        </MudTabs>
+
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel" Class="mt-3">Cancel</MudButton>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="(async () => await SendBatch())">
+            ENVIAR LOTE (CSV)
+        </MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter]
+    private MudDialogInstance MudDialog { get; set; }
+
+    private IBrowserFile _selectedFile;
+
+    private List<string> Errors { get; set; } = new();
+
+    private async Task SendBatch()
+    {
+        if (!string.IsNullOrWhiteSpace(_selectedFile.Name))
+        {
+
+            var token = await LoginServices.GetTokenAsync();
+
+            var authorization = new AuthenticationHeaderValue(token!.TokenType, token.AccessToken);
+
+            using var stream = _selectedFile.OpenReadStream(maxAllowedSize: 60_000_000); // 60MB limit
+            var streamPart = new StreamPart(stream, _selectedFile.Name, _selectedFile.ContentType);
+
+            var result = await AdminServices.CreatePersonBatchAsync(authorization, streamPart);
+
+            if (result.StatusCode.Equals((int)HttpStatusCode.OK))
+            {
+                var people = result.Data!.ToList();
+                GetErrors(people);
+            }
+            else
+            {
+                foreach (var error in result.Errors)
+                {
+                    Snackbar.Add(error, Severity.Error);
+                }
+            }
+        }
+        else
+        {
+            Snackbar.Add("Selecione um arquivo!", Severity.Info);
+        }
+    }
+
+    private void GetErrors(List<CreatePersonBatchResponseApi> people)
+    {
+        foreach (var person in people)
+        {
+            if (!person.Successfully)
+            {
+                Errors.Add(
+                $"{person.Name} - {person.Cpf}  :  {person.ErrorMessage}"
+                );
+            }
+        }
+        StateHasChanged();
+    }
+
+    private void HandleSelected(IBrowserFile e)
+    {
+        _selectedFile = e;
+    }
+
+    private void Cancel() => MudDialog.Cancel();
+}

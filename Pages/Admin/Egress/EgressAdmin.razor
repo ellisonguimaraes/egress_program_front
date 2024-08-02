@@ -7,13 +7,14 @@
 @using EgressPortal.Models.API.HttpClient.Egress.Person
 @using EgressPortal.Shared.Utils
 @using Microsoft.AspNetCore.Authorization
+@using Refit
 @inject IAdminServices AdminServices
 @inject IEgressServices EgressServices
 @inject IDialogService Dialog
 @inject ILoginServices LoginServices
 @inject ISnackbar Snackbar
 @inject NavigationManager NavigationManager
-@attribute [Authorize(Policy = "AdminPolicy")]
+@attribute [Microsoft.AspNetCore.Authorization.Authorize(Policy = "AdminPolicy")]
 
 <PageTitle>Egressos | Admin</PageTitle>
 
@@ -24,7 +25,13 @@
         <MudText Align="Align.Left" Typo="Typo.h5" Style="font-weight: bold">Egressos</MudText>
         <div class="d-flex justify-center gap-4">
             <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="(() => NavigationManager.NavigateTo(RouteSettings.AdminAddEgressRoute))">ADICIONAR EGRESSO</MudButton>
-            <MudButton Variant="Variant.Filled" Color="Color.Primary">ADICIONAR EM LOTE (CSV)</MudButton>
+            <MudButton HtmlTag="label"
+                       Variant="Variant.Filled"
+                       Color="Color.Primary"
+                       StartIcon="@Icons.Material.Filled.CloudUpload"
+                       OnClick="@( () => AddEgressBatch())">
+                ADICIONAR EM LOTE (CSV)
+            </MudButton>
         </div>
     </div>
 
@@ -210,6 +217,15 @@
         Dialog.Show<EgressDetails>(string.Empty, parameters, options);
     }
 
+    private void AddEgressBatch()
+    {
+        var parameters = new DialogParameters<CreateEgressBatch>();
+
+        var options = new DialogOptions() { CloseButton = true, CloseOnEscapeKey = true, MaxWidth = MaxWidth.ExtraLarge };
+
+        Dialog.Show<CreateEgressBatch>(string.Empty, parameters, options);
+    }
+
     private async Task DeletePersonAsync(PersonResponseApi egress)
     {
         var token = await LoginServices.GetTokenAsync();
@@ -261,5 +277,4 @@
         PersonType.Teacher => "Professor",
         _ => default!
     };
-
 }

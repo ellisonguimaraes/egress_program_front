@@ -27,6 +27,11 @@ public interface IAdminApi
     Task<HttpResponseMessage> CreateNewPerson([Header(AUTHORIZATION_HEADER)] AuthenticationHeaderValue authorization,
         [Body] CreatePersonRequestApi createPerson);
 
+    [Multipart]
+    [Post("/api/v1/admin/person/create-person/batch")]
+    Task<HttpResponseMessage> CreateNewPersonBatch([Header(AUTHORIZATION_HEADER)] AuthenticationHeaderValue authorization,
+    [AliasAs("batch")] StreamPart createPerson);
+
     [Put("/api/v1/admin/user/unlock/{id}")]
     Task<HttpResponseMessage> UnlockUserAsync([Header(AUTHORIZATION_HEADER)] AuthenticationHeaderValue authorization,
         [AliasAs(ID)] string id);
