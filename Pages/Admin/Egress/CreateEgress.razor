@@ -79,13 +79,14 @@
 
         var result = await AdminServices.CreatePersonAsync(authorization, _newEgress);
 
-        if (result.StatusCode.Equals((int)HttpStatusCode.OK))
+        if (!result.StatusCode.Equals((int)HttpStatusCode.OK))
         {
-            Snackbar.Add("Egresso criado com sucesso!", Severity.Success);
-            NavigationManager.NavigateTo(RouteSettings.AdminEgressRoute);
+            Snackbar.Add("Erro ao criar", Severity.Error);
+            return;
         }
-
-        Snackbar.Add("Erro ao criar egresso!", Severity.Error);
+        
+        Snackbar.Add("Criado com sucesso", Severity.Success);
+        NavigationManager.NavigateTo(RouteSettings.AdminEgressRoute);
     }
 
 }
