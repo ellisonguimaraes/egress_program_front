@@ -12,12 +12,15 @@
                 </MudRadioGroup>
             </MudField>
             <MudTextField Variant="Variant.Outlined" Placeholder="Nome" Label="Nome completo" @bind-Value="RegisterForm.Name" For="@(() => RegisterForm.Name)"></MudTextField>
-            <MudField Label="Cpf ou Matrícula" Variant="Variant.Outlined">
+            <MudField Label="Documento de identificação" Variant="Variant.Outlined">
                 <MudRadioGroup @bind-SelectedOption="@RegisterForm.DocumentType" For="@(() => RegisterForm.DocumentType)" Class="mb-3">
                     <MudRadio Option="@(DocumentType.Cpf)" Color="Color.Primary">Cpf</MudRadio>
-                    <MudRadio Option="@(DocumentType.Registration)" Color="Color.Primary">Matrícula</MudRadio>
+                    @if (RegisterForm.UserType.Equals(UserType.Egress) || RegisterForm.UserType.Equals(UserType.Student))
+                    {
+                        <MudRadio Option="@(DocumentType.Registration)" Color="Color.Primary">Matrícula</MudRadio>
+                    }
                 </MudRadioGroup>
-                <MudNumericField HideSpinButtons="true" Variant="Variant.Text" Class="px-4 py-2" Label="Cpf ou Matrícula" @bind-Value="RegisterForm.Document" For="@(() => RegisterForm.Document)"></MudNumericField>
+                <MudNumericField HideSpinButtons="true" Variant="Variant.Text" Class="px-4 py-2" Label="Número" @bind-Value="RegisterForm.Document" For="@(() => RegisterForm.Document)"></MudNumericField>
             </MudField>
             <MudTextField Variant="Variant.Outlined" Placeholder="E-mail" InputType="InputType.Email" Label="E-mail" @bind-Value="RegisterForm.Email" For="@(() => RegisterForm.Email)"></MudTextField>
             <MudTextField @bind-Value="RegisterForm.Password" Placeholder="Senha" Label="Senha" Variant="Variant.Outlined" InputType="@_passwordInput" For="@(() => RegisterForm.Password)" Adornment="Adornment.End" AdornmentIcon="@_passwordInputIcon" OnAdornmentClick="ButtonShowPassword" AdornmentAriaLabel="Mostrar senha"/>

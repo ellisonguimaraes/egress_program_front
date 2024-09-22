@@ -13,7 +13,7 @@ public class RegisterForm
     public string Name { get; set; }
 
     [Required(ErrorMessage = "Escolha entre CPF ou Matrícula.")]
-    public DocumentType DocumentType { get; set; }
+    public DocumentType DocumentType { get; set; } = DocumentType.Cpf;
 
     [Required(ErrorMessage = "Campo Documento é requerido.")]
     [MaxLength(20, ErrorMessage = "Máximo de 20 caracteres.")]
