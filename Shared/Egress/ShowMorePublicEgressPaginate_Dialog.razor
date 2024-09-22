@@ -89,7 +89,9 @@
     public GetEgressPaginateResponseApi Egress { get; set; }
 
     private void Submit() => MudDialog.Close(DialogResult.Ok(true));
+
+    private string FormatDate(string date)
+        => DateTime.ParseExact(date, "MM/dd/yyyy HH:mm:ss", null).ToString("dd/MM/yyyy");
     
-    private string FormatDate(string date) => DateTime.Parse(date).ToString("dd/MM/yyyy");
     private string FormatDate(DateTime date) => date.ToString("dd/MM/yyyy");
 }
