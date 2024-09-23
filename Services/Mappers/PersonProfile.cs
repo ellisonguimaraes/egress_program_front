@@ -25,6 +25,7 @@ public class PersonProfile : Profile
             .ForMember(dest => dest.IsContinuingEducationPublic, opt => opt.MapFrom(src => src.ContinuingEducation.IsPublic))
             .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.PhoneNumber))
             .ForMember(dest => dest.CanExposeData, opt => opt.MapFrom(src => src.ExposeData))
-            .ForMember(dest => dest.CanReceivedMessage, opt => opt.MapFrom(src => src.CanReceiveMessage));
+            .ForMember(dest => dest.CanReceivedMessage, opt => opt.MapFrom(src => src.CanReceiveMessage))
+            .ForMember(dest => dest.PerfilImage, opt => opt.Ignore());
     }
 }

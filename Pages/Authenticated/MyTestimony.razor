@@ -14,9 +14,10 @@
 
 <PageTitle>Meus depoimentos</PageTitle>
 
-<AuthorizeView>
-    <TitlePageLoggedComponent Name="@GetFirstName(context.User.Identity?.Name!)"/>
-</AuthorizeView>
+@if (!_loadingChangePage)
+{
+    <TitlePageLoggedComponent Person="_person"/>
+}
 
 <div class="d-flex flex-column align-items-center w-100">
     <div class="d-flex flex-column m-0 p-5 contact_main_center" style="width:100%;max-width: 1000px">
@@ -32,10 +33,10 @@
         }
         else
         {
-            @if (_testimonies is not null && _testimonies.Any())
+            @if (_person.Testimonies is not null && _person.Testimonies.Any())
             {
                 <MudGrid Class="w-100 m-0 p-0">
-                    @foreach (var t in _testimonies)
+                    @foreach (var t in _person.Testimonies)
                     {
                         <MudItem xs="12" sm="12" md="6" lg="6">
                             <MudCard Outlined="true">
@@ -96,7 +97,7 @@
     private const string REQUEST_MESSAGE_HEADER_DIALOG = "Solicitar Depoimento";
     #endregion
     
-    private IList<TestimonyResponseApi>? _testimonies;
+    private PersonResponseApi? _person;
     
     private bool _loadingChangePage = false;
 
@@ -178,7 +179,7 @@
 
         if (person.StatusCode.Equals((int)HttpStatusCode.OK))
         {
-            _testimonies = person.Data!.Testimonies;
+            _person = person.Data!;
             StateHasChanged();
         }
         else

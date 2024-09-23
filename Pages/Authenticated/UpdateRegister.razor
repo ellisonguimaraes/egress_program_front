@@ -4,6 +4,7 @@
 @using System.Net.Http.Headers
 @using Microsoft.AspNetCore.Authorization
 @using AutoMapper
+@using EgressPortal.Models.API.HttpClient.Egress.Person
 @inject ISnackbar Snackbar
 @inject IEgressServices EgressServices
 @inject ILoginServices LoginServices
@@ -12,9 +13,10 @@
 
 <PageTitle>Atualizar dados</PageTitle>
 
-<AuthorizeView>
-    <TitlePageLoggedComponent Name="@GetFirstName(context.User.Identity?.Name!)"/>
-</AuthorizeView>
+@if (!_loadingChangePage)
+{
+    <TitlePageLoggedComponent Person="_person"/>
+}
 
 <div class="d-flex flex-column align-items-center w-100">
     <div class="d-flex flex-column m-0 p-5" style="width:100%;max-width: 1300px;">
@@ -211,6 +213,8 @@
     
     private string _perfilImage = string.Empty;
     private CompleteRegisterForm _completeRegisterForm = new ();
+    
+    private PersonResponseApi? _person;
 
     protected override async Task OnInitializedAsync()
     {
@@ -232,6 +236,8 @@
             }
         }
 
+        _person = result.Data;
+        
         _completeRegisterForm = Mapper.Map<CompleteRegisterForm>(result.Data);
         _completeRegisterForm.HaveJob = result.Data?.Employment is not null;
 
