@@ -1,12 +1,21 @@
 ﻿@using EgressPortal.Models
+@using EgressPortal.Models.API.HttpClient.Egress.Person
 
 <div class="d-flex flex-column w-100 justify-content-center align-content-center align-items-center background_color_darkgreen p-3 title_page">
     <MudGrid Class="d-flex flex-row w-100 align-items-center title_page_center">
         <MudItem xs="6" sm="6" md="3" lg="3" Class="d-flex flex-row align-items-center justify-content-center gap-2">
             <MudAvatar Color="Color.Primary" Size="Size.Large">
-                <b>@Name[0]</b>
+                @if (string.IsNullOrWhiteSpace(Person.PerfilImage))
+                {
+                    <b>@Person.Name[0]</b>
+                }
+                else
+                {
+                    <MudImage Src="@Person.PerfilImage" Alt="avatar"/>
+                }
             </MudAvatar>
-            <MudText Typo="Typo.h5" Class="text_color_white fw-bold">Olá @Name.</MudText>
+            
+            <MudText Typo="Typo.h5" Class="text_color_white fw-bold">Olá @GetFirstName(Person.Name).</MudText>
         </MudItem>
         <MudItem xs="2" sm="2" md="1" lg="1" Class="text-center">
             <MudText Typo="Typo.h2" Class="nav_hidden_link text_color_white">|</MudText>
@@ -41,7 +50,12 @@
 </div>
 
 @code {
+    private const string WHITESPACE = " ";
+    
     [Parameter]
     [EditorRequired]
-    public string Name { get; set; } = null!;
+    public PersonResponseApi Person { get; set; } = null!;
+    
+    private static string GetFirstName(string name)
+        => name.Split(WHITESPACE).First();
 }
