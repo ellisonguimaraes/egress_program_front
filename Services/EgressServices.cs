@@ -9,6 +9,7 @@ using EgressPortal.Models.Form;
 using EgressPortal.Services.Extensions;
 using EgressPortal.Services.HttpClients;
 using EgressPortal.Services.Interfaces;
+using Microsoft.AspNetCore.Components.Forms;
 using CourseResponseApi = EgressPortal.Models.API.HttpClient.Courses.CourseResponseApi;
 using HighlightResponseApi = EgressPortal.Models.API.HttpClient.Egress.Highlights.HighlightResponseApi;
 using TestimonyResponseApi = EgressPortal.Models.API.HttpClient.Egress.Testimony.TestimonyResponseApi;
@@ -297,6 +298,9 @@ public class EgressServices : IEgressServices
         }
 
         var response = await _egressApi.UpdatePersonAsync(authorization, request);
+
+        if (completeRegisterForm.PerfilImage is not null)
+            await _httpClientEgressApi.UpdatePerfilImageAsync(authorization, completeRegisterForm.PerfilImage);
         
         return await HandleResponseAsync<object>(response);
     }

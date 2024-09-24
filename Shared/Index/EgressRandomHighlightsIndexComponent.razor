@@ -22,7 +22,7 @@
                                             <MudImage Src="@h.PerfilImageSrc" Alt=""></MudImage>
                                         </MudAvatar>
                                     }
-                                    <MudText Typo="Typo.h5" Class="text_color_green fw-bold">@h.Name</MudText>
+                                    <MudText Typo="Typo.h5" Class="text_color_green fw-bold">@GetNameWithLastname(h.Name)</MudText>
                                     <MudText Typo="Typo.subtitle2" Class="text_color_yellow fw-bold">@string.Join(", ", h.Courses)</MudText>
                                     <MudText Typo="Typo.body2" Align="Align.Justify" Class="text_color_white px-4 py-2">@h.Title</MudText>
                                 </div>
@@ -86,5 +86,11 @@
         {
             _randomHighlights = response.Data!;
         }
+    }
+    
+    private string GetNameWithLastname(string name)
+    {
+        var names = name.Split(" ");
+        return names.Length.Equals(1) ? name : $"{names.FirstOrDefault()} {names.LastOrDefault()}";
     }
 }

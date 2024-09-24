@@ -19,6 +19,9 @@ public sealed class HttpClientEgressApi : IHttpClientEgressApi
     private const string REQUEST_HIGHLIGHTS_PARAM_VERACITY_FILES = "veracity_files";
 
     private const string AUTHORIZATION = "Authorization";
+    
+    private const string UPDATE_PERFIL_IMAGE_ROUTE = "api/v1/person/register/profile-image";
+    private const string UPDATE_PERFIL_IMAGE_PARAM_NAME = "perfil_image";
     #endregion
 
     private readonly HttpClient _client;
@@ -37,7 +40,21 @@ public sealed class HttpClientEgressApi : IHttpClientEgressApi
 
         return await _client.SendAsync(httpRequestMessage);
     }
+    
+    public async Task<HttpResponseMessage> UpdatePerfilImageAsync(AuthenticationHeaderValue authorization, IBrowserFile file)
+    {
+        using var httpRequestMessage = new HttpRequestMessage(HttpMethod.Put, UPDATE_PERFIL_IMAGE_ROUTE);
+        
+        var content = new MultipartFormDataContent();
+        var streamContent = ConvertBrowserFileToStreamContent(file);
+        content.Add(streamContent, UPDATE_PERFIL_IMAGE_PARAM_NAME, file.Name);
+        
+        httpRequestMessage.Content = content;
+        httpRequestMessage.Headers.Add(AUTHORIZATION, authorization.ToString());
 
+        return await _client.SendAsync(httpRequestMessage);
+    }
+    
     /// <summary>
     /// Build FormData Content
     /// </summary>

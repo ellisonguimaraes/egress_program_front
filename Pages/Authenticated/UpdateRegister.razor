@@ -8,6 +8,7 @@
 @inject ISnackbar Snackbar
 @inject IEgressServices EgressServices
 @inject ILoginServices LoginServices
+@inject NavigationManager NavigationManager
 @inject IMapper Mapper
 @attribute [Authorize(Policy = "PersonIdentifierPolicy")]
 
@@ -256,6 +257,7 @@
         if (result.StatusCode.Equals((int)HttpStatusCode.OK))
         {
             Snackbar.Add("Atualizado com sucesso!", Severity.Success);
+            NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
         }
         else
         {

@@ -28,7 +28,7 @@
                         </MudAvatar>
                     }
 
-                    <MudText Typo="Typo.h5" Class="text_color_darkblue fw-bold">@_randomTestimonies[0].Name</MudText>
+                    <MudText Typo="Typo.h5" Class="text_color_darkblue fw-bold">@GetNameWithLastname(_randomTestimonies[0].Name)</MudText>
                     <MudText Typo="Typo.subtitle2" Class="text_color_gray_1 fw-bold">@string.Join(", ", _randomTestimonies[0].Courses)</MudText>
                     <MudText Typo="Typo.body2" Align="Align.Justify" Class="testimonies_content" Color="Color.Dark">"@_randomTestimonies[0].Content"</MudText>
                 }
@@ -64,7 +64,7 @@
                         </MudAvatar>
                     }
 
-                    <MudText Typo="Typo.h5" Class="text_color_darkblue fw-bold">@_randomTestimonies[1].Name</MudText>
+                    <MudText Typo="Typo.h5" Class="text_color_darkblue fw-bold">@GetNameWithLastname(_randomTestimonies[1].Name)</MudText>
                     <MudText Typo="Typo.subtitle2" Class="text_color_gray_1 fw-bold">@string.Join(", ", _randomTestimonies[1].Courses)</MudText>
                     <MudText Typo="Typo.body2" Align="Align.Justify" Class="testimonies_content" Color="Color.Dark">"@_randomTestimonies[1].Content"</MudText>
                 }
@@ -92,5 +92,11 @@
         {
             _randomTestimonies = response.Data!;
         }
+    }
+    
+    private string GetNameWithLastname(string name)
+    {
+        var names = name.Split(" ");
+        return names.Length.Equals(1) ? name : $"{names.FirstOrDefault()} {names.LastOrDefault()}";
     }
 }
