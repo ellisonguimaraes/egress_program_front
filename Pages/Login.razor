@@ -1,4 +1,5 @@
 @page "/Login"
+@using System.Security.Claims
 @using EgressPortal.Models.Form
 @using EgressPortal.Services.Interfaces
 @using EgressPortal.Models
@@ -7,6 +8,7 @@
 @inject ILoginServices LoginServices
 @inject ISnackbar Snackbar
 @inject NavigationManager NavigationManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
 
 <PageTitle>Login | Faça o login ou registre-se</PageTitle>
 
@@ -69,7 +71,11 @@
         {
             Snackbar.Add("Autenticado com sucesso.", Severity.Success);
             await LoginServices.LoginAsync(result.Data!);
-            NavigationManager.NavigateTo(RouteSettings.AuthStartPage);
+            
+            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            var user = authState.User;
+
+            NavigationManager.NavigateTo(IsAdmin(user.Claims.SingleOrDefault(c => c.Type.Equals(ClaimTypes.Role))?.Value) ? RouteSettings.AdminEgressRoute : RouteSettings.AuthStartPage);
         }
         else
         {
@@ -94,4 +100,7 @@
             _passwordInput = InputType.Text;
         }
     }
+    
+    private static bool IsAdmin(string? role)
+        => !string.IsNullOrWhiteSpace(role) && role.Equals(PermissionType.ADM.ToString());
 }
