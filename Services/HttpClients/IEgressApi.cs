@@ -14,6 +14,7 @@ public interface IEgressApi
     private const string QUERY = "query";
     private const string ORDER_BY = "order_by";
     private const string ID = "id";
+    private const string VIEWS_HEADER_NAME = "views";
     private const string AUTHORIZATION_HEADER = "authorization";
     #endregion
 
@@ -61,5 +62,8 @@ public interface IEgressApi
 
     [Post("/api/v1/egress/testimony")]
     Task<HttpResponseMessage> RequestTestimonyAsync([Header(AUTHORIZATION_HEADER)] AuthenticationHeaderValue authorization, [Body] RequestTestimonyRequestApi request);
+    
+    [Get("/api/v1/charts/views")]
+    Task<HttpResponseMessage> GetChartsDataAsync([Header(VIEWS_HEADER_NAME)] string views);
 }
 

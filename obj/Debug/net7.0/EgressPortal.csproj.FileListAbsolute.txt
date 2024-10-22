@@ -3558,3 +3558,5 @@ C:/Users/ellis/source/repos/egress_program_front/obj/Debug/net7.0/ref/EgressPort
 /home/ellison/source/repos/egress_program_front/obj/Debug/net7.0/refint/EgressPortal.dll
 /home/ellison/source/repos/egress_program_front/obj/Debug/net7.0/EgressPortal.pdb
 /home/ellison/source/repos/egress_program_front/obj/Debug/net7.0/ref/EgressPortal.dll
+/home/ellison/source/repos/egress_program_front/obj/Debug/net7.0/scopedcss/Shared/Egress/EgressInitiativeEmploymentTypeChartComponent.razor.rz.scp.css
+/home/ellison/source/repos/egress_program_front/obj/Debug/net7.0/scopedcss/Shared/Egress/EgressPerStateComponent.razor.rz.scp.css

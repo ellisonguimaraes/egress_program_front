@@ -1,9 +1,316 @@
 @page "/perfil-egressos"
+@using System.Globalization
+@using System.Net
+@using System.Text.Json
+@using EgressPortal.Shared.Egress
+@inject IEgressServices EgressServices
 
 <PageTitle>Perfil dos Egressos | Visualize o perfil de nossos egressos.</PageTitle>
 
 <TitlePageComponent Title="Perfil dos Egressos" SubTitle="Visualize o perfil de nossos egressos."/>
 
-@code {
 
+<div class="d-flex flex-column align-items-center w-100">
+    <div class="d-flex flex-column m-0 p-5" style="width:100%;max-width: 1000px;">
+        <div class="d-flex flex-row justify-content-around align-items-center align-content-center gap-4 flex-wrap">
+
+            <div class="d-flex m-0 p-4 flex-column align-items-center justify-content-center gap-2 border-2 w-25" style="border-radius:10px;min-width: 250px; min-height: 300px">
+                <MudIcon Icon="@Icons.Material.Filled.Home" Color="Color.Dark" Size="Size.Large"/>
+                <MudText Typo="Typo.button" Align="Align.Center">Egressos que moram fora do Brasil</MudText>
+                
+                @if (_outsideBrazilTotal is null)
+                {
+                    <MudSkeleton Animation="Animation.Wave" SkeletonType="SkeletonType.Rectangle" Width="30px" Height="60px"></MudSkeleton>
+                }
+                else
+                {
+                    <MudText Typo="Typo.h2" Align="Align.Center">@_outsideBrazilTotal</MudText>
+                }
+                <MudText Typo="Typo.caption" Align="Align.Center">*somente egressos que informaram</MudText>
+            </div>
+
+            <div class="d-flex m-0 p-4 flex-column align-items-center justify-content-center gap-2 border-2 w-25" style="border-radius:10px;min-width: 250px; min-height: 300px">
+                <MudIcon Icon="@Icons.Material.Filled.School" Color="Color.Dark" Size="Size.Large"/>
+                <MudText Typo="Typo.button" Align="Align.Center">Egressos com certificação</MudText>
+                @if (_withCertificationTotal is null)
+                {
+                    <MudSkeleton Animation="Animation.Wave" SkeletonType="SkeletonType.Rectangle" Width="30px" Height="60px"></MudSkeleton>
+                }
+                else
+                {
+                    <MudText Typo="Typo.h2" Align="Align.Center">@_withCertificationTotal</MudText>
+                }
+                <MudText Typo="Typo.caption" Align="Align.Center">*somente egressos que informaram</MudText>
+            </div>
+
+            <div class="d-flex m-0 p-4 flex-column align-items-center justify-content-center gap-2 border-2 w-25" style="border-radius:10px;min-width: 250px; min-height: 300px">
+                <MudIcon Icon="@Icons.Material.Filled.School" Color="Color.Dark" Size="Size.Large"/>
+                <MudText Typo="Typo.button" Align="Align.Center">Egressos com especialização</MudText>
+                @if (_withSpecializationTotal is null)
+                {
+                    <MudSkeleton Animation="Animation.Wave" SkeletonType="SkeletonType.Rectangle" Width="30px" Height="60px"></MudSkeleton>
+                }
+                else
+                {
+                    <MudText Typo="Typo.h2" Align="Align.Center">@_withSpecializationTotal</MudText>
+                }
+                <MudText Typo="Typo.caption" Align="Align.Center">*somente egressos que informaram</MudText>
+            </div>
+
+            <div class="d-flex m-0 p-0 flex-row w-100">
+                <EgressPerStateComponent/>
+            </div>
+
+            <div class="d-flex m-0 p-4 flex-column align-items-center justify-content-center gap-2 border-2 w-25" style="border-radius:10px;min-width: 250px; min-height: 300px">
+                <MudIcon Icon="@Icons.Material.Filled.WorkspacePremium" Color="Color.Dark" Size="Size.Large"/>
+                <MudText Typo="Typo.button" Align="Align.Center">Egressos com mestrado</MudText>
+                @if (_withMasterDegreeTotal is null)
+                {
+                    <MudSkeleton Animation="Animation.Wave" SkeletonType="SkeletonType.Rectangle" Width="30px" Height="60px"></MudSkeleton>
+                }
+                else
+                {
+                    <MudText Typo="Typo.h2" Align="Align.Center">@_withMasterDegreeTotal</MudText>
+                }
+                <MudText Typo="Typo.caption" Align="Align.Center">*somente egressos que informaram</MudText>
+            </div>
+
+            <div class="d-flex m-0 p-4 flex-column align-items-center justify-content-center gap-2 border-2 w-25" style="border-radius:10px;min-width: 250px; min-height: 300px">
+                <MudIcon Icon="@Icons.Material.Filled.WorkspacePremium" Color="Color.Dark" Size="Size.Large"/>
+                <MudText Typo="Typo.button" Align="Align.Center">Egressos com doutorado</MudText>
+                @if (_withDoctorateDegreeTotal is null)
+                {
+                    <MudSkeleton Animation="Animation.Wave" SkeletonType="SkeletonType.Rectangle" Width="30px" Height="60px"></MudSkeleton>
+                }
+                else
+                {
+                    <MudText Typo="Typo.h2" Align="Align.Center">@_withDoctorateDegreeTotal</MudText>
+                }
+                <MudText Typo="Typo.caption" Align="Align.Center">*somente egressos que informaram</MudText>
+            </div>
+
+            <div class="d-flex m-0 p-4 flex-column align-items-center justify-content-center gap-2 border-2 w-25" style="border-radius:10px;min-width: 250px; min-height: 300px">
+                <MudIcon Icon="@Icons.Material.Filled.Payments" Color="Color.Dark" Size="Size.Large"/>
+                <MudText Typo="Typo.button" Align="Align.Center">Média salarial dos egressos</MudText>
+                @if (_averageSalaryRange is null)
+                {
+                    <MudSkeleton Animation="Animation.Wave" SkeletonType="SkeletonType.Rectangle" Width="30px" Height="60px"></MudSkeleton>
+                }
+                else
+                {
+                    <MudText Typo="Typo.h4" Align="Align.Center">@($"{_averageSalaryRange:C}")</MudText>
+                }
+                <MudText Typo="Typo.caption" Align="Align.Center">*somente egressos que informaram</MudText>
+            </div>
+
+            <div class="d-flex m-0 p-0 flex-row w-100">
+                <EgressChartComponent/>
+            </div>
+
+            <div class="d-flex m-0 p-4 flex-column align-items-center justify-content-center gap-2 border-2 w-25" style="border-radius:10px;min-width: 250px; min-height: 260px">
+                <MudIcon Icon="@Icons.Material.Filled.Grading" Color="Color.Dark" Size="Size.Large"/>
+                <MudText Typo="Typo.button" Align="Align.Center">Depoimentos cadastrados no portal</MudText>
+                @if (_egressTestimoniesTotal is null)
+                {
+                    <MudSkeleton Animation="Animation.Wave" SkeletonType="SkeletonType.Rectangle" Width="30px" Height="60px"></MudSkeleton>
+                }
+                else
+                {
+                    <MudText Typo="Typo.h2" Align="Align.Center">@_egressTestimoniesTotal</MudText>
+                }
+            </div>
+
+            <div class="d-flex m-0 p-4 flex-column align-items-center justify-content-center gap-2 border-2 w-25" style="border-radius:10px;min-width: 250px; min-height: 260px">
+                <MudIcon Icon="@Icons.Material.Filled.Star" Color="Color.Dark" Size="Size.Large"/>
+                <MudText Typo="Typo.button" Align="Align.Center">Destaques cadastrados no portal</MudText>
+                @if (_egressHighlightsTotal is null)
+                {
+                    <MudSkeleton Animation="Animation.Wave" SkeletonType="SkeletonType.Rectangle" Width="30px" Height="60px"></MudSkeleton>
+                }
+                else
+                {
+                    <MudText Typo="Typo.h2" Align="Align.Center">@_egressHighlightsTotal</MudText>
+                }
+            </div>
+
+            <div class="d-flex m-0 p-4 flex-column align-items-center justify-content-center gap-2 border-2 w-25" style="border-radius:10px;min-width: 250px; min-height: 260px">
+                <MudIcon Icon="@Icons.Material.Filled.AvTimer" Color="Color.Dark" Size="Size.Large"/>
+                <MudText Typo="Typo.button" Align="Align.Center">Média de idade dos egressos</MudText>
+                @if (_averageBirthDate is null)
+                {
+                    <MudSkeleton Animation="Animation.Wave" SkeletonType="SkeletonType.Rectangle" Width="30px" Height="60px"></MudSkeleton>
+                }
+                else
+                {
+                    <MudText Typo="Typo.h2" Align="Align.Center">@($"{_averageBirthDate:F1}")</MudText>
+                }
+                <MudText Typo="Typo.button" Align="Align.Center">anos</MudText>
+            </div>
+
+            <div class="d-flex m-0 p-0 flex-row w-100">
+                <EgressInitiativeEmploymentTypeChartComponent/>
+            </div>
+
+            <div class="d-flex m-0 p-4 flex-column align-items-center justify-content-center gap-2 border-2 w-25" style="border-radius:10px;min-width: 250px; min-height: 260px">
+                <MudIcon Icon="@Icons.Material.Filled.AvTimer" Color="Color.Dark" Size="Size.Large"/>
+                <MudText Typo="Typo.button" Align="Align.Center">Média de idade dos egressos ao entrar na universidade</MudText>
+                @if (_averageBirthDateToEntry is null)
+                {
+                    <MudSkeleton Animation="Animation.Wave" SkeletonType="SkeletonType.Rectangle" Width="30px" Height="60px"></MudSkeleton>
+                }
+                else
+                {
+                    <MudText Typo="Typo.h2" Align="Align.Center">@($"{_averageBirthDateToEntry:F1}")</MudText>
+                }
+                <MudText Typo="Typo.button" Align="Align.Center">anos</MudText>
+            </div>
+
+            <div class="d-flex m-0 p-4 flex-column align-items-center justify-content-center gap-2 border-2 w-25" style="border-radius:10px;min-width: 250px; min-height: 260px">
+                <MudIcon Icon="@Icons.Material.Filled.AvTimer" Color="Color.Dark" Size="Size.Large"/>
+                <MudText Typo="Typo.button" Align="Align.Center">Média de idade dos egressos ao concluir o curso</MudText>
+                @if (_averageBirthDateToExit is null)
+                {
+                    <MudSkeleton Animation="Animation.Wave" SkeletonType="SkeletonType.Rectangle" Width="30px" Height="60px"></MudSkeleton>
+                }
+                else
+                {
+                    <MudText Typo="Typo.h2" Align="Align.Center">@($"{_averageBirthDateToExit:F1}")</MudText>
+                }
+                <MudText Typo="Typo.button" Align="Align.Center">anos</MudText>
+            </div>
+
+            <div class="d-flex m-0 mt-5 mb-5 p-4 flex-row align-items-center justify-content-center gap-2 w-100 flex-wrap" style="border-radius:10px;min-width: 250px; min-height: 260px">
+                <MudText Typo="Typo.h6" Align="Align.Start" Class="w-100 mt-5 mb-5">Cargos ocupados pelos egressos:</MudText>
+                @if (Elements.Any())
+                {
+                <MudTable Items="@Elements" Class="w-100" Striped="true" RowsPerPage="5">
+                    <HeaderContent>
+                        <MudTh>Cargo</MudTh>
+                        <MudTh>Egressos</MudTh>
+                    </HeaderContent>
+                    <RowTemplate>
+                        <MudTd DataLabel="Cargo">@context.Role</MudTd>
+                        <MudTd DataLabel="Egressos">@context.Count</MudTd>
+                    </RowTemplate>
+                    <PagerContent>
+                        <MudTablePager HideRowsPerPage="true"/>
+                    </PagerContent>
+                </MudTable>
+                }
+                else
+                {
+                <MudSkeleton Animation="Animation.Wave" SkeletonType="SkeletonType.Rectangle" Width="100%" Height="60px"></MudSkeleton>
+                }
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+@code {
+    private List<dynamic> Elements = new ();
+
+    private int? _outsideBrazilTotal = null;
+    private int? _withCertificationTotal = null;
+    private int? _withSpecializationTotal = null;
+    private int? _withMasterDegreeTotal = null;
+    private int? _withDoctorateDegreeTotal = null;
+    private int? _egressHighlightsTotal = null;
+    private int? _egressTestimoniesTotal = null;
+    private double? _averageSalaryRange = null;
+    private double? _averageBirthDate = null;
+    private double? _averageBirthDateToEntry = null;
+    private double? _averageBirthDateToExit = null;
+
+    protected override async Task OnInitializedAsync()
+        => await GetGetChartsDataRequestAsync();
+
+    private async Task GetGetChartsDataRequestAsync()
+    {
+        var response = await EgressServices.GetChartsDataAsync("total_by_state_view, total_outside_brazil, total_with_certification_view, total_with_especialization_view, total_with_master_degree_view, total_with_doctorate_degree_view, average_salary_range_view, total_per_role_view, total_per_initiative_type_view, total_egress_highlights_view, total_egress_testimonies_view, average_birthdate_view, average_birthday_to_entry_view, average_birthday_to_exit_view");
+  
+        if (response.StatusCode.Equals((int)HttpStatusCode.OK))
+        {
+            var outsideBrazilTotal = response.Data.FirstOrDefault(c => c.ViewName.Equals("total_outside_brazil"));
+            if (outsideBrazilTotal is not null)
+            {
+                _outsideBrazilTotal = int.Parse(outsideBrazilTotal.Data.EnumerateArray().FirstOrDefault().GetProperty("count").ToString());
+            }
+            
+            var withCertificationTotal = response.Data.FirstOrDefault(c => c.ViewName.Equals("total_with_certification_view"));
+            if (withCertificationTotal is not null)
+            {
+                _withCertificationTotal = int.Parse(withCertificationTotal.Data.EnumerateArray().FirstOrDefault().GetProperty("count").ToString());
+            }
+            
+            var withSpecializationTotal = response.Data.FirstOrDefault(c => c.ViewName.Equals("total_with_especialization_view"));
+            if (withSpecializationTotal is not null)
+            {
+                _withSpecializationTotal = int.Parse(withSpecializationTotal.Data.EnumerateArray().FirstOrDefault().GetProperty("count").ToString());
+            }
+            
+            var withMasterDegreeTotal = response.Data.FirstOrDefault(c => c.ViewName.Equals("total_with_master_degree_view"));
+            if (withMasterDegreeTotal is not null)
+            {
+                _withMasterDegreeTotal = int.Parse(withMasterDegreeTotal.Data.EnumerateArray().FirstOrDefault().GetProperty("count").ToString());
+            }
+            
+            var withDoctorateDegreeTotal = response.Data.FirstOrDefault(c => c.ViewName.Equals("total_with_doctorate_degree_view"));
+            if (withDoctorateDegreeTotal is not null)
+            {
+                _withDoctorateDegreeTotal = int.Parse(withDoctorateDegreeTotal.Data.EnumerateArray().FirstOrDefault().GetProperty("count").ToString());
+            }
+            
+            var egressHighlightsTotal = response.Data.FirstOrDefault(c => c.ViewName.Equals("total_egress_highlights_view"));
+            if (egressHighlightsTotal is not null)
+            {
+                _egressHighlightsTotal = int.Parse(egressHighlightsTotal.Data.EnumerateArray().FirstOrDefault().GetProperty("count").ToString());
+            }
+            
+            var egressTestimoniesTotal = response.Data.FirstOrDefault(c => c.ViewName.Equals("total_egress_testimonies_view"));
+            if (egressTestimoniesTotal is not null)
+            {
+                _egressTestimoniesTotal = int.Parse(egressTestimoniesTotal.Data.EnumerateArray().FirstOrDefault().GetProperty("count").ToString());
+            }
+            
+            var averageSalaryRange = response.Data.FirstOrDefault(c => c.ViewName.Equals("average_salary_range_view"));
+            if (averageSalaryRange is not null)
+            {
+                var value = averageSalaryRange.Data.EnumerateArray().FirstOrDefault().GetProperty("average").ToString();
+                _averageSalaryRange = double.Parse(value, CultureInfo.InvariantCulture);
+            }
+            
+            var averageBirthDate = response.Data.FirstOrDefault(c => c.ViewName.Equals("average_birthdate_view"));
+            if (averageBirthDate is not null)
+            {
+                var value = averageBirthDate.Data.EnumerateArray().FirstOrDefault().GetProperty("average").ToString();
+                _averageBirthDate = double.Parse(value, CultureInfo.InvariantCulture);
+            }
+            
+            var averageBirthDateToEntry = response.Data.FirstOrDefault(c => c.ViewName.Equals("average_birthday_to_entry_view"));
+            if (averageBirthDateToEntry is not null)
+            {
+                var value = averageBirthDateToEntry.Data.EnumerateArray().FirstOrDefault().GetProperty("average").ToString();
+                _averageBirthDateToEntry = double.Parse(value, CultureInfo.InvariantCulture);
+            }
+            
+            var averageBirthDateToExit = response.Data.FirstOrDefault(c => c.ViewName.Equals("average_birthday_to_exit_view"));
+            if (averageBirthDateToExit is not null)
+            {
+                var value = averageBirthDateToExit.Data.EnumerateArray().FirstOrDefault().GetProperty("average").ToString();
+                _averageBirthDateToExit = double.Parse(value, CultureInfo.InvariantCulture);
+            }
+            
+            var egressPerRole = response.Data.FirstOrDefault(c => c.ViewName.Equals("total_per_role_view"));
+            if (egressPerRole is not null)
+            {
+                foreach (var roleElement in egressPerRole.Data.EnumerateArray())
+                {
+                    var role = roleElement.GetProperty("role").ToString();
+                    var count = roleElement.GetProperty("count").ToString();
+                    Elements.Add(new { Role = role, Count = count });
+                }
+            }
+        }
+    }
 }

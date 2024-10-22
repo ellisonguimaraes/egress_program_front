@@ -1,0 +1,69 @@
+﻿@using System.Net
+@using System.Text.Json
+@using System.Text.Json.Serialization
+@inject IEgressServices EgressServices
+
+<div class="d-flex flex-column align-items-center w-100 py-5">
+    <div class="d-flex w-100 main-center py-5">
+        <MudGrid Class="d-flex m-0 p-0 align-items-center">
+            <MudItem xs="12" sm="12" md="6" lg="6" Class="d-flex m-0 p-0">
+                <MudGrid Class="d-flex m-0 p-0">
+                    <MudItem xs="2" sm="2" md="2" lg="2" Class="d-flex m-0 p-0">
+                        <svg width="60" height="300" viewBox="0 0 81 402" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M81 201L0.75 401.052L0.75 0.948135L81 201Z" fill="#384861"/>
+                        </svg>
+                    </MudItem>
+                    <MudItem xs="10" sm="10" md="10" lg="10" Class="d-flex p-5 justify-content-center align-items-center align-content-center m-0 p-0">
+                        <div class="d-flex flex-column">
+                            <MudText Typo="Typo.h6" Class="fw-bold total-text-color">EGRESSOS</MudText>
+                            <MudText Typo="Typo.h4" Class="fw-bold" Color="Color.Dark">POR ESTADO</MudText>
+                        </div>
+                    </MudItem>
+                </MudGrid>
+            </MudItem>
+            <MudItem xs="12" sm="12" md="6" lg="6" Class="m-0 py-2 px-5">
+                @if (dataPie.Length > 0)
+                {
+                    <MudChart ChartType="ChartType.Pie" InputData="@dataPie" InputLabels="@labelsPie" Width="300px" Height="300px" />
+                }
+                else
+                {
+                    <MudSkeleton Animation="Animation.Wave" SkeletonType="SkeletonType.Rectangle" Width="100%" Height="300px"/>
+                }
+            </MudItem>
+        </MudGrid>
+    </div>
+</div>
+
+
+@code {
+    #region Chart Properties
+    double[] dataPie = {  };
+    string[] labelsPie = { };
+    #endregion
+
+    protected override async Task OnInitializedAsync()
+        => await GetCountEgressPerFinalSemesterRequestAsync();
+
+    private async Task GetCountEgressPerFinalSemesterRequestAsync()
+    {
+        var response = await EgressServices.GetChartsDataAsync("total_by_state_view");
+
+        if (response.StatusCode.Equals((int)HttpStatusCode.OK))
+        {
+            var states = JsonSerializer.Deserialize<List<EgressPerStateData>>(response.Data.First().Data.ToString());
+
+            labelsPie = states.Select(state => state.State).ToArray();
+            dataPie = states.Select(state => (double)state.Count).ToArray();
+        }
+    }
+
+    class EgressPerStateData
+    {
+        [JsonPropertyName("state")] 
+        public string State { get; set; }
+        
+        [JsonPropertyName("count")]
+        public int Count { get; set; }
+    }
+}
