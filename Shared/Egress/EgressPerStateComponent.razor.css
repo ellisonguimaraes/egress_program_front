@@ -1,0 +1,9 @@
+
+.main-center {
+    max-width: 1200px;
+}
+
+::deep .total-text-color {
+    color: var(--egress-color-darkgreen);
+}
+

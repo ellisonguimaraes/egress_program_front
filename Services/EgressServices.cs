@@ -3,6 +3,7 @@ using System.Text.Json;
 using EgressPortal.Models;
 using EgressPortal.Models.API;
 using EgressPortal.Models.API.HttpClient.Egress;
+using EgressPortal.Models.API.HttpClient.Egress.Charts;
 using EgressPortal.Models.API.HttpClient.Egress.Person;
 using EgressPortal.Models.API.HttpClient.Egress.Testimony;
 using EgressPortal.Models.Form;
@@ -126,6 +127,12 @@ public class EgressServices : IEgressServices
     {
         var response = await _egressApi.GetCountEgressPerFinalSemesterAsync();
         return await HandleResponseAsync<GetCountEgressPerFinalSemesterResponseApi>(response);
+    }
+    
+    public async Task<GenericHttpResponse<IList<ChartViewsApiResponse>>> GetChartsDataAsync(string views)
+    {
+        var response = await _egressApi.GetChartsDataAsync(views);
+        return await HandleResponseAsync<IList<ChartViewsApiResponse>>(response);
     }
 
     public async Task<GenericHttpResponse<PagedList<GetEgressPaginateResponseApi>>> GetPaginateEgressAsync(int pageNumber, int pageSize, EgressFilterForm egressFilterForm)

@@ -2,6 +2,7 @@ using System.Net.Http.Headers;
 using EgressPortal.Models;
 using EgressPortal.Models.API;
 using EgressPortal.Models.API.HttpClient.Egress;
+using EgressPortal.Models.API.HttpClient.Egress.Charts;
 using EgressPortal.Models.API.HttpClient.Egress.Highlights;
 using EgressPortal.Models.API.HttpClient.Egress.Person;
 using EgressPortal.Models.API.HttpClient.Egress.Testimony;
@@ -138,4 +139,11 @@ public interface IEgressServices
     /// </summary>
     /// <param name="authorization">Authorization header</param>
     Task<GenericHttpResponse<List<CourseResponseApi>>> GetCourses(AuthenticationHeaderValue authorization);
+
+    /// <summary>
+    /// Get charts data in db views
+    /// </summary>
+    /// <param name="views">views (with ',' separated)</param>
+    /// <returns>Charts data</returns>
+    Task<GenericHttpResponse<IList<ChartViewsApiResponse>>> GetChartsDataAsync(string views);
 }
