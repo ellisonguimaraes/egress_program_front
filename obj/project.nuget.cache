@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "lwN7SrQRtCqCG2G3m12kOzCRHY6spcdauMsy1SarrpJE9K9Lcx/wFja9whobQkia0ID7nAjcMrQb78GAB36slg==",
+  "dgSpecHash": "6i/87Rij1Gc=",
   "success": true,
   "projectFilePath": "/home/ellison/source/repos/egress_program_front/EgressPortal.csproj",
   "expectedPackageFiles": [
@@ -40,9 +40,9 @@
     "/home/ellison/.nuget/packages/microsoft.identitymodel.tokens/6.22.0/microsoft.identitymodel.tokens.6.22.0.nupkg.sha512",
     "/home/ellison/.nuget/packages/microsoft.jsinterop/7.0.17/microsoft.jsinterop.7.0.17.nupkg.sha512",
     "/home/ellison/.nuget/packages/microsoft.jsinterop.webassembly/7.0.11/microsoft.jsinterop.webassembly.7.0.11.nupkg.sha512",
-    "/home/ellison/.nuget/packages/microsoft.net.illink.analyzers/7.0.100-1.23211.1/microsoft.net.illink.analyzers.7.0.100-1.23211.1.nupkg.sha512",
-    "/home/ellison/.nuget/packages/microsoft.net.illink.tasks/7.0.100-1.23211.1/microsoft.net.illink.tasks.7.0.100-1.23211.1.nupkg.sha512",
-    "/home/ellison/.nuget/packages/microsoft.net.sdk.webassembly.pack/8.0.4/microsoft.net.sdk.webassembly.pack.8.0.4.nupkg.sha512",
+    "/home/ellison/.nuget/packages/microsoft.net.illink.analyzers/7.0.100-1.23401.1/microsoft.net.illink.analyzers.7.0.100-1.23401.1.nupkg.sha512",
+    "/home/ellison/.nuget/packages/microsoft.net.illink.tasks/7.0.100-1.23401.1/microsoft.net.illink.tasks.7.0.100-1.23401.1.nupkg.sha512",
+    "/home/ellison/.nuget/packages/microsoft.net.sdk.webassembly.pack/8.0.10/microsoft.net.sdk.webassembly.pack.8.0.10.nupkg.sha512",
     "/home/ellison/.nuget/packages/mudblazor/6.19.1/mudblazor.6.19.1.nupkg.sha512",
     "/home/ellison/.nuget/packages/refit/7.0.0/refit.7.0.0.nupkg.sha512",
     "/home/ellison/.nuget/packages/refit.httpclientfactory/7.0.0/refit.httpclientfactory.7.0.0.nupkg.sha512",
@@ -52,9 +52,20 @@
     "/home/ellison/.nuget/packages/system.security.cryptography.cng/4.5.0/system.security.cryptography.cng.4.5.0.nupkg.sha512",
     "/home/ellison/.nuget/packages/system.text.encodings.web/7.0.0/system.text.encodings.web.7.0.0.nupkg.sha512",
     "/home/ellison/.nuget/packages/system.text.json/7.0.3/system.text.json.7.0.3.nupkg.sha512",
-    "/home/ellison/.nuget/packages/microsoft.netcore.app.runtime.mono.browser-wasm/7.0.18/microsoft.netcore.app.runtime.mono.browser-wasm.7.0.18.nupkg.sha512"
+    "/home/ellison/.nuget/packages/microsoft.netcore.app.runtime.mono.browser-wasm/7.0.20/microsoft.netcore.app.runtime.mono.browser-wasm.7.0.20.nupkg.sha512"
   ],
   "logs": [
+    {
+      "code": "NU1904",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'Refit' 7.0.0 has a known critical severity vulnerability, https://github.com/advisories/GHSA-3hxg-fxwm-8gf7",
+      "libraryId": "Refit",
+      "targetGraphs": [
+        "net7.0",
+        "net7.0/browser-wasm"
+      ]
+    },
     {
       "code": "NU1902",
       "level": "Warning",
