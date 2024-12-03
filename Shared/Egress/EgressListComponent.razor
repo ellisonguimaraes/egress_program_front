@@ -1,0 +1,125 @@
+@using System.Net
+@using EgressPortal.Models.API.HttpClient.Egress
+@using EgressPortal.Models.Form
+@using EgressPortal.Shared.Utils
+@inject IDialogService Dialog
+@inject IEgressServices EgressServices
+@inject ISnackbar Snackbar
+
+<div class="d-flex flex-column m-0 " style="width:100%;max-width: 1000px;">
+
+    <div class="d-flex w-50 flex-column align-self-end" style="">
+        <EditForm Model="_egressFilter" OnValidSubmit="OnValidSubmitAsync">
+            <DataAnnotationsValidator/>
+
+            <MudSelect T="string" Label="Ano de Conclusão" Placeholder="2023.1" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" Class="p-0 m-0" @bind-Value="_egressFilter.FinalSemester" For="@(() => _egressFilter.FinalSemester)">
+                <MudSelectItem T="string" Value="@("Todos os semestres")">Todos os semestres</MudSelectItem>
+                @foreach (var s in GenerateFinalSemestersToSelect())
+                {
+                    <MudSelectItem T="string" Value="@s"/>
+                }
+            </MudSelect>
+
+            <div class="d-flex w-100 justify-content-end gap-3 mt-3">
+                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Large" Class="">Filtrar</MudButton>
+                <MudButton OnClick="CleanEgressFilterAsync" Variant="Variant.Filled" Color="Color.Warning" Size="Size.Large" Class="">Limpar</MudButton>
+            </div>
+        </EditForm>
+    </div>
+
+
+    <div class="d-flex w-100 flex-column" style="margin:50px 0 30px;">
+        <PaginationComponent Items="_egresses" TotalPages="_totalPages" ChangePageNumberCallback="GetEgressPaginateAsync" @ref="_paginationComponent">
+            <ViewAllItemsComponent Context="egressListContext">
+                <MudTable Items="egressListContext" Hover="true" Breakpoint="Breakpoint.Sm" Context="egressContext" Class="mb-5">
+                    <HeaderContent>
+                        <MudTh>Nome</MudTh>
+                        <MudTh>Email</MudTh>
+                        <MudTh>Matrícula</MudTh>
+                        <MudTh>Curso</MudTh>
+                        <MudTh>Ano Conclusão</MudTh>
+                        <MudTh>*</MudTh>
+                    </HeaderContent>
+                    <RowTemplate>
+                        <MudTd DataLabel="Nome">@(string.IsNullOrWhiteSpace(egressContext.Name) ? "***" : egressContext.Name)</MudTd>
+                        <MudTd DataLabel="Email">@(string.IsNullOrWhiteSpace(egressContext.Email) ? "***" : egressContext.Email)</MudTd>
+                        <MudTd DataLabel="Matrícula">@egressContext.Mat</MudTd>
+                        <MudTd DataLabel="Curso">@egressContext.Course</MudTd>
+                        <MudTd DataLabel="Ano Conclusão">@egressContext.FinalSemester</MudTd>
+                        <MudTd DataLabel="*">
+                            <MudButton Variant="Variant.Filled" Size="Size.Small" Color="Color.Tertiary" OnClick="() => OpenDialogAsync(egressContext)">Ver mais</MudButton>
+                        </MudTd>
+                    </RowTemplate>
+                </MudTable>
+            </ViewAllItemsComponent>
+        </PaginationComponent>
+    </div>
+</div>
+
+@code {
+    #region Constants
+    private const int PAGE_SIZE = 5;
+    #endregion
+    
+    private EgressFilterForm _egressFilter = new() { FinalSemester = "Todos os semestres"};
+    
+    private List<GetEgressPaginateResponseApi> _egresses = new();
+    private PaginationComponent<GetEgressPaginateResponseApi> _paginationComponent = null!;
+    
+    private int _totalPages = 1;
+    
+    private async Task OnValidSubmitAsync() => await _paginationComponent.ChangePageNumberAsync(1);
+    
+    private async Task GetEgressPaginateAsync(int pageNumber)
+    {
+        var result = await EgressServices.GetPaginateEgressAsync(pageNumber, PAGE_SIZE, _egressFilter);
+
+        if (result.StatusCode.Equals((int)HttpStatusCode.OK))
+        {
+            _egresses = result.Data!.Data!.ToList();
+            _totalPages = result.Data.TotalPages;
+        }
+        else
+        {
+            foreach (var error in result.Errors)
+            {
+                Snackbar.Add(error, Severity.Error);
+            }
+        }
+    }
+    
+    private Task OpenDialogAsync(GetEgressPaginateResponseApi egress)
+    {
+        var parameters = new DialogParameters<ShowMorePublicEgressPaginate_Dialog>();
+
+        parameters.Add(x => x.Egress, egress);
+
+        var options = new DialogOptions
+        {
+            CloseButton = true, 
+            MaxWidth = MaxWidth.Small,
+            FullWidth = true
+        };
+
+        return Dialog.ShowAsync<ShowMorePublicEgressPaginate_Dialog>("Dados", parameters, options);
+    }
+    
+    private async Task CleanEgressFilterAsync()
+    {
+        _egressFilter = new EgressFilterForm { FinalSemester = "Todos os semestres"};
+        await OnValidSubmitAsync();
+    }
+
+    private static IEnumerable<string> GenerateFinalSemestersToSelect()
+    {
+        var semesters = new List<string>();
+
+        for (var i = DateTime.UtcNow.Year; i >= 1960; i--)
+        {
+            semesters.Add($"{i}.2");
+            semesters.Add($"{i}.1");
+        }
+
+        return semesters.OrderDescending();
+    }
+}

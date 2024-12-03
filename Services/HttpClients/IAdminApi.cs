@@ -16,8 +16,7 @@ public interface IAdminApi
     private const string AUTHORIZATION_HEADER = "Authorization";
 
     #endregion
-
-
+    
     [Get("/api/v1/admin/user/lockout")]
     Task<HttpResponseMessage> GetPaginateLockedUserAsync(
         [Header(AUTHORIZATION_HEADER)] AuthenticationHeaderValue authorization, [AliasAs(PAGE_NUMBER)] int pageNumber,

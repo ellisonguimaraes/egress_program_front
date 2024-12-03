@@ -1,12 +1,63 @@
 ﻿@page "/me"
+@using System.Net
+@using System.Net.Http.Headers
+@using EgressPortal.Models
+@using EgressPortal.Models.API.HttpClient.Egress
+@using EgressPortal.Models.API.HttpClient.Egress.Person
+@using EgressPortal.Models.Form
+@using EgressPortal.Pages.Admin.Egress
+@using EgressPortal.Shared.Egress
+@using EgressPortal.Shared.Utils
 @using Microsoft.AspNetCore.Authorization
+@inject ILoginServices LoginServices
+@inject ISnackbar Snackbar
+@inject NavigationManager NavigationManager
+@inject IEgressServices EgressServices
+@inject IDialogService Dialog
 @attribute [Authorize(policy: "PersonIdentifierPolicy")]
 
 <PageTitle>Página Inicial</PageTitle>
 
-<AuthorizeView>
-    <TitlePageLoggedComponent Name="@GetFirstName(context.User.Identity?.Name!)"/>
-</AuthorizeView>
+@if (!_loadingChangePage)
+{
+    <TitlePageLoggedComponent Person="_person"/>
+}
+
+<div class="d-flex flex-column align-items-center w-100 p-4">
+    <div class="d-flex flex- align-items-start w-100 my-4" style="width:100%;max-width: 1000px;">
+        <MudText Align="Align.Start" Typo="Typo.h6">Mural de Recados</MudText>
+    </div>
+    <div class="d-flex flex-column flex-wrap m-0 p-0 justify-content-center" style="width:100%;max-width: 1000px; height:330px;overflow: auto;">
+        @for (var i = 0; i < 4; i++)
+        {
+            <MudCard Style="max-width: 280px; margin: 10px">
+                <MudCardHeader>
+                    <CardHeaderContent>
+                        <MudText Typo="Typo.h6">News title</MudText>
+                        <MudText Typo="Typo.caption">Há 5 dias</MudText>
+                    </CardHeaderContent>
+                    <CardHeaderActions>
+                    </CardHeaderActions>
+                </MudCardHeader>
+                <MudCardContent>
+                    <MudText Typo="Typo.body2">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s...</MudText>
+                </MudCardContent>
+                <MudCardActions>
+                    <MudButton Variant="Variant.Text" Color="Color.Primary">Ler Mais</MudButton>
+                </MudCardActions>
+            </MudCard>
+        }
+        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" Class="m-4 h-100 p-5">Ver Mais</MudButton>
+    </div>
+
+    <div class="d-flex flex- align-items-start w-100 my-4" style="width:100%;max-width: 1000px;padding: 40px 0 20px">
+        <MudText Align="Align.Start" Typo="Typo.h6">Egressos da Universidade</MudText>
+    </div>
+    <div class="d-flex flex-column flex-wrap m-0 p-0 justify-content-center" style="width:100%;max-width: 1000px;">
+        <EgressListComponent/>
+    </div>
+    
+</div>
 
 Egressos da minha turma
 Egressos formados no mesmo semestre
@@ -16,11 +67,54 @@ Mural de notícias
 
 @code {
     #region Constants
-    private const string WHITESPACE = " ";
+    private const string USER_NOT_AUTHENTICATED_SNACKBAR_MESSAGE = "Usuário não autenticado";
+    private const string SCHEME = "Bearer";
     #endregion
     
-    #region Static methods
-    private static string GetFirstName(string name)
-        => name.Split(WHITESPACE).First();
-    #endregion
+    private EgressFilterForm _egressFilter = new() { FinalSemester = "Todos os semestres"};
+    
+    private PersonResponseApi? _person;
+    private List<GetEgressPaginateResponseApi> _egresses = new();
+    private PaginationComponent<GetEgressPaginateResponseApi> _paginationComponent = null!;
+    
+    private bool _loadingChangePage = false;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        _loadingChangePage = true;
+        StateHasChanged();
+
+        await GetUserInfoAsync();
+        
+        _loadingChangePage = false;
+        StateHasChanged();
+    }
+
+    private async Task GetUserInfoAsync()
+    {
+        var token = await LoginServices.GetTokenAsync();
+
+        if (token is null)
+        {
+            Snackbar.Add(USER_NOT_AUTHENTICATED_SNACKBAR_MESSAGE);
+            await LoginServices.LogoutAsync();
+            NavigationManager.NavigateTo(RouteSettings.LoginRoute);
+            return;
+        }
+
+        var bearer = new AuthenticationHeaderValue(SCHEME, token!.AccessToken);
+
+        var person = await EgressServices.GetPersonInfoAsync(bearer);
+
+        if (person.StatusCode.Equals((int)HttpStatusCode.OK))
+        {
+            _person = person.Data!;
+            StateHasChanged();
+        }
+        else
+        {
+            foreach (var error in person.Errors)
+                Snackbar.Add(error, Severity.Error);
+        }
+    }
 }

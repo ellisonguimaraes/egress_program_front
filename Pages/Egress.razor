@@ -14,58 +14,7 @@
 
 <div class="d-flex flex-column align-items-center w-100">
     <div class="d-flex flex-column m-0 p-5" style="width:100%;max-width: 1000px;">
-        <EditForm Model="_egressFilter" OnValidSubmit="OnValidSubmitAsync">
-            <DataAnnotationsValidator/>
-
-            <MudGrid Class="d-flex">
-                <MudItem xs="12" sm="12" md="6" lg="6">
-                    <MudText Typo="Typo.h6">Filtros</MudText>
-                </MudItem>
-
-                <MudItem xs="12" sm="12" md="6" lg="6" Class="d-flex flex-column gap-3">
-                    <MudSelect T="string" Label="Ano de Conclusão" Placeholder="2023.1" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" Class="p-0 m-0" @bind-Value="_egressFilter.FinalSemester" For="@(() => _egressFilter.FinalSemester)">
-                        <MudSelectItem T="string" Value="@("Todos os semestres")">Todos os semestres</MudSelectItem>
-                        @foreach (var s in GenerateFinalSemestersToSelect())
-                        {
-                            <MudSelectItem T="string" Value="@s"/>
-                        }
-                    </MudSelect>
-                    
-                    <div class="d-flex w-100 justify-content-end gap-3">
-                        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Large" Class="">Filtrar</MudButton>
-                        <MudButton OnClick="CleanEgressFilterAsync" Variant="Variant.Filled" Color="Color.Warning" Size="Size.Large" Class="">Limpar</MudButton>
-                    </div>
-                </MudItem>
-            </MudGrid>
-        </EditForm>
-
-
-        <div class="d-flex w-100 flex-column" style="margin:50px 0 30px;">
-            <PaginationComponent Items="_egresses" TotalPages="_totalPages" ChangePageNumberCallback="GetEgressPaginateAsync" @ref="_paginationComponent">
-                <ViewAllItemsComponent Context="egressListContext">
-                    <MudTable Items="egressListContext" Hover="true" Breakpoint="Breakpoint.Sm" Context="egressContext" Class="mb-5">
-                        <HeaderContent>
-                            <MudTh>Nome</MudTh>
-                            <MudTh>Email</MudTh>
-                            <MudTh>Matrícula</MudTh>
-                            <MudTh>Curso</MudTh>
-                            <MudTh>Ano Conclusão</MudTh>
-                            <MudTh>*</MudTh>
-                        </HeaderContent>
-                        <RowTemplate>
-                            <MudTd DataLabel="Nome">@(string.IsNullOrWhiteSpace(egressContext.Name)? "***" : egressContext.Name)</MudTd>
-                            <MudTd DataLabel="Email">@(string.IsNullOrWhiteSpace(egressContext.Email)? "***" : egressContext.Email)</MudTd>
-                            <MudTd DataLabel="Matrícula">@egressContext.Mat</MudTd>
-                            <MudTd DataLabel="Curso">@egressContext.Course</MudTd>
-                            <MudTd DataLabel="Ano Conclusão">@egressContext.FinalSemester</MudTd>
-                            <MudTd DataLabel="*">
-                                <MudButton Variant="Variant.Filled" Size="Size.Small" Color="Color.Tertiary" OnClick="() => OpenDialogAsync(egressContext)">Ver mais</MudButton>
-                            </MudTd>
-                        </RowTemplate>
-                    </MudTable>
-                </ViewAllItemsComponent>
-            </PaginationComponent>
-        </div>
+        <EgressListComponent/>
     </div>
 </div>
 
