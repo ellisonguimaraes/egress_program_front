@@ -2,12 +2,18 @@
 @using System.Net
 @using System.Net.Http.Headers
 @using EgressPortal.Models
+@using EgressPortal.Models.API.HttpClient.Egress
 @using EgressPortal.Models.API.HttpClient.Egress.Person
+@using EgressPortal.Models.Form
+@using EgressPortal.Pages.Admin.Egress
+@using EgressPortal.Shared.Egress
+@using EgressPortal.Shared.Utils
 @using Microsoft.AspNetCore.Authorization
 @inject ILoginServices LoginServices
 @inject ISnackbar Snackbar
 @inject NavigationManager NavigationManager
 @inject IEgressServices EgressServices
+@inject IDialogService Dialog
 @attribute [Authorize(policy: "PersonIdentifierPolicy")]
 
 <PageTitle>Página Inicial</PageTitle>
@@ -43,6 +49,14 @@
         }
         <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" Class="m-4 h-100 p-5">Ver Mais</MudButton>
     </div>
+
+    <div class="d-flex flex- align-items-start w-100 my-4" style="width:100%;max-width: 1000px;padding: 40px 0 20px">
+        <MudText Align="Align.Start" Typo="Typo.h6">Egressos da Universidade</MudText>
+    </div>
+    <div class="d-flex flex-column flex-wrap m-0 p-0 justify-content-center" style="width:100%;max-width: 1000px;">
+        <EgressListComponent/>
+    </div>
+    
 </div>
 
 Egressos da minha turma
@@ -57,7 +71,11 @@ Mural de notícias
     private const string SCHEME = "Bearer";
     #endregion
     
+    private EgressFilterForm _egressFilter = new() { FinalSemester = "Todos os semestres"};
+    
     private PersonResponseApi? _person;
+    private List<GetEgressPaginateResponseApi> _egresses = new();
+    private PaginationComponent<GetEgressPaginateResponseApi> _paginationComponent = null!;
     
     private bool _loadingChangePage = false;
     
@@ -71,7 +89,7 @@ Mural de notícias
         _loadingChangePage = false;
         StateHasChanged();
     }
-    
+
     private async Task GetUserInfoAsync()
     {
         var token = await LoginServices.GetTokenAsync();
